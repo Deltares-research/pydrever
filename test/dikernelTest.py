@@ -3,4 +3,4 @@ import os
 
 sys.path.append(os.getcwd() + "\src")
 
-from dikernel import DiKErnel
+from dikernelrunner import DiKErnelInput

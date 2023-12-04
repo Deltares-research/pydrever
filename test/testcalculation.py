@@ -1,19 +1,45 @@
+import sys
+import os
+
+sys.path.append(os.getcwd() + "\src")
+
 from dikernelinput import (
-    GrassCoverOuterSlopeOutputLocation,
-    GrassCoverOverflowOutputLocation,
+    DikernelInput,
+    DikeSchematization,
+    HydraulicInput,
+)
+from dikerneloutputlocations import (
+    GrassWaveImpactOutputLocation,
+    GrassOvertoppingOutputLocation,
     AsphaltOutputLocation,
     NordicStoneOutputLocation,
+)
+from dikernelcalculationsettings import (
     AsphalCalculationSettings,
     NaturalStoneCalculationSettings,
-    GrassCoverWaveImpactCalculationSettings,
-    GrassCoverWaveOvertoppingCalculationSettings,
+    GrassWaveImpactCalculationSettings,
+    GrassWaveOvertoppingCalculationSettings,
     AsphaltTopLayer,
+    GrasCoverOvertoppingTopLayer,
     GrassCoverWaveImpactTopLayer,
 )
 
+from dikernel import Dikernel
+
 
 class TestCalculationInputFactory:
-    def GetHydraulicBoundaries():
+    @staticmethod
+    def GetCalculationInput() -> DikernelInput:
+        input = DikernelInput()
+        input.DikeOrientation = 0.0
+        input.HydraulicInput = TestCalculationInputFactory.GetHydraulicBoundaries()
+        input.DikeSchematization = TestCalculationInputFactory.GetDikeProfile()
+        input.OutputLocations = TestCalculationInputFactory.GetOutputLocations()
+        input.Settings = TestCalculationInputFactory.GetCalculationSettings()
+        return input
+
+    @staticmethod
+    def GetHydraulicBoundaries() -> HydraulicInput:
         timeSteps = [
             0.0,
             2269.440000000016,
@@ -219,7 +245,6 @@ class TestCalculationInputFactory:
             0.51,
             0.50,
         ]
-
         waveHeights = [
             0.80,
             0.80,
@@ -322,7 +347,6 @@ class TestCalculationInputFactory:
             0.80,
             0.80,
         ]
-
         wavePeriods = [
             7,
             7.06,
@@ -425,7 +449,6 @@ class TestCalculationInputFactory:
             12.88,
             12.94,
         ]
-
         waveAngles = [
             -20,
             -19.5,
@@ -528,33 +551,25 @@ class TestCalculationInputFactory:
             29,
             29.5,
         ]
-        return timeSteps, waterLevels, waveHeights, wavePeriods, waveAngles
+        return HydraulicInput(timeSteps, waterLevels, waveHeights, wavePeriods, waveAngles)
 
-    def GetDikeProfile():
-        xPositions = [0.0, 25.0, 35.0, 41.0, 45, 50, 60, 70]
-        dikeElevations = [-3, 0.0, 1.5, 1.7, 3.0, 3.1, 0, -1]
-        raughnessCoefficients = [1, 1, 0.75, 0.5, 0.8, 0.8, 0.8]
+    @staticmethod
+    def GetDikeProfile() -> DikeSchematization:
+        schematization = DikeSchematization()
+        schematization.XPositions = [0.0, 25.0, 35.0, 41.0, 45, 50, 60, 70]
+        schematization.ZPositions = [-3, 0.0, 1.5, 1.7, 3.0, 3.1, 0, -1]
+        schematization.Roughnesses = [1, 1, 0.75, 0.5, 0.8, 0.8, 0.8]
+        schematization.OuterToe = 25.0
+        schematization.OuterCrest = 45.0
+        schematization.CrestOuterBerm = 35.0
+        schematization.NotchOuterBerm = 41.0
+        schematization.InnerCrest = 50.0
+        schematization.InnerToe = 60.0
+        return schematization
 
-        return xPositions, dikeElevations, raughnessCoefficients
-
-    def GetCharacteristicPoints():
-        teenBuitenzijde = 25.0
-        kruinBuitenzijde = 45.0
-        kruinBermBuitenzijde = 35.0
-        insteekBermBuitenzijde = 41.0
-        kruinBinnenzijde = 50.0
-        teenBinnenzijde = 60.0
-        return (
-            teenBuitenzijde,
-            kruinBuitenzijde,
-            kruinBermBuitenzijde,
-            insteekBermBuitenzijde,
-            kruinBinnenzijde,
-            teenBinnenzijde,
-        )
-
+    @staticmethod
     def GetOutputLocations():
-        return (
+        return [
             NordicStoneOutputLocation(25.01, 0, 0.28, 2.45),
             NordicStoneOutputLocation(25.5, 0, 0.28, 2.45),
             NordicStoneOutputLocation(26.0, 0, 0.28, 2.45),
@@ -589,37 +604,51 @@ class TestCalculationInputFactory:
             AsphaltOutputLocation(40.0, 0.0, 0.9, 64.0, 0.146, 5712.0),
             AsphaltOutputLocation(40.5, 0.0, 0.9, 64.0, 0.146, 5712.0),
             AsphaltOutputLocation(40.9, 0.0, 0.9, 64.0, 0.146, 5712.0),
-            GrassCoverOuterSlopeOutputLocation(41.1, 0.0),
-            GrassCoverOuterSlopeOutputLocation(41.5, 0.0),
-            GrassCoverOuterSlopeOutputLocation(42.0, 0.0),
-            GrassCoverOuterSlopeOutputLocation(42.5, 0.0),
-            GrassCoverOuterSlopeOutputLocation(43.0, 0.0),
-            GrassCoverOuterSlopeOutputLocation(43.5, 0.0),
-            GrassCoverOuterSlopeOutputLocation(44.0, 0.0),
-            GrassCoverOuterSlopeOutputLocation(44.5, 0.0),
-            GrassCoverOuterSlopeOutputLocation(44.99, 0.0),
-            GrassCoverOverflowOutputLocation(45.0, 0.02),
-            GrassCoverOverflowOutputLocation(45.5, 0.02),
-            GrassCoverOverflowOutputLocation(46.0, 0.02),
-            GrassCoverOverflowOutputLocation(46.5, 0.02),
-            GrassCoverOverflowOutputLocation(47.0, 0.02),
-            GrassCoverOverflowOutputLocation(47.5, 0.02),
-            GrassCoverOverflowOutputLocation(48.0, 0.02),
-            GrassCoverOverflowOutputLocation(48.5, 0.02),
-            GrassCoverOverflowOutputLocation(49.0, 0.02),
-            GrassCoverOverflowOutputLocation(49.5, 0.02),
-            GrassCoverOverflowOutputLocation(49.99, 0.02),
-            GrassCoverOverflowOutputLocation(45.0, 0.02),
-            GrassCoverOverflowOutputLocation(52.0, 0.02),
-            GrassCoverOverflowOutputLocation(54.0, 0.02),
-            GrassCoverOverflowOutputLocation(56.0, 0.02),
-            GrassCoverOverflowOutputLocation(58.0, 0.02),
-        )
+            GrassWaveImpactOutputLocation(41.1, 0.0),
+            GrassWaveImpactOutputLocation(41.5, 0.0),
+            GrassWaveImpactOutputLocation(42.0, 0.0),
+            GrassWaveImpactOutputLocation(42.5, 0.0),
+            GrassWaveImpactOutputLocation(43.0, 0.0),
+            GrassWaveImpactOutputLocation(43.5, 0.0),
+            GrassWaveImpactOutputLocation(44.0, 0.0),
+            GrassWaveImpactOutputLocation(44.5, 0.0),
+            GrassWaveImpactOutputLocation(44.99, 0.0),
+            GrassOvertoppingOutputLocation(45.0, 0.02),
+            GrassOvertoppingOutputLocation(45.5, 0.02),
+            GrassOvertoppingOutputLocation(46.0, 0.02),
+            GrassOvertoppingOutputLocation(46.5, 0.02),
+            GrassOvertoppingOutputLocation(47.0, 0.02),
+            GrassOvertoppingOutputLocation(47.5, 0.02),
+            GrassOvertoppingOutputLocation(48.0, 0.02),
+            GrassOvertoppingOutputLocation(48.5, 0.02),
+            GrassOvertoppingOutputLocation(49.0, 0.02),
+            GrassOvertoppingOutputLocation(49.5, 0.02),
+            GrassOvertoppingOutputLocation(49.99, 0.02),
+            GrassOvertoppingOutputLocation(45.0, 0.02),
+            GrassOvertoppingOutputLocation(52.0, 0.02),
+            GrassOvertoppingOutputLocation(54.0, 0.02),
+            GrassOvertoppingOutputLocation(56.0, 0.02),
+            GrassOvertoppingOutputLocation(58.0, 0.02),
+        ]
 
+    @staticmethod
     def GetCalculationSettings():
-        return (
+        grasCoverTopLayer1 = GrassCoverWaveImpactTopLayer("grasGeslotenZode")
+        grasCoverTopLayer1.StanceTimeLineA = 1
+        grasCoverTopLayer1.StanceTimeLineB = -0.000009722
+        grasCoverTopLayer1.StanceTimeLineC = 0.25
+        grasCoverTopLayer2 = GrassCoverWaveImpactTopLayer("grasOpenZode")
+        grasCoverTopLayer2.StanceTimeLineA = 0.8
+        grasCoverTopLayer2.StanceTimeLineB = -0.00001944
+        grasCoverTopLayer2.StanceTimeLineC = 0.25
+
+        return [
             AsphalCalculationSettings([AsphaltTopLayer()]),
             NaturalStoneCalculationSettings(),
-            GrassCoverWaveImpactCalculationSettings([GrassCoverWaveImpactTopLayer("grasGeslotenZode")]),
-            GrassCoverWaveOvertoppingCalculationSettings(),
-        )
+            GrassWaveImpactCalculationSettings([grasCoverTopLayer1, grasCoverTopLayer2]),
+            GrassWaveOvertoppingCalculationSettings([GrasCoverOvertoppingTopLayer("grasGeslotenZode")]),
+        ]
+
+
+input = TestCalculationInputFactory.GetCalculationInput()
+output = Dikernel.run(input)
