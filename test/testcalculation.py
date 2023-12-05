@@ -652,3 +652,4 @@ class TestCalculationInputFactory:
 
 input = TestCalculationInputFactory.GetCalculationInput()
 output = Dikernel.run(input)
+print(len(output))

@@ -43,5 +43,5 @@ class GrassWaveImpactOutputLocation(OutputLocation):
 class GrassOvertoppingOutputLocation(OutputLocation):
     def __init__(self, xPosition: float, beginDamage: float, alphaM: float = 1.0, alphaS: float = 1.0):
         super().__init__(xPosition, beginDamage, "grasGolfoverslag", "grasGeslotenZode")
-        self.AlphaM = alphaM
-        self.AlphaS = alphaS
+        self.IncreasedLoadTransitionAlphaM = alphaM
+        self.ReducedStrengthTransitionAlphaS = alphaS

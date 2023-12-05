@@ -145,6 +145,7 @@ class GrassWaveOvertoppingCalculationSettings(CalculationSettings):
         self.FixedNumberOfWaves = 10000
         self.FrontVelocityCwo = 1.45
         self.FactorCtm = 0.92
+        self.DikeHeight = None
 
 
 class GrassWaveImpactCalculationSettings(CalculationSettings):
