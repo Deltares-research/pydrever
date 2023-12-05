@@ -3,6 +3,8 @@ import os
 
 sys.path.append(os.getcwd() + "\src")
 
+from dikerneloutput import CalculationType
+
 from dikernelinput import (
     DikernelInput,
     DikeSchematization,
@@ -652,4 +654,9 @@ class TestCalculationInputFactory:
 
 input = TestCalculationInputFactory.GetCalculationInput()
 output = Dikernel.run(input)
-print(len(output))
+print("number of output locations: " + str(len(output)))
+print("Number of failed locations: " + str(len([l for l in output if l.Failed])))
+stones = [o for o in output if o.CalculationType == CalculationType.NaturalStone]
+print("Number of natural stone output locations: " + str(len(stones)))
+for stone in stones:
+    print("X: " + str(stone.XPosition) + ", Damage=" + str(stone.DamageDevelopment[-1:]))
