@@ -2,8 +2,10 @@ import sys
 import os
 
 sys.path.append(os.getcwd() + "\src")
+sys.path.append(os.getcwd() + "\src\dikerneldll")
 
-from dikerneloutput import CalculationType
+from dikerneloutput import CalculationMethod
+from toplayertypes import TopLayerType
 
 from dikernelinput import (
     DikernelInput,
@@ -21,9 +23,9 @@ from dikernelcalculationsettings import (
     NaturalStoneCalculationSettings,
     GrassWaveImpactCalculationSettings,
     GrassWaveOvertoppingCalculationSettings,
-    AsphaltTopLayer,
-    GrasCoverOvertoppingTopLayer,
-    GrassCoverWaveImpactTopLayer,
+    AsphaltTopLayerSettings,
+    GrasCoverOvertoppingTopLayerSettings,
+    GrassCoverWaveImpactTopLayerSettings,
 )
 
 from dikernel import Dikernel
@@ -606,57 +608,69 @@ class TestCalculationInputFactory:
             AsphaltOutputLocation(40.0, 0.0, 0.9, 64.0, 0.146, 5712.0),
             AsphaltOutputLocation(40.5, 0.0, 0.9, 64.0, 0.146, 5712.0),
             AsphaltOutputLocation(40.9, 0.0, 0.9, 64.0, 0.146, 5712.0),
-            GrassWaveImpactOutputLocation(41.1, 0.0),
-            GrassWaveImpactOutputLocation(41.5, 0.0),
-            GrassWaveImpactOutputLocation(42.0, 0.0),
-            GrassWaveImpactOutputLocation(42.5, 0.0),
-            GrassWaveImpactOutputLocation(43.0, 0.0),
-            GrassWaveImpactOutputLocation(43.5, 0.0),
-            GrassWaveImpactOutputLocation(44.0, 0.0),
-            GrassWaveImpactOutputLocation(44.5, 0.0),
-            GrassWaveImpactOutputLocation(44.99, 0.0),
-            GrassOvertoppingOutputLocation(45.0, 0.02),
-            GrassOvertoppingOutputLocation(45.5, 0.02),
-            GrassOvertoppingOutputLocation(46.0, 0.02),
-            GrassOvertoppingOutputLocation(46.5, 0.02),
-            GrassOvertoppingOutputLocation(47.0, 0.02),
-            GrassOvertoppingOutputLocation(47.5, 0.02),
-            GrassOvertoppingOutputLocation(48.0, 0.02),
-            GrassOvertoppingOutputLocation(48.5, 0.02),
-            GrassOvertoppingOutputLocation(49.0, 0.02),
-            GrassOvertoppingOutputLocation(49.5, 0.02),
-            GrassOvertoppingOutputLocation(49.99, 0.02),
-            GrassOvertoppingOutputLocation(45.0, 0.02),
-            GrassOvertoppingOutputLocation(52.0, 0.02),
-            GrassOvertoppingOutputLocation(54.0, 0.02),
-            GrassOvertoppingOutputLocation(56.0, 0.02),
-            GrassOvertoppingOutputLocation(58.0, 0.02),
+            GrassWaveImpactOutputLocation(41.1, 0.0, TopLayerType.GrassClosedSod),
+            GrassWaveImpactOutputLocation(41.5, 0.0, TopLayerType.GrassClosedSod),
+            GrassWaveImpactOutputLocation(42.0, 0.0, TopLayerType.GrassClosedSod),
+            GrassWaveImpactOutputLocation(42.5, 0.0, TopLayerType.GrassClosedSod),
+            GrassWaveImpactOutputLocation(43.0, 0.0, TopLayerType.GrassClosedSod),
+            GrassWaveImpactOutputLocation(43.5, 0.0, TopLayerType.GrassClosedSod),
+            GrassWaveImpactOutputLocation(44.0, 0.0, TopLayerType.GrassOpenSod),
+            GrassWaveImpactOutputLocation(44.5, 0.0, TopLayerType.GrassOpenSod),
+            GrassWaveImpactOutputLocation(44.99, 0.0, TopLayerType.GrassClosedSod),
+            GrassOvertoppingOutputLocation(45.0, 0.02, TopLayerType.GrassClosedSod),
+            GrassOvertoppingOutputLocation(45.5, 0.02, TopLayerType.GrassClosedSod),
+            GrassOvertoppingOutputLocation(46.0, 0.02, TopLayerType.GrassClosedSod),
+            GrassOvertoppingOutputLocation(46.5, 0.02, TopLayerType.GrassClosedSod),
+            GrassOvertoppingOutputLocation(47.0, 0.02, TopLayerType.GrassClosedSod),
+            GrassOvertoppingOutputLocation(47.5, 0.02, TopLayerType.GrassClosedSod),
+            GrassOvertoppingOutputLocation(48.0, 0.02, TopLayerType.GrassClosedSod),
+            GrassOvertoppingOutputLocation(48.5, 0.02, TopLayerType.GrassClosedSod),
+            GrassOvertoppingOutputLocation(49.0, 0.02, TopLayerType.GrassClosedSod),
+            GrassOvertoppingOutputLocation(49.5, 0.02, TopLayerType.GrassClosedSod),
+            GrassOvertoppingOutputLocation(49.99, 0.02, TopLayerType.GrassClosedSod),
+            GrassOvertoppingOutputLocation(45.0, 0.02, TopLayerType.GrassClosedSod),
+            GrassOvertoppingOutputLocation(52.0, 0.02, TopLayerType.GrassClosedSod),
+            GrassOvertoppingOutputLocation(54.0, 0.02, TopLayerType.GrassClosedSod),
+            GrassOvertoppingOutputLocation(56.0, 0.02, TopLayerType.GrassClosedSod),
+            GrassOvertoppingOutputLocation(58.0, 0.02, TopLayerType.GrassClosedSod),
         ]
 
     @staticmethod
     def GetCalculationSettings():
-        grasCoverTopLayer1 = GrassCoverWaveImpactTopLayer("grasGeslotenZode")
+        grasCoverTopLayer1 = GrassCoverWaveImpactTopLayerSettings(TopLayerType.GrassClosedSod)
         grasCoverTopLayer1.StanceTimeLineA = 1
         grasCoverTopLayer1.StanceTimeLineB = -0.000009722
         grasCoverTopLayer1.StanceTimeLineC = 0.25
-        grasCoverTopLayer2 = GrassCoverWaveImpactTopLayer("grasOpenZode")
+        grasCoverTopLayer2 = GrassCoverWaveImpactTopLayerSettings(TopLayerType.GrassOpenSod)
         grasCoverTopLayer2.StanceTimeLineA = 0.8
         grasCoverTopLayer2.StanceTimeLineB = -0.00001944
         grasCoverTopLayer2.StanceTimeLineC = 0.25
 
         return [
-            AsphalCalculationSettings([AsphaltTopLayer()]),
+            AsphalCalculationSettings([AsphaltTopLayerSettings()]),
             NaturalStoneCalculationSettings(),
             GrassWaveImpactCalculationSettings([grasCoverTopLayer1, grasCoverTopLayer2]),
-            GrassWaveOvertoppingCalculationSettings([GrasCoverOvertoppingTopLayer("grasGeslotenZode")]),
+            GrassWaveOvertoppingCalculationSettings(
+                [GrasCoverOvertoppingTopLayerSettings(TopLayerType.GrassClosedSod)]
+            ),
         ]
 
 
 input = TestCalculationInputFactory.GetCalculationInput()
-output = Dikernel.run(input)
-print("number of output locations: " + str(len(output)))
-print("Number of failed locations: " + str(len([l for l in output if l.Failed])))
-stones = [o for o in output if o.CalculationType == CalculationType.NaturalStone]
-print("Number of natural stone output locations: " + str(len(stones)))
+dikernel = Dikernel(input)
+
+print("Starting validation")
+validationresult = dikernel.validate()
+print("   Validation was: " + "succesfull" if validationresult else "unsuccessfull")
+
+print("Starting calculation")
+runresult = dikernel.run()
+print("   Run was: " + "succesfull" if runresult else "unsuccessfull")
+
+output = dikernel.Output
+print("   number of output locations: " + str(len(output)))
+print("   Number of failed locations: " + str(len([l for l in output if l.Failed])))
+stones = [o for o in output if o.CalculationType == CalculationMethod.NaturalStone]
+print("   Number of natural stone output locations: " + str(len(stones)))
 for stone in stones:
-    print("X: " + str(stone.XPosition) + ", Damage=" + str(stone.DamageDevelopment[-1:]))
+    print("      X: " + str(stone.XPosition) + ", Damage lvel = " + str(stone.DamageDevelopment[-1]))

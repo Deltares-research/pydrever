@@ -1,59 +1,66 @@
-class TopLayer:
-    def __init__(self, type: str):
-        self.TopLayerType = type
+from toplayertypes import TopLayerType
+from calculationmethods import CalculationMethod
+
+# TODO: remove unnecessary defaults and add to calculation definition
+# TODO: check all settings types in C# classes
 
 
-class AsphaltTopLayer(TopLayer):
+class TopLayerSettings:
+    def __init__(self, type: TopLayerType):
+        self.TopLayerType: TopLayerType = type
+
+
+class AsphaltTopLayerSettings(TopLayerSettings):
     def __init__(self):
-        super().__init__("waterbouwAsfaltBeton")
-        self.StiffnessRatioNu = 0.35
-        self.FatigueAsphaltAlpha = 0.5
-        self.FatigueAsphaltBeta = 5.4
+        super().__init__(TopLayerType.WAB)
+        self.StiffnessRatioNu: float = 0.35
+        self.FatigueAsphaltAlpha: float = 0.5
+        self.FatigueAsphaltBeta: float = 5.4
 
 
-class GrasCoverOvertoppingTopLayer(TopLayer):
-    def __init__(self, topLayerType: str):
+class GrasCoverOvertoppingTopLayerSettings(TopLayerSettings):
+    def __init__(self, topLayerType: TopLayerType):
         super().__init__(topLayerType)
-        self.CriticalCumulativeOverload = 7000
-        self.CriticalFrontVelocity = 6.6
+        self.CriticalCumulativeOverload: float = 7000.0
+        self.CriticalFrontVelocity: float = 6.6
 
 
-class GrassCoverWaveImpactTopLayer(TopLayer):
-    def __init__(self, type: str):
+class GrassCoverWaveImpactTopLayerSettings(TopLayerSettings):
+    def __init__(self, type: TopLayerType):
         super().__init__(type)
-        self.StanceTimeLineA = 1
-        self.StanceTimeLineB = -0.000009722
-        self.StanceTimeLineC = 0.25
+        self.StanceTimeLineA: float = 1.0
+        self.StanceTimeLineB: float = -0.000009722
+        self.StanceTimeLineC: float = 0.25
 
 
-class NaturalStoneTopLayer(TopLayer):
+class NaturalStoneTopLayerSettings(TopLayerSettings):
     def __init__(self):
-        super().__init__("noorseSteen")
-        self.StabilityPlungingA = 4
-        self.StabilityPlungingB = 0
-        self.StabilityPlungingC = 0
-        self.StabilityPlungingN = -0.9
-        self.StabilitySurgingA = 0.8
-        self.StabilitySurgingB = 0
-        self.StabilitySurgingC = 0
-        self.StabilitySurgingN = 0.6
-        self.Xib = 2.9
+        super().__init__(TopLayerType.NordicStone)
+        self.StabilityPlungingA: float = 4.0
+        self.StabilityPlungingB: float = 0.0
+        self.StabilityPlungingC: float = 0.0
+        self.StabilityPlungingN: float = -0.9
+        self.StabilitySurgingA: float = 0.8
+        self.StabilitySurgingB: float = 0.0
+        self.StabilitySurgingC: float = 0.0
+        self.StabilitySurgingN: float = 0.6
+        self.Xib: float = 2.9
 
 
 class CalculationSettings:
-    def __init__(self, calculationMethod: str, topLayers: list[TopLayer]):
-        self.CalculationMethod = calculationMethod
-        self.FailureNumber = 1.0
-        self.TopLayers = topLayers
+    def __init__(self, calculationMethod: CalculationMethod, topLayers: list[TopLayerSettings]):
+        self.CalculationMethod: CalculationMethod = calculationMethod
+        self.FailureNumber: float = 1.0
+        self.TopLayersSettings: list[TopLayerSettings] = topLayers
 
 
 class AsphalCalculationSettings(CalculationSettings):
     def __init__(self, topLayers: list[float]):
-        super().__init__("asfaltGolfklap", topLayers)
-        self.DensityOfWater = 1000.0
-        self.FactorCtm = 1.0
-        self.ImpactNumberC = 1.0
-        self.WidthFactors = [
+        super().__init__(CalculationMethod.AsphaltWaveImpact, topLayers)
+        self.DensityOfWater: float = 1000.0
+        self.FactorCtm: float = 1.0
+        self.ImpactNumberC: float = 1.0
+        self.WidthFactors: list[float, float] = [
             [0.1, 0.0392],
             [0.2, 0.0738],
             [0.3, 0.1002],
@@ -70,7 +77,7 @@ class AsphalCalculationSettings(CalculationSettings):
             [1.4, 0.015],
             [1.5, 0.0105],
         ]
-        self.DepthFactors = [
+        self.DepthFactors: list[float, float] = [
             [-1.0, 0.005040816326530646],
             [-0.9744897959183674, 0.00596482278562177],
             [-0.9489795918367347, 0.007049651822326582],
@@ -122,7 +129,7 @@ class AsphalCalculationSettings(CalculationSettings):
             [0.22448979591836737, 0.003263202667360069],
             [0.25, 0.0031645408163265307],
         ]
-        self.ImpactFactors = [
+        self.ImpactFactors: list[float, float] = [
             [2.0, 0.039],
             [2.4, 0.1],
             [2.8, 0.18],
@@ -138,49 +145,49 @@ class AsphalCalculationSettings(CalculationSettings):
 
 
 class GrassWaveOvertoppingCalculationSettings(CalculationSettings):
-    def __init__(self, topLayers: list[TopLayer]):
-        super().__init__("grasGolfoverslag", topLayers)
-        self.AccelerationAlphaAForCrest = 1
-        self.AccelerationAlphaAForInnerSlope = 1.4
-        self.FixedNumberOfWaves = 10000
-        self.FrontVelocityCwo = 1.45
-        self.FactorCtm = 0.92
-        self.DikeHeight = None
+    def __init__(self, topLayers: list[TopLayerSettings]):
+        super().__init__(CalculationMethod.GrassWaveOvertopping, topLayers)
+        self.AccelerationAlphaAForCrest: float = 1.0
+        self.AccelerationAlphaAForInnerSlope: float = 1.4
+        self.FixedNumberOfWaves: int = 10000
+        self.FrontVelocityCwo: float = 1.45
+        self.FactorCtm: float = 0.92
+        self.DikeHeight: float = None
 
 
 class GrassWaveImpactCalculationSettings(CalculationSettings):
     def __init__(self, topLayers):
-        super().__init__("grasGolfklap", topLayers)
-        self.LoadingUpperLimit = 0
-        self.LoadingLowerLimit = 0.5
-        self.WaveAngleImpactN = 0.6666666666666667
-        self.WaveAngleImpactQ = 0.35
-        self.WaveAngleImpactR = 10
-        self.Temax = 3600000
-        self.Temin = 3.6
+        super().__init__(CalculationMethod.GrassWaveImpact, topLayers)
+        self.LoadingUpperLimit: float = 0.0
+        self.LoadingLowerLimit: float = 0.5
+        self.WaveAngleImpactN: float = 0.6666666666666667
+        self.WaveAngleImpactQ: float = 0.35
+        self.WaveAngleImpactR: float = 10.0
+        self.Temax: float = 3600000.0
+        self.Temin: float = 3.6
 
 
 class NaturalStoneCalculationSettings(CalculationSettings):
     def __init__(self):
-        topLayers = [NaturalStoneTopLayer()]
-        super().__init__("natuursteen", topLayers)
-        self.DistanceMaximumWaveElevationA = 0.42
-        self.DistanceMaximumWaveElevationB = 0.9
-        self.ForcingUpperBoundaryA = 0.1
-        self.ForcingUpperBoundaryB = 0.6
-        self.ForcingUpperBoundaryC = 4
-        self.ForcingLowerBoundaryA = 0.1
-        self.ForcingLowerBoundaryB = 0.2
-        self.ForcingLowerBoundaryC = 4
-        self.SlopeUpperLevel = 0.05
-        self.SLopeLowerLevel = 1.5
-        self.ImpactWageAngleBetaMax = 78
-        self.NormativeWidthOfWaveImpactA = 0.96
-        self.NormativeWidthOfWaveImpactB = 0.11
-        self.UpperLimitLoadingA = None
-        self.UpperLimitLoadingB = None
-        self.UpperLimitLoadingC = None
-        self.LowerLimitLoadingA = None
-        self.LowerLimitLoadingB = None
-        self.LowerLimitLoadingC = None
-        self.WaveAngleImpactBetaMax = None
+        topLayers = [NaturalStoneTopLayerSettings()]
+        super().__init__(CalculationMethod.NaturalStone, topLayers)
+        self.DistanceMaximumWaveElevationA: float = 0.42
+        self.DistanceMaximumWaveElevationB: float = 0.9
+        self.ForcingUpperBoundaryA: float = 0.1
+        self.ForcingUpperBoundaryB: float = 0.6
+        self.ForcingUpperBoundaryC: float = 4.0
+        self.ForcingLowerBoundaryA: float = 0.1
+        self.ForcingLowerBoundaryB: float = 0.2
+        self.ForcingLowerBoundaryC: float = 4.0
+        self.SlopeUpperLevel: float = 0.05
+        self.SLopeLowerLevel: float = 1.5
+        self.ImpactWageAngleBetaMax: float = 78.0
+        self.NormativeWidthOfWaveImpactA: float = 0.96
+        self.NormativeWidthOfWaveImpactB: float = 0.11
+        self.UpperLimitLoadingA: float = None
+        self.UpperLimitLoadingB: float = None
+        self.UpperLimitLoadingC: float = None
+        self.LowerLimitLoadingA: float = None
+        self.LowerLimitLoadingB: float = None
+        self.LowerLimitLoadingC: float = None
+        self.WaveAngleImpactBetaMax: float = None

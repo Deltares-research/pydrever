@@ -1,17 +1,10 @@
-from enum import Enum
-
-
-class CalculationType(Enum):
-    GrassWaveOvertopping = 0
-    GrassWaveImpact = 1
-    NaturalStone = 2
-    AsphaltWaveImpact = 3
+from calculationmethods import CalculationMethod
 
 
 class DikernelOutputLocation:
     def __init__(
         self,
-        calculationType: CalculationType,
+        calculationType: CalculationMethod,
         xPosition: float,
         timeOfFailure: float,
         damageDevelopment: list[float],
@@ -24,7 +17,7 @@ class DikernelOutputLocation:
         self.__calculationType = calculationType
 
     @property
-    def CalculationType(self) -> CalculationType:
+    def CalculationType(self) -> CalculationMethod:
         return self.__calculationType
 
     @property
@@ -65,7 +58,7 @@ class AsphaltWaveImpactOutputLocation(DikernelOutputLocation):
         averageNumberOfWaves: list[float],
     ):
         super().__init__(
-            CalculationType.AsphaltWaveImpact, xPosition, timeOfFailure, damageDevelopment, damageIncrement
+            CalculationMethod.AsphaltWaveImpact, xPosition, timeOfFailure, damageDevelopment, damageIncrement
         )
         self.__z = z
         self.__outerSlope = outerSlope
@@ -122,7 +115,7 @@ class GrassOvertoppingOutputLocation(DikernelOutputLocation):
         averageNumberOfWaves: list[float],
     ):
         super().__init__(
-            CalculationType.GrassWaveOvertopping, xPosition, timeOfFailure, damageDevelopment, damageIncrement
+            CalculationMethod.GrassWaveOvertopping, xPosition, timeOfFailure, damageDevelopment, damageIncrement
         )
         self.__verticalDistanceWaterLevelElevation = verticalDistanceWaterLevelElevation
         self.__representativeWaveRunup2P = representativeWaveRunup2P
@@ -163,7 +156,9 @@ class GrassWaveImpactOutputLocation(DikernelOutputLocation):
         waveAngleImpact: list[float],
         waveHeightImpact: list[float],
     ):
-        super().__init__(CalculationType.GrassWaveImpact, xPosition, timeOfFailure, damageDevelopment, damageIncrement)
+        super().__init__(
+            CalculationMethod.GrassWaveImpact, xPosition, timeOfFailure, damageDevelopment, damageIncrement
+        )
         self.__z = z
         self.__minimumWaveHeight = minimumWaveHeight
         self.__maximumWaveHeight = maximumWaveHeight
@@ -239,7 +234,7 @@ class NaturalStoneOutputLocation(DikernelOutputLocation):
         referenceTimeDegradation: list[float],
         referenceDegradation: list[float],
     ):
-        super().__init__(CalculationType.NaturalStone, xPosition, timeOfFailure, damageDevelopment, damageIncrement)
+        super().__init__(CalculationMethod.NaturalStone, xPosition, timeOfFailure, damageDevelopment, damageIncrement)
         self.__z = z
         self.__resistance = resistance
         self.__outerSlope = outerSlope

@@ -11,40 +11,18 @@ from dikernelcalculationsettings import (
     GrassWaveImpactCalculationSettings,
     NaturalStoneCalculationSettings,
 )
-import clr
-
-clr.AddReference("C:/src/dikerosion-pyton/src/dikerneldll/DiKErnel.Integration.dll")
-clr.AddReference("C:/src/dikerosion-pyton/src/dikerneldll/DiKErnel.Core.dll")
-
-from System import Double, ValueTuple
-from System.Collections.Generic import List
-
-from DiKErnel.Integration import CalculationInputBuilder
-from DiKErnel.Core.Data import CharacteristicPointType
-from DiKErnel.Integration.Data.AsphaltRevetmentWaveImpact import (
-    AsphaltRevetmentWaveImpactLocationConstructionProperties,
-)
-from DiKErnel.Integration.Data.NaturalStoneRevetment import NaturalStoneRevetmentLocationConstructionProperties
-from DiKErnel.Integration.Data.GrassRevetmentOvertopping import GrassRevetmentOvertoppingLocationConstructionProperties
-from DiKErnel.Integration.Data.GrassRevetmentWaveImpact import GrassRevetmentWaveImpactLocationConstructionProperties
-
-# TODO: Also allow runup calculaitons
-# from DiKErnel.Integration.Data.GrassRevetmentWaveRunup import GrassRevetmentWaveRunupLocationConstructionProperties
-
-from DiKErnel.Integration.Data.AsphaltRevetmentWaveImpact import AsphaltRevetmentTopLayerType
-from DiKErnel.Integration.Data.GrassRevetment import GrassRevetmentTopLayerType
-from DiKErnel.Integration.Data.NaturalStoneRevetment import NaturalStoneRevetmentTopLayerType
+from dikernelcreferences import *
+from toplayertypes import TopLayerType
 
 
 class DikernelInputParser:
     @staticmethod
-    def ConvertToCInput(dikernelInput: DikernelInput):
+    def parsedikernelinput(dikernelInput: DikernelInput):
         builder = CalculationInputBuilder(dikernelInput.DikeOrientation)
         DikernelInputParser.__addDikeProfileToBuilder(builder, dikernelInput.DikeSchematization)
         DikernelInputParser.__addHydraulicsToBuilder(builder, dikernelInput.HydraulicInput)
         DikernelInputParser.__addOutputLocationsToBuilder(builder, dikernelInput)
         composedInput = builder.Build()
-        # TODO: Validate input with DiKErnel.Core.Validator()
         return composedInput.Data
 
     @staticmethod
@@ -176,21 +154,31 @@ class DikernelInputParser:
             locationData.TopLayerElasticModulus,
         )
 
-        topLayer = next((l for l in settings.TopLayers if l.TopLayerType == locationData.TopLayerType), None)
+        topLayer = (
+            next((l for l in settings.TopLayersSettings if l.TopLayerType == locationData.TopLayerType), None)
+            if settings is not None
+            else None
+        )
 
         properties.InitialDamage = locationData.InitialDamage
         properties.ThicknessSubLayer = locationData.SubLayerThickness
         properties.ElasticModulusSubLayer = locationData.SubLayerElasticModulus
-        properties.FailureNumber = settings.FailureNumber
-        properties.DensityOfWater = settings.DensityOfWater
-        properties.AverageNumberOfWavesCtm = settings.FactorCtm
-        properties.FatigueAlpha = topLayer.FatigueAsphaltAlpha
-        properties.FatigueBeta = topLayer.FatigueAsphaltBeta
-        properties.StiffnessRelationNu = topLayer.StiffnessRatioNu
-        properties.ImpactNumberC = settings.ImpactNumberC
-        properties.WidthFactors = DikernelInputParser.__convertToCList(settings.WidthFactors)
-        properties.DepthFactors = DikernelInputParser.__convertToCList(settings.DepthFactors)
-        properties.ImpactFactors = DikernelInputParser.__convertToCList(settings.ImpactFactors)
+        properties.FailureNumber = settings.FailureNumber if settings is not None else None
+        properties.DensityOfWater = settings.DensityOfWater if settings is not None else None
+        properties.AverageNumberOfWavesCtm = settings.FactorCtm if settings is not None else None
+        properties.FatigueAlpha = topLayer.FatigueAsphaltAlpha if topLayer is not None else None
+        properties.FatigueBeta = topLayer.FatigueAsphaltBeta if topLayer is not None else None
+        properties.StiffnessRelationNu = topLayer.StiffnessRatioNu if topLayer is not None else None
+        properties.ImpactNumberC = settings.ImpactNumberC if settings is not None else None
+        properties.WidthFactors = (
+            DikernelInputParser.__convertToCList(settings.WidthFactors) if settings is not None else None
+        )
+        properties.DepthFactors = (
+            DikernelInputParser.__convertToCList(settings.DepthFactors) if settings is not None else None
+        )
+        properties.ImpactFactors = (
+            DikernelInputParser.__convertToCList(settings.ImpactFactors) if settings is not None else None
+        )
 
         return properties
 
@@ -205,32 +193,44 @@ class DikernelInputParser:
             locationData.RelativeDensity,
         )
 
-        topLayer = next((l for l in settings.TopLayers if l.TopLayerType == locationData.TopLayerType), None)
+        topLayer = (
+            next((l for l in settings.TopLayersSettings if l.TopLayerType == locationData.TopLayerType), None)
+            if settings is not None
+            else None
+        )
 
         properties.InitialDamage = locationData.InitialDamage
-        properties.FailureNumber = settings.FailureNumber
-        properties.HydraulicLoadAp = topLayer.StabilityPlungingA
-        properties.HydraulicLoadBp = topLayer.StabilityPlungingB
-        properties.HydraulicLoadCp = topLayer.StabilityPlungingC
-        properties.HydraulicLoadNp = topLayer.StabilityPlungingN
-        properties.HydraulicLoadAs = topLayer.StabilitySurgingA
-        properties.HydraulicLoadBs = topLayer.StabilitySurgingB
-        properties.HydraulicLoadCs = topLayer.StabilitySurgingC
-        properties.HydraulicLoadNs = topLayer.StabilitySurgingN
-        properties.HydraulicLoadXib = topLayer.Xib
-        properties.SlopeUpperLevelAus = settings.SlopeUpperLevel
-        properties.SlopeLowerLevelAls = settings.SLopeLowerLevel
-        properties.UpperLimitLoadingAul = settings.UpperLimitLoadingA
-        properties.UpperLimitLoadingBul = settings.UpperLimitLoadingB
-        properties.UpperLimitLoadingCul = settings.UpperLimitLoadingC
-        properties.LowerLimitLoadingAll = settings.LowerLimitLoadingA
-        properties.LowerLimitLoadingBll = settings.LowerLimitLoadingB
-        properties.LowerLimitLoadingCll = settings.LowerLimitLoadingC
-        properties.DistanceMaximumWaveElevationAsmax = settings.DistanceMaximumWaveElevationA
-        properties.DistanceMaximumWaveElevationBsmax = settings.DistanceMaximumWaveElevationB
-        properties.NormativeWidthOfWaveImpactAwi = settings.NormativeWidthOfWaveImpactA
-        properties.NormativeWidthOfWaveImpactBwi = settings.NormativeWidthOfWaveImpactB
-        properties.WaveAngleImpactBetamax = settings.WaveAngleImpactBetaMax
+        properties.FailureNumber = settings.FailureNumber if settings is not None else None
+        properties.HydraulicLoadAp = topLayer.StabilityPlungingA if topLayer is not None else None
+        properties.HydraulicLoadBp = topLayer.StabilityPlungingB if topLayer is not None else None
+        properties.HydraulicLoadCp = topLayer.StabilityPlungingC if topLayer is not None else None
+        properties.HydraulicLoadNp = topLayer.StabilityPlungingN if topLayer is not None else None
+        properties.HydraulicLoadAs = topLayer.StabilitySurgingA if topLayer is not None else None
+        properties.HydraulicLoadBs = topLayer.StabilitySurgingB if topLayer is not None else None
+        properties.HydraulicLoadCs = topLayer.StabilitySurgingC if topLayer is not None else None
+        properties.HydraulicLoadNs = topLayer.StabilitySurgingN if topLayer is not None else None
+        properties.HydraulicLoadXib = topLayer.Xib if topLayer is not None else None
+        properties.SlopeUpperLevelAus = settings.SlopeUpperLevel if settings is not None else None
+        properties.SlopeLowerLevelAls = settings.SLopeLowerLevel if settings is not None else None
+        properties.UpperLimitLoadingAul = settings.UpperLimitLoadingA if settings is not None else None
+        properties.UpperLimitLoadingBul = settings.UpperLimitLoadingB if settings is not None else None
+        properties.UpperLimitLoadingCul = settings.UpperLimitLoadingC if settings is not None else None
+        properties.LowerLimitLoadingAll = settings.LowerLimitLoadingA if settings is not None else None
+        properties.LowerLimitLoadingBll = settings.LowerLimitLoadingB if settings is not None else None
+        properties.LowerLimitLoadingCll = settings.LowerLimitLoadingC if settings is not None else None
+        properties.DistanceMaximumWaveElevationAsmax = (
+            settings.DistanceMaximumWaveElevationA if settings is not None else None
+        )
+        properties.DistanceMaximumWaveElevationBsmax = (
+            settings.DistanceMaximumWaveElevationB if settings is not None else None
+        )
+        properties.NormativeWidthOfWaveImpactAwi = (
+            settings.NormativeWidthOfWaveImpactA if settings is not None else None
+        )
+        properties.NormativeWidthOfWaveImpactBwi = (
+            settings.NormativeWidthOfWaveImpactB if settings is not None else None
+        )
+        properties.WaveAngleImpactBetamax = settings.WaveAngleImpactBetaMax if settings is not None else None
 
         return properties
 
@@ -240,25 +240,29 @@ class DikernelInputParser:
     ):
         topLayerType = (
             GrassRevetmentTopLayerType.ClosedSod
-            if locationData.TopLayerType == "grasGeslotenZode"
+            if locationData.TopLayerType == TopLayerType.GrassClosedSod
             else GrassRevetmentTopLayerType.OpenSod
         )
         properties = GrassRevetmentWaveImpactLocationConstructionProperties(locationData.XPosition, topLayerType)
 
-        topLayer = next((l for l in settings.TopLayers if l.TopLayerType == locationData.TopLayerType), None)
+        topLayer = (
+            next((l for l in settings.TopLayersSettings if l.TopLayerType == locationData.TopLayerType), None)
+            if settings is not None
+            else None
+        )
 
         properties.InitialDamage = locationData.InitialDamage
-        properties.FailureNumber = settings.FailureNumber
-        properties.TimeLineAgwi = topLayer.StanceTimeLineA
-        properties.TimeLineBgwi = topLayer.StanceTimeLineB
-        properties.TimeLineCgwi = topLayer.StanceTimeLineC
-        properties.MinimumWaveHeightTemax = settings.Temax
-        properties.MaximumWaveHeightTemin = settings.Temin
-        properties.WaveAngleImpactNwa = settings.WaveAngleImpactN
-        properties.WaveAngleImpactQwa = settings.WaveAngleImpactQ
-        properties.WaveAngleImpactRwa = settings.WaveAngleImpactR
-        properties.UpperLimitLoadingAul = settings.LoadingUpperLimit
-        properties.LowerLimitLoadingAll = settings.LoadingLowerLimit
+        properties.FailureNumber = settings.FailureNumber if settings is not None else None
+        properties.TimeLineAgwi = topLayer.StanceTimeLineA if topLayer is not None else None
+        properties.TimeLineBgwi = topLayer.StanceTimeLineB if topLayer is not None else None
+        properties.TimeLineCgwi = topLayer.StanceTimeLineC if topLayer is not None else None
+        properties.MinimumWaveHeightTemax = settings.Temax if settings is not None else None
+        properties.MaximumWaveHeightTemin = settings.Temin if settings is not None else None
+        properties.WaveAngleImpactNwa = settings.WaveAngleImpactN if settings is not None else None
+        properties.WaveAngleImpactQwa = settings.WaveAngleImpactQ if settings is not None else None
+        properties.WaveAngleImpactRwa = settings.WaveAngleImpactR if settings is not None else None
+        properties.UpperLimitLoadingAul = settings.LoadingUpperLimit if settings is not None else None
+        properties.LowerLimitLoadingAll = settings.LoadingLowerLimit if settings is not None else None
 
         return properties
 
@@ -266,34 +270,42 @@ class DikernelInputParser:
     def __createGrassOvertoppingConstructionProperties(
         locationData: GrassOvertoppingOutputLocation, settings: GrassWaveOvertoppingCalculationSettings
     ):
-        topLayerType = (
-            GrassRevetmentTopLayerType.ClosedSod
-            if locationData.TopLayerType == "grasGeslotenZode"  # TODO: Implement enum value
-            else GrassRevetmentTopLayerType.OpenSod
-        )
+        topLayerType = None
+        match locationData.TopLayerType:
+            case TopLayerType.GrassClosedSod:
+                topLayerType = GrassRevetmentTopLayerType.ClosedSod
+            case TopLayerType.GrassOpenSod:
+                topLayerType = GrassRevetmentTopLayerType.OpenSod
 
         properties = GrassRevetmentOvertoppingLocationConstructionProperties(locationData.XPosition, topLayerType)
 
-        topLayer = next((l for l in settings.TopLayers if l.TopLayerType == locationData.TopLayerType), None)
+        topLayer = (
+            next((l for l in settings.TopLayersSettings if l.TopLayerType == locationData.TopLayerType), None)
+            if settings is not None
+            else None
+        )
 
         properties.InitialDamage = locationData.InitialDamage
         properties.IncreasedLoadTransitionAlphaM = locationData.IncreasedLoadTransitionAlphaM
         properties.ReducedStrengthTransitionAlphaS = locationData.ReducedStrengthTransitionAlphaS
-        properties.FailureNumber = settings.FailureNumber
-        properties.CriticalCumulativeOverload = topLayer.CriticalCumulativeOverload
-        properties.CriticalFrontVelocity = topLayer.CriticalFrontVelocity
-        properties.DikeHeight = settings.DikeHeight
-        properties.AccelerationAlphaAForCrest = settings.AccelerationAlphaAForCrest
-        properties.AccelerationAlphaAForInnerSlope = settings.AccelerationAlphaAForInnerSlope
-        properties.FixedNumberOfWaves = settings.FixedNumberOfWaves
-        properties.FrontVelocityCwo = settings.FrontVelocityCwo
-        properties.AverageNumberOfWavesCtm = settings.FactorCtm
+        properties.FailureNumber = settings.FailureNumber if settings is not None else None
+        properties.CriticalCumulativeOverload = topLayer.CriticalCumulativeOverload if topLayer is not None else None
+        properties.CriticalFrontVelocity = topLayer.CriticalFrontVelocity if topLayer is not None else None
+        properties.DikeHeight = settings.DikeHeight if settings is not None else None
+        properties.AccelerationAlphaAForCrest = settings.AccelerationAlphaAForCrest if settings is not None else None
+        properties.AccelerationAlphaAForInnerSlope = (
+            settings.AccelerationAlphaAForInnerSlope if settings is not None else None
+        )
+        properties.FixedNumberOfWaves = settings.FixedNumberOfWaves if settings is not None else None
+        properties.FrontVelocityCwo = settings.FrontVelocityCwo if settings is not None else None
+        properties.AverageNumberOfWavesCtm = settings.FactorCtm if settings is not None else None
 
         return properties
 
     @staticmethod
     def __convertToCList(lst: list[list[float]]):
         cList = List[ValueTuple[Double, Double]]()
-        for l in lst:
-            cList.Add(ValueTuple[Double, Double](l[0], l[1]))
+        if lst is not None:
+            for l in lst:
+                cList.Add(ValueTuple[Double, Double](l[0], l[1]))
         return cList
