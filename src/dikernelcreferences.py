@@ -7,8 +7,14 @@ clr.AddReference("C:/src/dikerosion-pyton/src/dikerneldll/DiKErnel.Core.dll")
 from System import Double, ValueTuple
 from System.Collections.Generic import List
 
-from DiKErnel.Core import Calculator
-from DiKErnel.Core.Data import LocationDependentOutput, CalculationOutput, CharacteristicPointType
+from DiKErnel.Core import Calculator, Validator
+from DiKErnel.Core.Data import (
+    LocationDependentOutput,
+    CalculationOutput,
+    CharacteristicPointType,
+    ValidationResultType,
+    CalculationState,
+)
 
 from DiKErnel.Integration.Data.AsphaltRevetmentWaveImpact import (
     AsphaltRevetmentWaveImpactLocationDependentOutput,

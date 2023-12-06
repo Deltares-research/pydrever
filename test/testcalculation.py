@@ -34,10 +34,9 @@ from dikernel import Dikernel
 class TestCalculationInputFactory:
     @staticmethod
     def GetCalculationInput() -> DikernelInput:
-        input = DikernelInput()
-        input.DikeOrientation = 0.0
-        input.HydraulicInput = TestCalculationInputFactory.GetHydraulicBoundaries()
-        input.DikeSchematization = TestCalculationInputFactory.GetDikeProfile()
+        input = DikernelInput(
+            0.0, TestCalculationInputFactory.GetHydraulicBoundaries(), TestCalculationInputFactory.GetDikeProfile()
+        )
         input.OutputLocations = TestCalculationInputFactory.GetOutputLocations()
         input.Settings = TestCalculationInputFactory.GetCalculationSettings()
         return input
@@ -454,46 +453,46 @@ class TestCalculationInputFactory:
             12.94,
         ]
         waveAngles = [
-            -20,
-            -19.5,
-            -19,
-            -18.5,
-            -18,
-            -17.5,
-            -17,
-            -16.5,
-            -16,
-            -15.5,
-            -15,
-            -14.5,
-            -14,
-            -13.5,
-            -13,
-            -12.5,
-            -12,
-            -11.5,
-            -11,
-            -10.5,
-            -10,
-            -9.5,
-            -9,
-            -8.5,
-            -8,
-            -7.5,
-            -7,
-            -6.5,
-            -6,
-            -5.5,
-            -5,
-            -4.5,
-            -4,
-            -3.5,
-            -3,
-            -2.5,
-            -2,
-            -1.5,
-            -1,
-            -0.5,
+            -20 + 360,
+            -19.5 + 360,
+            -19 + 360,
+            -18.5 + 360,
+            -18 + 360,
+            -17.5 + 360,
+            -17 + 360,
+            -16.5 + 360,
+            -16 + 360,
+            -15.5 + 360,
+            -15 + 360,
+            -14.5 + 360,
+            -14 + 360,
+            -13.5 + 360,
+            -13 + 360,
+            -12.5 + 360,
+            -12 + 360,
+            -11.5 + 360,
+            -11 + 360,
+            -10.5 + 360,
+            -10 + 360,
+            -9.5 + 360,
+            -9 + 360,
+            -8.5 + 360,
+            -8 + 360,
+            -7.5 + 360,
+            -7 + 360,
+            -6.5 + 360,
+            -6 + 360,
+            -5.5 + 360,
+            -5 + 360,
+            -4.5 + 360,
+            -4 + 360,
+            -3.5 + 360,
+            -3 + 360,
+            -2.5 + 360,
+            -2 + 360,
+            -1.5 + 360,
+            -1 + 360,
+            -0.5 + 360,
             0,
             0.5,
             1,
@@ -559,10 +558,10 @@ class TestCalculationInputFactory:
 
     @staticmethod
     def GetDikeProfile() -> DikeSchematization:
-        schematization = DikeSchematization()
-        schematization.XPositions = [0.0, 25.0, 35.0, 41.0, 45, 50, 60, 70]
-        schematization.ZPositions = [-3, 0.0, 1.5, 1.7, 3.0, 3.1, 0, -1]
-        schematization.Roughnesses = [1, 1, 0.75, 0.5, 0.8, 0.8, 0.8]
+        xPositions = [0.0, 25.0, 35.0, 41.0, 45, 50, 60, 70]
+        zPositions = [-3, 0.0, 1.5, 1.7, 3.0, 3.1, 0, -1]
+        roughnesses = [1, 1, 0.75, 0.5, 0.8, 0.8, 0.8]
+        schematization = DikeSchematization(xPositions, zPositions, roughnesses)
         schematization.OuterToe = 25.0
         schematization.OuterCrest = 45.0
         schematization.CrestOuterBerm = 35.0
