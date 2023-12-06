@@ -17,27 +17,51 @@ class DikernelOutputLocation:
         self.__calculationType = calculationType
 
     @property
-    def CalculationType(self) -> CalculationMethod:
+    def CalculationMethod(self) -> CalculationMethod:
+        """
+        Returns:
+            CalculationMethod: The calculation method that was used at this output location.
+        """
         return self.__calculationType
 
     @property
     def XPosition(self) -> float:
+        """
+        Returns:
+            float: The cross-shore position of the calculated location.
+        """
         return self.__xPosition
 
     @property
     def Failed(self) -> bool:
+        """
+        Returns:
+            bool: Whether the revetment has failed at this position.
+        """
         return self.__timeOfFailure is not None
 
     @property
     def TimeOfFailure(self) -> float:
+        """
+        Returns:
+            float: The moment (time step) this location failed. None if it did not fail.
+        """
         return self.__timeOfFailure
 
     @property
     def DamageDevelopment(self) -> list[float]:
+        """
+        Returns:
+            list[float]: The damage level at the end of each time step.
+        """
         return self.__damageDevelopment
 
     @property
     def DamageIncrement(self) -> list[float]:
+        """
+        Returns:
+            list[float]: The increment of the damage level during each time step.
+        """
         return self.__damageIncrement
 
 
@@ -60,7 +84,7 @@ class AsphaltWaveImpactOutputLocation(DikernelOutputLocation):
         super().__init__(
             CalculationMethod.AsphaltWaveImpact, xPosition, timeOfFailure, damageDevelopment, damageIncrement
         )
-        self.__z = z
+        self.__zPosition = z
         self.__outerSlope = outerSlope
         self.__logFlexuralStrength = logFlexuralStrength
         self.__stiffnessRelation = stiffnessRelation
@@ -70,8 +94,8 @@ class AsphaltWaveImpactOutputLocation(DikernelOutputLocation):
         self.__averageNumberOfWaves = averageNumberOfWaves
 
     @property
-    def Z(self) -> float:
-        return self.__z
+    def ZPosition(self) -> float:
+        return self.__zPosition
 
     @property
     def OuterSlope(self) -> float:
@@ -159,7 +183,7 @@ class GrassWaveImpactOutputLocation(DikernelOutputLocation):
         super().__init__(
             CalculationMethod.GrassWaveImpact, xPosition, timeOfFailure, damageDevelopment, damageIncrement
         )
-        self.__z = z
+        self.__zPosition = z
         self.__minimumWaveHeight = minimumWaveHeight
         self.__maximumWaveHeight = maximumWaveHeight
         self.__loadingRevetment = loadingRevetment
@@ -170,8 +194,8 @@ class GrassWaveImpactOutputLocation(DikernelOutputLocation):
         self.__waveHeightImpact = waveHeightImpact
 
     @property
-    def Z(self) -> float:
-        return self.__z
+    def ZPosition(self) -> float:
+        return self.__zPosition
 
     @property
     def MinimumWaveHeight(self) -> float:
@@ -235,7 +259,7 @@ class NaturalStoneOutputLocation(DikernelOutputLocation):
         referenceDegradation: list[float],
     ):
         super().__init__(CalculationMethod.NaturalStone, xPosition, timeOfFailure, damageDevelopment, damageIncrement)
-        self.__z = z
+        self.__zPosition = z
         self.__resistance = resistance
         self.__outerSlope = outerSlope
         self.__slopeUpperLevel = slopeUpperLevel
@@ -257,8 +281,8 @@ class NaturalStoneOutputLocation(DikernelOutputLocation):
         self.__referenceDegradation = referenceDegradation
 
     @property
-    def Z(self) -> float:
-        return self.__z
+    def ZPosition(self) -> float:
+        return self.__zPosition
 
     @property
     def Resistance(self) -> float:

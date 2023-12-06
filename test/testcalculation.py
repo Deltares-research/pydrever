@@ -669,7 +669,7 @@ print("   Run was: " + "succesfull" if runresult else "unsuccessfull")
 output = dikernel.Output
 print("   number of output locations: " + str(len(output)))
 print("   Number of failed locations: " + str(len([l for l in output if l.Failed])))
-stones = [o for o in output if o.CalculationType == CalculationMethod.NaturalStone]
+stones = [o for o in output if o.CalculationMethod == CalculationMethod.NaturalStone]
 print("   Number of natural stone output locations: " + str(len(stones)))
 for stone in stones:
     print("      X: " + str(stone.XPosition) + ", Damage lvel = " + str(stone.DamageDevelopment[-1]))
