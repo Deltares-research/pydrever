@@ -9,19 +9,25 @@ class Dikernel:
     def __init__(self, dikernelInput: DikernelInput):
         self.Input: DikernelInput = dikernelInput
         self.Output: list[DikernelOutputLocation] = None
+        self.ValidationMessages: list[str] = None
         self.__cInput = DikernelInputParser.parsedikernelinput(dikernelInput)
         self.__cOutput = None
         self.__cValidationResult = None
 
     def validate(self) -> bool:
         if self.__cInput is None:
+            self.ValidationMessages = ["Could not parse input"]
             return False
 
         self.__cValidationResult = Validator.Validate(self.__cInput)
 
-        return self.__cValidationResult.Successful and int(self.__cValidationResult.Data) == int(
+        if self.__cValidationResult.Successful and int(self.__cValidationResult.Data) == int(
             ValidationResultType.Successful
-        )
+        ):
+            return True
+        else:
+            self.ValidationMessages = next(i.Message for i in self.__cValidationResult.Events)
+            return False
 
     def run(self) -> bool:
         try:

@@ -6,7 +6,7 @@ from dikerneloutputlocations import (
     GrassOvertoppingOutputLocation,
 )
 from dikernelcalculationsettings import (
-    AsphalCalculationSettings,
+    AsphaltCalculationSettings,
     GrassWaveOvertoppingCalculationSettings,
     GrassWaveImpactCalculationSettings,
     NaturalStoneCalculationSettings,
@@ -87,16 +87,18 @@ class DikernelInputParser:
                     builder.AddAsphaltWaveImpactLocation(
                         DikernelInputParser.__createAsphaltWaveImpactConstructionProperties(
                             locationData,
-                            next((ci for ci in calculationSettings if isinstance(ci, AsphalCalculationSettings))),
+                            next((ci for ci in calculationSettings if isinstance(ci, AsphaltCalculationSettings)))
+                            if calculationSettings is not None
+                            else None,
                         )
                     )
                 case NordicStoneOutputLocation():
                     builder.AddNaturalStoneLocation(
                         DikernelInputParser.__createNaturalStoneConstructionProperties(
                             locationData,
-                            next(
-                                (ci for ci in calculationSettings if isinstance(ci, NaturalStoneCalculationSettings))
-                            ),
+                            next((ci for ci in calculationSettings if isinstance(ci, NaturalStoneCalculationSettings)))
+                            if calculationSettings is not None
+                            else None,
                         )
                     )
 
@@ -110,7 +112,9 @@ class DikernelInputParser:
                                     for ci in calculationSettings
                                     if isinstance(ci, GrassWaveImpactCalculationSettings)
                                 )
-                            ),
+                            )
+                            if calculationSettings is not None
+                            else None,
                         )
                     )
                 case GrassOvertoppingOutputLocation():
@@ -123,7 +127,9 @@ class DikernelInputParser:
                                     for ci in calculationSettings
                                     if isinstance(ci, GrassWaveOvertoppingCalculationSettings)
                                 )
-                            ),
+                            )
+                            if calculationSettings is not None
+                            else None,
                         )
                     )
 
@@ -143,7 +149,7 @@ class DikernelInputParser:
 
     @staticmethod
     def __createAsphaltWaveImpactConstructionProperties(
-        locationData: AsphaltOutputLocation, settings: AsphalCalculationSettings
+        locationData: AsphaltOutputLocation, settings: AsphaltCalculationSettings
     ):
         properties = AsphaltRevetmentWaveImpactLocationConstructionProperties(
             locationData.XPosition,

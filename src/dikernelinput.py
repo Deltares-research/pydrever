@@ -3,19 +3,28 @@ from dikernelcalculationsettings import CalculationSettings
 
 
 class DikeSchematization:
-    def __init__(self, xPositions: list[float], zPositions: list[float], roughnesses: list[float]):
+    def __init__(
+        self,
+        xPositions: list[float],
+        zPositions: list[float],
+        roughnesses: list[float],
+        xOuterToe: float,
+        xOuterCrest: float,
+    ):
         """Contructor for a schematization of a dike profile.
 
         Args:
             xPositions (list[float]): list of cross-shore positions
             zPositions (list[float]): list of dike heights in meter correspoinding to the cross-shore positions. zPositions needs to be of the samen length as xPositions
             roughnesses (list[float]): a list of roughness coefficients per dike segment. By definition the length of this list is equal to the length of xPositions - 1
+            xOuterToe (float): The cross-shore location of the toe of the dike at the outer slope
+            xOuterCrest (float): The cross-shore location of the (outer) crest of the dike
         """
         self.XPositions: list[float] = xPositions
         self.ZPositions: list[float] = zPositions
         self.Roughnesses: list[float] = roughnesses
-        self.OuterToe: float = None
-        self.OuterCrest: float = None
+        self.OuterToe: float = xOuterToe
+        self.OuterCrest: float = xOuterCrest
         self.CrestOuterBerm: float = None
         self.NotchOuterBerm: float = None
         self.InnerCrest: float = None
