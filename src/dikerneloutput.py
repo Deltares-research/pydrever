@@ -57,6 +57,10 @@ class DikernelOutputLocation:
         return self.__damageDevelopment
 
     @property
+    def Damage(self) -> float:
+        return self.__damageDevelopment[-1] if self.__damageDevelopment is not None else 0.0
+
+    @property
     def DamageIncrement(self) -> list[float]:
         """
         Returns:

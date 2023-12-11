@@ -23,7 +23,14 @@ class DikernelOutputParser:
     @staticmethod
     def __createOutputLocation(cOutputLocation: LocationDependentOutput, xPosition: float):
         momentOfFailure = (
-            next((item for item in cOutputLocation.TimeDependentOutputItems if item is not None), None).TimeOfFailure
+            next(
+                (
+                    item.TimeOfFailure
+                    for item in cOutputLocation.TimeDependentOutputItems
+                    if item is not None and item.TimeOfFailure is not None
+                ),
+                None,
+            )
             if not None
             else None
         )

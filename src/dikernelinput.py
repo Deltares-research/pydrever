@@ -1,4 +1,4 @@
-from dikerneloutputlocations import OutputLocation
+from dikerneloutputlocations import OutputLocationSpecification
 from dikernelcalculationsettings import CalculationSettings
 
 
@@ -81,5 +81,5 @@ class DikernelInput:
         self.DikeOrientation: float = dikeOrientation
         self.HydraulicInput: HydraulicInput = hydraulicInput
         self.DikeSchematization: DikeSchematization = dikeSchematization
-        self.OutputLocations: list[OutputLocation] = None
+        self.OutputLocations: list[OutputLocationSpecification] = None
         self.Settings: list[CalculationSettings] = None

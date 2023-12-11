@@ -2,7 +2,7 @@ from toplayertypes import TopLayerType
 from calculationmethods import CalculationMethod
 
 
-class OutputLocation:
+class OutputLocationSpecification:
     def __init__(
         self, xPosition: float, initialDamage: float, calculationMethod: CalculationMethod, topLayerType: TopLayerType
     ):
@@ -12,7 +12,7 @@ class OutputLocation:
         self.TopLayerType = topLayerType
 
 
-class AsphaltOutputLocation(OutputLocation):
+class AsphaltOutputLocationSpecification(OutputLocationSpecification):
     def __init__(
         self,
         xPosition: float,
@@ -34,19 +34,19 @@ class AsphaltOutputLocation(OutputLocation):
         self.TopLayerStiffnessRelationNu = None
 
 
-class NordicStoneOutputLocation(OutputLocation):
+class NordicStoneOutputLocationSpecification(OutputLocationSpecification):
     def __init__(self, xPosition: float, beginDamage: float, topLayerThickness: float, relativeDensity: float):
         super().__init__(xPosition, beginDamage, CalculationMethod.NaturalStone, TopLayerType.NordicStone)
         self.TopLayerThickness = topLayerThickness
         self.RelativeDensity = relativeDensity
 
 
-class GrassWaveImpactOutputLocation(OutputLocation):
+class GrassWaveImpactOutputLocationSpecification(OutputLocationSpecification):
     def __init__(self, xPosition: float, beginDamage: float, topLayerType: TopLayerType):
         super().__init__(xPosition, beginDamage, CalculationMethod.GrassWaveImpact, topLayerType)
 
 
-class GrassOvertoppingOutputLocation(OutputLocation):
+class GrassOvertoppingOutputLocationSpecification(OutputLocationSpecification):
     def __init__(
         self,
         xPosition: float,

@@ -1,9 +1,9 @@
 from dikernelinput import DikernelInput, HydraulicInput, DikeSchematization
 from dikerneloutputlocations import (
-    AsphaltOutputLocation,
-    NordicStoneOutputLocation,
-    GrassWaveImpactOutputLocation,
-    GrassOvertoppingOutputLocation,
+    AsphaltOutputLocationSpecification,
+    NordicStoneOutputLocationSpecification,
+    GrassWaveImpactOutputLocationSpecification,
+    GrassOvertoppingOutputLocationSpecification,
 )
 from dikernelcalculationsettings import (
     AsphaltCalculationSettings,
@@ -21,7 +21,7 @@ class DikernelInputParser:
         builder = CalculationInputBuilder(dikernelInput.DikeOrientation)
         DikernelInputParser.__addDikeProfileToBuilder(builder, dikernelInput.DikeSchematization)
         DikernelInputParser.__addHydraulicsToBuilder(builder, dikernelInput.HydraulicInput)
-        DikernelInputParser.__addOutputLocationsToBuilder(builder, dikernelInput)
+        DikernelInputParser.__addOutputLocationSpecificationsToBuilder(builder, dikernelInput)
         composedInput = builder.Build()
         return composedInput.Data
 
@@ -75,7 +75,7 @@ class DikernelInputParser:
         return builder
 
     @staticmethod
-    def __addOutputLocationsToBuilder(
+    def __addOutputLocationSpecificationsToBuilder(
         builder: CalculationInputBuilder, dikernelInput: DikernelInput
     ) -> CalculationInputBuilder:
         locationDataItems = dikernelInput.OutputLocations
@@ -83,7 +83,7 @@ class DikernelInputParser:
 
         for locationData in locationDataItems:
             match locationData:
-                case AsphaltOutputLocation():
+                case AsphaltOutputLocationSpecification():
                     builder.AddAsphaltWaveImpactLocation(
                         DikernelInputParser.__createAsphaltWaveImpactConstructionProperties(
                             locationData,
@@ -92,7 +92,7 @@ class DikernelInputParser:
                             else None,
                         )
                     )
-                case NordicStoneOutputLocation():
+                case NordicStoneOutputLocationSpecification():
                     builder.AddNaturalStoneLocation(
                         DikernelInputParser.__createNaturalStoneConstructionProperties(
                             locationData,
@@ -102,7 +102,7 @@ class DikernelInputParser:
                         )
                     )
 
-                case GrassWaveImpactOutputLocation():
+                case GrassWaveImpactOutputLocationSpecification():
                     builder.AddGrassWaveImpactLocation(
                         DikernelInputParser.__createGrassWaveImpactConstructionProperties(
                             locationData,
@@ -117,7 +117,7 @@ class DikernelInputParser:
                             else None,
                         )
                     )
-                case GrassOvertoppingOutputLocation():
+                case GrassOvertoppingOutputLocationSpecification():
                     builder.AddGrassOvertoppingLocation(
                         DikernelInputParser.__createGrassOvertoppingConstructionProperties(
                             locationData,
@@ -149,7 +149,7 @@ class DikernelInputParser:
 
     @staticmethod
     def __createAsphaltWaveImpactConstructionProperties(
-        locationData: AsphaltOutputLocation, settings: AsphaltCalculationSettings
+        locationData: AsphaltOutputLocationSpecification, settings: AsphaltCalculationSettings
     ):
         properties = AsphaltRevetmentWaveImpactLocationConstructionProperties(
             locationData.XPosition,
@@ -190,7 +190,7 @@ class DikernelInputParser:
 
     @staticmethod
     def __createNaturalStoneConstructionProperties(
-        locationData: NordicStoneOutputLocation, settings: NaturalStoneCalculationSettings
+        locationData: NordicStoneOutputLocationSpecification, settings: NaturalStoneCalculationSettings
     ):
         properties = NaturalStoneRevetmentLocationConstructionProperties(
             locationData.XPosition,
@@ -242,7 +242,7 @@ class DikernelInputParser:
 
     @staticmethod
     def __createGrassWaveImpactConstructionProperties(
-        locationData: GrassWaveImpactOutputLocation, settings: GrassWaveImpactCalculationSettings
+        locationData: GrassWaveImpactOutputLocationSpecification, settings: GrassWaveImpactCalculationSettings
     ):
         topLayerType = (
             GrassRevetmentTopLayerType.ClosedSod
@@ -274,7 +274,7 @@ class DikernelInputParser:
 
     @staticmethod
     def __createGrassOvertoppingConstructionProperties(
-        locationData: GrassOvertoppingOutputLocation, settings: GrassWaveOvertoppingCalculationSettings
+        locationData: GrassOvertoppingOutputLocationSpecification, settings: GrassWaveOvertoppingCalculationSettings
     ):
         topLayerType = None
         match locationData.TopLayerType:
