@@ -20,7 +20,9 @@ from toplayertypes import TopLayerType
 from dikernel import Dikernel
 
 
-def interpolatetimeseries(timeSteps: list[float], values: list[float], targetTimeSteps: list[float]) -> list[float]:
+def interpolatetimeseries(
+    timeSteps: list[float], values: list[float], targetTimeSteps: list[float]
+) -> list[float]:
     iargs = 1
     itarget = 1
     targetValues = list[float]()
@@ -37,7 +39,9 @@ def interpolatetimeseries(timeSteps: list[float], values: list[float], targetTim
 xLocationPositions = [0.0, 25.0, 35.0, 41.0, 45, 50, 60, 70]
 zPositions = [-3, 0.0, 1.5, 1.7, 3.0, 3.1, 0, -1]
 roughnesses = [1, 1, 0.75, 0.5, 0.8, 0.8, 0.8]
-dikeSchematization = DikeSchematization(xLocationPositions, zPositions, roughnesses, 25.0, 45.0)
+dikeSchematization = DikeSchematization(
+    xLocationPositions, zPositions, roughnesses, 25.0, 45.0
+)
 timeSteps = [0.0, 25000.0, 50000.0, 75000.0, 100000.0, 126000.0]
 timeSteps = list(numpy.array(timeSteps) * 0.0001)
 outputTimeSteps = numpy.arange(0.0, 12.6, 0.1)
@@ -46,16 +50,20 @@ waterLevels = [1.5, 2.3, 3.5, 3.2, 2.4]
 waterLevels = list(numpy.array(waterLevels) * 0.8)
 waveHeights = [3.5, 3.9, 4.2, 4.1, 2.8]
 wavePeriods = [8.0, 8.0, 8.0, 8.0, 8.0]
-waveAngles = [60.0, 70.0, 80.0, 90.0, 100.0]
+waveDirections = [60.0, 70.0, 80.0, 90.0, 100.0]
 
 waterLevels2 = interpolatetimeseries(timeSteps, waterLevels, outputTimeSteps)
 waveHeights2 = interpolatetimeseries(timeSteps, waveHeights, outputTimeSteps)
 wavePeriods2 = interpolatetimeseries(timeSteps, wavePeriods, outputTimeSteps)
-waveAngles2 = interpolatetimeseries(timeSteps, waveAngles, outputTimeSteps)
-hydraulicInput = HydraulicInput(outputTimeSteps, waterLevels2, waveHeights2, wavePeriods2, waveAngles2)
+waveDirections2 = interpolatetimeseries(timeSteps, waveDirections, outputTimeSteps)
+hydraulicInput = HydraulicInput(
+    timeSteps, waterLevels, waveHeights, wavePeriods, waveDirections
+)
 
 
 input = DikernelInput(90.0, hydraulicInput, dikeSchematization)
+input.StartTime = 0.0
+input.OutputTimeSteps = outputTimeSteps
 
 input.OutputLocations = [
     GrassWaveImpactOutputLocationSpecification(41.1, 0.0, TopLayerType.GrassClosedSod),
@@ -100,8 +108,8 @@ if validationResult:
     axs[0, 1].plot(timeSteps, [None] + wavePeriods, "bo")
     axs[0, 1].set(ylabel="Wave periods [s]")
     axs[0, 1].grid()
-    axs[1, 1].plot(outputTimeSteps, [None] + waveAngles2, "gx", linestyle="dotted")
-    axs[1, 1].plot(timeSteps, [None] + waveAngles, "bo")
+    axs[1, 1].plot(outputTimeSteps, [None] + waveDirections2, "gx", linestyle="dotted")
+    axs[1, 1].plot(timeSteps, [None] + waveDirections, "bo")
     axs[1, 1].set(xlabel="Time step [s]", ylabel="Wave angles [degrees]")
     axs[1, 1].grid()
     fig.tight_layout()
@@ -122,7 +130,11 @@ if validationResult:
     ax2 = ax.twinx()
     ax2.set(ylabel="Height [m]")
     ax2.plot(
-        dikeSchematization.XPositions, dikeSchematization.ZPositions, linestyle="solid", color="lightgray", marker="o"
+        dikeSchematization.XPositions,
+        dikeSchematization.ZPositions,
+        linestyle="solid",
+        color="lightgray",
+        marker="o",
     )
     ax2.set_facecolor("white")
     ax2.tick_params(axis="y", colors="lightgray")

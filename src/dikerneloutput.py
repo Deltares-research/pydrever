@@ -58,7 +58,11 @@ class DikernelOutputLocation:
 
     @property
     def Damage(self) -> float:
-        return self.__damageDevelopment[-1] if self.__damageDevelopment is not None else 0.0
+        return (
+            self.__damageDevelopment[-1]
+            if self.__damageDevelopment is not None
+            else 0.0
+        )
 
     @property
     def DamageIncrement(self) -> list[float]:
@@ -86,7 +90,11 @@ class AsphaltWaveImpactOutputLocation(DikernelOutputLocation):
         averageNumberOfWaves: list[float],
     ):
         super().__init__(
-            CalculationMethod.AsphaltWaveImpact, xPosition, timeOfFailure, damageDevelopment, damageIncrement
+            CalculationMethod.AsphaltWaveImpact,
+            xPosition,
+            timeOfFailure,
+            damageDevelopment,
+            damageIncrement,
         )
         self.__zPosition = z
         self.__outerSlope = outerSlope
@@ -143,7 +151,11 @@ class GrassOvertoppingOutputLocation(DikernelOutputLocation):
         averageNumberOfWaves: list[float],
     ):
         super().__init__(
-            CalculationMethod.GrassWaveOvertopping, xPosition, timeOfFailure, damageDevelopment, damageIncrement
+            CalculationMethod.GrassWaveOvertopping,
+            xPosition,
+            timeOfFailure,
+            damageDevelopment,
+            damageIncrement,
         )
         self.__verticalDistanceWaterLevelElevation = verticalDistanceWaterLevelElevation
         self.__representativeWaveRunup2P = representativeWaveRunup2P
@@ -185,7 +197,11 @@ class GrassWaveImpactOutputLocation(DikernelOutputLocation):
         waveHeightImpact: list[float],
     ):
         super().__init__(
-            CalculationMethod.GrassWaveImpact, xPosition, timeOfFailure, damageDevelopment, damageIncrement
+            CalculationMethod.GrassWaveImpact,
+            xPosition,
+            timeOfFailure,
+            damageDevelopment,
+            damageIncrement,
         )
         self.__zPosition = z
         self.__minimumWaveHeight = minimumWaveHeight
@@ -262,7 +278,13 @@ class NaturalStoneOutputLocation(DikernelOutputLocation):
         referenceTimeDegradation: list[float],
         referenceDegradation: list[float],
     ):
-        super().__init__(CalculationMethod.NaturalStone, xPosition, timeOfFailure, damageDevelopment, damageIncrement)
+        super().__init__(
+            CalculationMethod.NaturalStone,
+            xPosition,
+            timeOfFailure,
+            damageDevelopment,
+            damageIncrement,
+        )
         self.__zPosition = z
         self.__resistance = resistance
         self.__outerSlope = outerSlope

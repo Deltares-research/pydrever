@@ -10,18 +10,24 @@ from dikernelcreferences import *
 
 class DikernelOutputParser:
     @staticmethod
-    def parsedikerneloutput(cOutput: CalculationOutput, xPositions: list[float]) -> list[DikernelOutputLocation]:
+    def parsedikerneloutput(
+        cOutput: CalculationOutput, xPositions: list[float]
+    ) -> list[DikernelOutputLocation]:
         outputLocations = list[float]()
         i = 0
         for cOutputLocation in cOutput.LocationDependentOutputItems:
             cOutputLocation = cOutput.LocationDependentOutputItems[i]
             xPosition = xPositions[i]
-            outputLocations.append(DikernelOutputParser.__createOutputLocation(cOutputLocation, xPosition))
+            outputLocations.append(
+                DikernelOutputParser.__createOutputLocation(cOutputLocation, xPosition)
+            )
             i = i + 1
         return outputLocations
 
     @staticmethod
-    def __createOutputLocation(cOutputLocation: LocationDependentOutput, xPosition: float):
+    def __createOutputLocation(
+        cOutputLocation: LocationDependentOutput, xPosition: float
+    ):
         momentOfFailure = (
             next(
                 (
@@ -36,7 +42,9 @@ class DikernelOutputParser:
         )
         timeDependentOutputItems = cOutputLocation.TimeDependentOutputItems
         damageDevelopment = list(item.Damage for item in timeDependentOutputItems)
-        damageIncrement = list(item.IncrementDamage for item in timeDependentOutputItems)
+        damageIncrement = list(
+            item.IncrementDamage for item in timeDependentOutputItems
+        )
 
         match cOutputLocation:
             case AsphaltRevetmentWaveImpactLocationDependentOutput():
@@ -55,7 +63,11 @@ class DikernelOutputParser:
                 )
             case GrassRevetmentOvertoppingLocationDependentOutput():
                 return DikernelOutputParser.__createGrassOvertoppingOutputLocation(
-                    xPosition, momentOfFailure, damageDevelopment, damageIncrement, timeDependentOutputItems
+                    xPosition,
+                    momentOfFailure,
+                    damageDevelopment,
+                    damageIncrement,
+                    timeDependentOutputItems,
                 )
             case GrassRevetmentWaveImpactLocationDependentOutput():
                 return DikernelOutputParser.__createGrassWaveImpactOutputLocation(
@@ -143,7 +155,10 @@ class DikernelOutputParser:
             momentOfFailure,
             damageDevelopment,
             damageIncrement,
-            list(item.VerticalDistanceWaterLevelElevation for item in timeDependentOutputItems),
+            list(
+                item.VerticalDistanceWaterLevelElevation
+                for item in timeDependentOutputItems
+            ),
             list(item.RepresentativeWaveRunup2P for item in timeDependentOutputItems),
             list(item.CumulativeOverload for item in timeDependentOutputItems),
             list(item.AverageNumberOfWaves for item in timeDependentOutputItems),
@@ -204,7 +219,9 @@ class DikernelOutputParser:
             list(item.UpperLimitLoading for item in timeDependentOutputItems),
             list(item.LowerLimitLoading for item in timeDependentOutputItems),
             list(item.DepthMaximumWaveLoad for item in timeDependentOutputItems),
-            list(item.DistanceMaximumWaveElevation for item in timeDependentOutputItems),
+            list(
+                item.DistanceMaximumWaveElevation for item in timeDependentOutputItems
+            ),
             list(item.NormativeWidthOfWaveImpact for item in timeDependentOutputItems),
             list(item.HydraulicLoad for item in timeDependentOutputItems),
             list(item.WaveAngle for item in timeDependentOutputItems),

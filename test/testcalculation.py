@@ -607,31 +607,81 @@ def getoutputlocations() -> list[OutputLocationSpecification]:
         AsphaltOutputLocationSpecification(40.0, 0.0, 0.9, 64.0, 0.146, 5712.0),
         AsphaltOutputLocationSpecification(40.5, 0.0, 0.9, 64.0, 0.146, 5712.0),
         AsphaltOutputLocationSpecification(40.9, 0.0, 0.9, 64.0, 0.146, 5712.0),
-        GrassWaveImpactOutputLocationSpecification(41.1, 0.0, TopLayerType.GrassClosedSod),
-        GrassWaveImpactOutputLocationSpecification(41.5, 0.0, TopLayerType.GrassClosedSod),
-        GrassWaveImpactOutputLocationSpecification(42.0, 0.0, TopLayerType.GrassClosedSod),
-        GrassWaveImpactOutputLocationSpecification(42.5, 0.0, TopLayerType.GrassClosedSod),
-        GrassWaveImpactOutputLocationSpecification(43.0, 0.0, TopLayerType.GrassClosedSod),
-        GrassWaveImpactOutputLocationSpecification(43.5, 0.0, TopLayerType.GrassClosedSod),
-        GrassWaveImpactOutputLocationSpecification(44.0, 0.0, TopLayerType.GrassOpenSod),
-        GrassWaveImpactOutputLocationSpecification(44.5, 0.0, TopLayerType.GrassOpenSod),
-        GrassWaveImpactOutputLocationSpecification(44.99, 0.0, TopLayerType.GrassClosedSod),
-        GrassOvertoppingOutputLocationSpecification(45.0, 0.02, TopLayerType.GrassClosedSod),
-        GrassOvertoppingOutputLocationSpecification(45.5, 0.02, TopLayerType.GrassClosedSod),
-        GrassOvertoppingOutputLocationSpecification(46.0, 0.02, TopLayerType.GrassClosedSod),
-        GrassOvertoppingOutputLocationSpecification(46.5, 0.02, TopLayerType.GrassClosedSod),
-        GrassOvertoppingOutputLocationSpecification(47.0, 0.02, TopLayerType.GrassClosedSod),
-        GrassOvertoppingOutputLocationSpecification(47.5, 0.02, TopLayerType.GrassClosedSod),
-        GrassOvertoppingOutputLocationSpecification(48.0, 0.02, TopLayerType.GrassClosedSod),
-        GrassOvertoppingOutputLocationSpecification(48.5, 0.02, TopLayerType.GrassClosedSod),
-        GrassOvertoppingOutputLocationSpecification(49.0, 0.02, TopLayerType.GrassClosedSod),
-        GrassOvertoppingOutputLocationSpecification(49.5, 0.02, TopLayerType.GrassClosedSod),
-        GrassOvertoppingOutputLocationSpecification(49.99, 0.02, TopLayerType.GrassClosedSod),
-        GrassOvertoppingOutputLocationSpecification(45.0, 0.02, TopLayerType.GrassClosedSod),
-        GrassOvertoppingOutputLocationSpecification(52.0, 0.02, TopLayerType.GrassClosedSod),
-        GrassOvertoppingOutputLocationSpecification(54.0, 0.02, TopLayerType.GrassClosedSod),
-        GrassOvertoppingOutputLocationSpecification(56.0, 0.02, TopLayerType.GrassClosedSod),
-        GrassOvertoppingOutputLocationSpecification(58.0, 0.02, TopLayerType.GrassClosedSod),
+        GrassWaveImpactOutputLocationSpecification(
+            41.1, 0.0, TopLayerType.GrassClosedSod
+        ),
+        GrassWaveImpactOutputLocationSpecification(
+            41.5, 0.0, TopLayerType.GrassClosedSod
+        ),
+        GrassWaveImpactOutputLocationSpecification(
+            42.0, 0.0, TopLayerType.GrassClosedSod
+        ),
+        GrassWaveImpactOutputLocationSpecification(
+            42.5, 0.0, TopLayerType.GrassClosedSod
+        ),
+        GrassWaveImpactOutputLocationSpecification(
+            43.0, 0.0, TopLayerType.GrassClosedSod
+        ),
+        GrassWaveImpactOutputLocationSpecification(
+            43.5, 0.0, TopLayerType.GrassClosedSod
+        ),
+        GrassWaveImpactOutputLocationSpecification(
+            44.0, 0.0, TopLayerType.GrassOpenSod
+        ),
+        GrassWaveImpactOutputLocationSpecification(
+            44.5, 0.0, TopLayerType.GrassOpenSod
+        ),
+        GrassWaveImpactOutputLocationSpecification(
+            44.99, 0.0, TopLayerType.GrassClosedSod
+        ),
+        GrassOvertoppingOutputLocationSpecification(
+            45.0, 0.02, TopLayerType.GrassClosedSod
+        ),
+        GrassOvertoppingOutputLocationSpecification(
+            45.5, 0.02, TopLayerType.GrassClosedSod
+        ),
+        GrassOvertoppingOutputLocationSpecification(
+            46.0, 0.02, TopLayerType.GrassClosedSod
+        ),
+        GrassOvertoppingOutputLocationSpecification(
+            46.5, 0.02, TopLayerType.GrassClosedSod
+        ),
+        GrassOvertoppingOutputLocationSpecification(
+            47.0, 0.02, TopLayerType.GrassClosedSod
+        ),
+        GrassOvertoppingOutputLocationSpecification(
+            47.5, 0.02, TopLayerType.GrassClosedSod
+        ),
+        GrassOvertoppingOutputLocationSpecification(
+            48.0, 0.02, TopLayerType.GrassClosedSod
+        ),
+        GrassOvertoppingOutputLocationSpecification(
+            48.5, 0.02, TopLayerType.GrassClosedSod
+        ),
+        GrassOvertoppingOutputLocationSpecification(
+            49.0, 0.02, TopLayerType.GrassClosedSod
+        ),
+        GrassOvertoppingOutputLocationSpecification(
+            49.5, 0.02, TopLayerType.GrassClosedSod
+        ),
+        GrassOvertoppingOutputLocationSpecification(
+            49.99, 0.02, TopLayerType.GrassClosedSod
+        ),
+        GrassOvertoppingOutputLocationSpecification(
+            45.0, 0.02, TopLayerType.GrassClosedSod
+        ),
+        GrassOvertoppingOutputLocationSpecification(
+            52.0, 0.02, TopLayerType.GrassClosedSod
+        ),
+        GrassOvertoppingOutputLocationSpecification(
+            54.0, 0.02, TopLayerType.GrassClosedSod
+        ),
+        GrassOvertoppingOutputLocationSpecification(
+            56.0, 0.02, TopLayerType.GrassClosedSod
+        ),
+        GrassOvertoppingOutputLocationSpecification(
+            58.0, 0.02, TopLayerType.GrassClosedSod
+        ),
     ]
 
 
@@ -771,7 +821,9 @@ def getnaturalstonecalculationsettings() -> NaturalStoneCalculationSettings:
 
 
 def getgrasswaveimpactcalculationsettings() -> GrassWaveImpactCalculationSettings:
-    topLayerClosedSod = GrassCoverWaveImpactTopLayerSettings(TopLayerType.GrassClosedSod)
+    topLayerClosedSod = GrassCoverWaveImpactTopLayerSettings(
+        TopLayerType.GrassClosedSod
+    )
     topLayerClosedSod.StanceTimeLineA = 1
     topLayerClosedSod.StanceTimeLineB = -0.000009722
     topLayerClosedSod.StanceTimeLineC = 0.25
@@ -791,8 +843,12 @@ def getgrasswaveimpactcalculationsettings() -> GrassWaveImpactCalculationSetting
     return settings
 
 
-def getgrasswaveovertoppingcalculationsettings() -> GrassWaveOvertoppingCalculationSettings:
-    topLayerClosedSod = GrasCoverOvertoppingTopLayerSettings(TopLayerType.GrassClosedSod)
+def getgrasswaveovertoppingcalculationsettings() -> (
+    GrassWaveOvertoppingCalculationSettings
+):
+    topLayerClosedSod = GrasCoverOvertoppingTopLayerSettings(
+        TopLayerType.GrassClosedSod
+    )
     topLayerClosedSod.CriticalCumulativeOverload = 7000.0
     topLayerClosedSod.CriticalFrontVelocity = 6.6
 
@@ -825,4 +881,9 @@ print("   Number of failed locations: " + str(len([l for l in output if l.Failed
 stones = [o for o in output if o.CalculationMethod == CalculationMethod.NaturalStone]
 print("   Number of natural stone output locations: " + str(len(stones)))
 for stone in stones:
-    print("      X: " + str(stone.XPosition) + ", Damage lvel = " + str(stone.DamageDevelopment[-1]))
+    print(
+        "      X: "
+        + str(stone.XPosition)
+        + ", Damage lvel = "
+        + str(stone.DamageDevelopment[-1])
+    )

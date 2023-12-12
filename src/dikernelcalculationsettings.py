@@ -45,7 +45,9 @@ class NaturalStoneTopLayerSettings(TopLayerSettings):
 
 
 class CalculationSettings:
-    def __init__(self, calculationMethod: CalculationMethod, topLayers: list[TopLayerSettings]):
+    def __init__(
+        self, calculationMethod: CalculationMethod, topLayers: list[TopLayerSettings]
+    ):
         self.CalculationMethod: CalculationMethod = calculationMethod
         self.FailureNumber: float = None
         self.TopLayersSettings: list[TopLayerSettings] = topLayers

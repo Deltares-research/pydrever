@@ -4,7 +4,11 @@ from calculationmethods import CalculationMethod
 
 class OutputLocationSpecification:
     def __init__(
-        self, xPosition: float, initialDamage: float, calculationMethod: CalculationMethod, topLayerType: TopLayerType
+        self,
+        xPosition: float,
+        initialDamage: float,
+        calculationMethod: CalculationMethod,
+        topLayerType: TopLayerType,
     ):
         self.XPosition = xPosition
         self.InitialDamage = initialDamage
@@ -22,7 +26,12 @@ class AsphaltOutputLocationSpecification(OutputLocationSpecification):
         topLayerThickness: float,
         topLayerStiffnessModulus: float,
     ):
-        super().__init__(xPosition, beginDamage, CalculationMethod.AsphaltWaveImpact, TopLayerType.WAB)
+        super().__init__(
+            xPosition,
+            beginDamage,
+            CalculationMethod.AsphaltWaveImpact,
+            TopLayerType.WAB,
+        )
         self.FlexuralStrent = breakStrentAsphalt
         self.SoilElasticity = springConstantSoil
         self.TopLayerThickness = topLayerThickness
@@ -35,15 +44,30 @@ class AsphaltOutputLocationSpecification(OutputLocationSpecification):
 
 
 class NordicStoneOutputLocationSpecification(OutputLocationSpecification):
-    def __init__(self, xPosition: float, beginDamage: float, topLayerThickness: float, relativeDensity: float):
-        super().__init__(xPosition, beginDamage, CalculationMethod.NaturalStone, TopLayerType.NordicStone)
+    def __init__(
+        self,
+        xPosition: float,
+        beginDamage: float,
+        topLayerThickness: float,
+        relativeDensity: float,
+    ):
+        super().__init__(
+            xPosition,
+            beginDamage,
+            CalculationMethod.NaturalStone,
+            TopLayerType.NordicStone,
+        )
         self.TopLayerThickness = topLayerThickness
         self.RelativeDensity = relativeDensity
 
 
 class GrassWaveImpactOutputLocationSpecification(OutputLocationSpecification):
-    def __init__(self, xPosition: float, beginDamage: float, topLayerType: TopLayerType):
-        super().__init__(xPosition, beginDamage, CalculationMethod.GrassWaveImpact, topLayerType)
+    def __init__(
+        self, xPosition: float, beginDamage: float, topLayerType: TopLayerType
+    ):
+        super().__init__(
+            xPosition, beginDamage, CalculationMethod.GrassWaveImpact, topLayerType
+        )
 
 
 class GrassOvertoppingOutputLocationSpecification(OutputLocationSpecification):
@@ -55,6 +79,8 @@ class GrassOvertoppingOutputLocationSpecification(OutputLocationSpecification):
         alphaM: float = 1.0,
         alphaS: float = 1.0,
     ):
-        super().__init__(xPosition, beginDamage, CalculationMethod.GrassWaveOvertopping, topLayerType)
+        super().__init__(
+            xPosition, beginDamage, CalculationMethod.GrassWaveOvertopping, topLayerType
+        )
         self.IncreasedLoadTransitionAlphaM = alphaM
         self.ReducedStrengthTransitionAlphaS = alphaS

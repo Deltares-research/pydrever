@@ -1,5 +1,7 @@
+from __future__ import annotations
 from dikerneloutputlocations import OutputLocationSpecification
 from dikernelcalculationsettings import CalculationSettings
+import numpy as numpy
 
 
 class DikeSchematization:
@@ -38,7 +40,7 @@ class HydraulicInput:
         waterLevels: list[float],
         waveHeights: list[float],
         wavePeriods: list[float],
-        waveAngles: list[float],
+        waveDirections: list[float],
     ):
         """Constructor for the hydraulic input.
 
@@ -56,7 +58,7 @@ class HydraulicInput:
             nrTimeSteps - 1 != len(waterLevels)
             or nrTimeSteps - 1 != len(waveHeights)
             or nrTimeSteps - 1 != len(wavePeriods)
-            or nrTimeSteps - 1 != len(waveAngles)
+            or nrTimeSteps - 1 != len(waveDirections)
         ):
             raise Exception(
                 "length of the specified series for waterlevels, wave heights, wave periods and wave angles needs to be exactly 1 less than the length of the specified time steps."
@@ -66,11 +68,16 @@ class HydraulicInput:
         self.WaterLevels = waterLevels
         self.WaveHeights = waveHeights
         self.WavePeriods = wavePeriods
-        self.WaveDirections = waveAngles
+        self.WaveDirections = waveDirections
 
 
 class DikernelInput:
-    def __init__(self, dikeOrientation: float, hydraulicInput: HydraulicInput, dikeSchematization: DikeSchematization):
+    def __init__(
+        self,
+        dikeOrientation: float,
+        hydraulicInput: HydraulicInput,
+        dikeSchematization: DikeSchematization,
+    ):
         """Constructor for the DikernelInput class.
 
         Args:
@@ -83,3 +90,66 @@ class DikernelInput:
         self.DikeSchematization: DikeSchematization = dikeSchematization
         self.OutputLocations: list[OutputLocationSpecification] = None
         self.Settings: list[CalculationSettings] = None
+        self.StartTime: float = None
+        self.OutputTimeSteps: list[float] = None
+
+    def getruntimesteps(self) -> list[float]:
+        runTimeSteps = self.HydraulicInput.TimeSteps
+        if self.OutputTimeSteps is not None:
+            runTimeSteps = numpy.union1d(runTimeSteps, self.OutputTimeSteps).tolist()
+
+        if self.StartTime is not None:
+            runTimeSteps = list(
+                timeStep
+                for timeStep in numpy.union1d(runTimeSteps, [self.StartTime])
+                if timeStep >= self.StartTime
+            )
+        return runTimeSteps
+
+    def getruninput(self) -> DikernelInput:
+        timeSteps = self.HydraulicInput.TimeSteps
+        runTimeSteps = self.getruntimesteps()
+        runWaterLevels = self.__interpolatetimeseries(
+            timeSteps, self.HydraulicInput.WaterLevels, runTimeSteps
+        )
+        runWaveHeights = self.__interpolatetimeseries(
+            timeSteps, self.HydraulicInput.WaveHeights, runTimeSteps
+        )
+        runWavePeriods = self.__interpolatetimeseries(
+            timeSteps, self.HydraulicInput.WavePeriods, runTimeSteps
+        )
+        runWaveDirections = self.__interpolatetimeseries(
+            timeSteps, self.HydraulicInput.WaveDirections, runTimeSteps
+        )
+        runHydraulics = HydraulicInput(
+            runTimeSteps,
+            runWaterLevels,
+            runWaveHeights,
+            runWavePeriods,
+            runWaveDirections,
+        )
+        runInput = DikernelInput(
+            self.DikeOrientation, runHydraulics, self.DikeSchematization
+        )
+        runInput.OutputLocations = self.OutputLocations
+        runInput.Settings = self.Settings
+        return runInput
+
+    @staticmethod
+    def __interpolatetimeseries(
+        timeSteps: list[float], values: list[float], targetTimeSteps: list[float]
+    ) -> list[float]:
+        iargs = 1
+        itarget = 1
+        targetValues = list[float]()
+        while itarget < len(targetTimeSteps):
+            if (
+                targetTimeSteps[itarget] > timeSteps[iargs]
+                and iargs < len(timeSteps) - 1
+            ):
+                iargs = iargs + 1
+                continue
+            targetValues.append(values[iargs - 1])
+            itarget = itarget + 1
+
+        return targetValues
