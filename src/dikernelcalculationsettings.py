@@ -4,44 +4,44 @@ from calculationmethods import CalculationMethod
 
 class TopLayerSettings:
     def __init__(self, type: TopLayerType):
-        self.TopLayerType: TopLayerType = type
+        self.top_layer_type: TopLayerType = type
 
 
 class AsphaltTopLayerSettings(TopLayerSettings):
     def __init__(self):
         super().__init__(TopLayerType.WAB)
-        self.StiffnessRatioNu: float = None
-        self.FatigueAsphaltAlpha: float = None
-        self.FatigueAsphaltBeta: float = None
+        self.stiffness_ratio_nu: float = None
+        self.fatigue_asphalt_alpha: float = None
+        self.fatigue_asphalt_beta: float = None
 
 
 class GrasCoverOvertoppingTopLayerSettings(TopLayerSettings):
     def __init__(self, topLayerType: TopLayerType):
         super().__init__(topLayerType)
-        self.CriticalCumulativeOverload: float = None
-        self.CriticalFrontVelocity: float = None
+        self.critical_cumulative_overload: float = None
+        self.critical_front_velocity: float = None
 
 
 class GrassCoverWaveImpactTopLayerSettings(TopLayerSettings):
     def __init__(self, type: TopLayerType):
         super().__init__(type)
-        self.StanceTimeLineA: float = None
-        self.StanceTimeLineB: float = None
-        self.StanceTimeLineC: float = None
+        self.stance_time_line_a: float = None
+        self.stance_time_line_b: float = None
+        self.stance_time_line_c: float = None
 
 
 class NaturalStoneTopLayerSettings(TopLayerSettings):
     def __init__(self):
         super().__init__(TopLayerType.NordicStone)
-        self.StabilityPlungingA: float = None
-        self.StabilityPlungingC: float = None
-        self.StabilityPlungingB: float = None
-        self.StabilityPlungingN: float = None
-        self.StabilitySurgingA: float = None
-        self.StabilitySurgingB: float = None
-        self.StabilitySurgingC: float = None
-        self.StabilitySurgingN: float = None
-        self.Xib: float = None
+        self.stability_plunging_a: float = None
+        self.stability_plunging_b: float = None
+        self.stability_plunging_c: float = None
+        self.stability_plunging_n: float = None
+        self.stability_surging_a: float = None
+        self.stability_surging_b: float = None
+        self.stability_surging_c: float = None
+        self.stability_surging_n: float = None
+        self.xib: float = None
 
 
 class CalculationSettings:
@@ -49,57 +49,57 @@ class CalculationSettings:
         self, calculationMethod: CalculationMethod, topLayers: list[TopLayerSettings]
     ):
         self.CalculationMethod: CalculationMethod = calculationMethod
-        self.FailureNumber: float = None
-        self.TopLayersSettings: list[TopLayerSettings] = topLayers
+        self.failure_number: float = None
+        self.top_layers_settings: list[TopLayerSettings] = topLayers
 
 
 class AsphaltCalculationSettings(CalculationSettings):
     def __init__(self, topLayers: list[TopLayerSettings]):
         super().__init__(CalculationMethod.AsphaltWaveImpact, topLayers)
-        self.DensityOfWater: float = None
-        self.FactorCtm: float = None
-        self.ImpactNumberC: float = None
-        self.WidthFactors: list[float, float] = None
-        self.DepthFactors: list[float, float] = None
-        self.ImpactFactors: list[float, float] = None
+        self.density_of_water: float = None
+        self.factor_ctm: float = None
+        self.impact_number_c: float = None
+        self.width_factors: list[float, float] = None
+        self.depth_factors: list[float, float] = None
+        self.impact_factors: list[float, float] = None
 
 
 class GrassWaveOvertoppingCalculationSettings(CalculationSettings):
     def __init__(self, topLayers: list[TopLayerSettings]):
         super().__init__(CalculationMethod.GrassWaveOvertopping, topLayers)
-        self.AccelerationAlphaAForCrest: float = None
-        self.AccelerationAlphaAForInnerSlope: float = None
-        self.FixedNumberOfWaves: int = None
-        self.FrontVelocityCwo: float = None
-        self.FactorCtm: float = None
+        self.acceleration_alpha_a_for_crest: float = None
+        self.acceleration_alpha_a_for_inner_slope: float = None
+        self.fixed_number_of_waves: int = None
+        self.front_velocity_c_wo: float = None
+        self.factor_ctm: float = None
         self.DikeHeight: float = None
 
 
 class GrassWaveImpactCalculationSettings(CalculationSettings):
     def __init__(self, topLayers: list[TopLayerSettings]):
         super().__init__(CalculationMethod.GrassWaveImpact, topLayers)
-        self.LoadingUpperLimit: float = None
-        self.LoadingLowerLimit: float = None
-        self.WaveAngleImpactN: float = None
-        self.WaveAngleImpactQ: float = None
-        self.WaveAngleImpactR: float = None
-        self.Temax: float = None
-        self.Temin: float = None
+        self.loading_upper_limit: float = None
+        self.loading_lower_limit: float = None
+        self.wave_angle_impact_n: float = None
+        self.wave_angle_impact_q: float = None
+        self.wave_angle_impact_r: float = None
+        self.te_max: float = None
+        self.te_min: float = None
 
 
 class NaturalStoneCalculationSettings(CalculationSettings):
     def __init__(self, topLayers: list[TopLayerSettings]):
         super().__init__(CalculationMethod.NaturalStone, topLayers)
-        self.DistanceMaximumWaveElevationA: float = None
-        self.DistanceMaximumWaveElevationB: float = None
-        self.SlopeUpperLevel: float = None
-        self.SLopeLowerLevel: float = None
-        self.NormativeWidthOfWaveImpactA: float = None
-        self.NormativeWidthOfWaveImpactB: float = None
-        self.UpperLimitLoadingA: float = None
-        self.UpperLimitLoadingB: float = None
-        self.UpperLimitLoadingC: float = None
-        self.LowerLimitLoadingA: float = None
-        self.LowerLimitLoadingB: float = None
-        self.LowerLimitLoadingC: float = None
-        self.WaveAngleImpactBetaMax: float = None
+        self.distance_maximum_wave_elevation_a: float = None
+        self.distance_maximum_wave_elevation_b: float = None
+        self.slope_upper_level: float = None
+        self.sLope_lower_level: float = None
+        self.normative_width_of_wave_impact_a: float = None
+        self.normative_width_of_wave_impact_b: float = None
+        self.upper_limit_loading_a: float = None
+        self.upper_limit_loading_b: float = None
+        self.upper_limit_loading_c: float = None
+        self.lower_limit_loading_a: float = None
+        self.lower_limit_loading_b: float = None
+        self.lower_limit_loading_c: float = None
+        self.wave_angle_impact_beta_max: float = None

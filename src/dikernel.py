@@ -1,5 +1,5 @@
 from dikernelcreferences import *
-from dikernelinput import DikernelInput, HydraulicInput
+from dikernelinput import DikernelInput
 from dikerneloutput import DikernelOutputLocation
 from dikernelinputparser import DikernelInputParser
 from dikerneloutputparser import DikernelOutputParser
@@ -7,122 +7,126 @@ import numpy as numpy
 
 
 class Dikernel:
-    def __init__(self, dikernelInput: DikernelInput):
-        self.Input: DikernelInput = dikernelInput
-        self.Output: list[DikernelOutputLocation] = None
-        self.ValidationMessages: list[str] = list[str]()
-        self.__cInput = None
-        self.__cOutput = None
-        self.__cValidationResult = None
+    def __init__(self, input: DikernelInput):
+        self.input: DikernelInput = input
+        self.output: list[DikernelOutputLocation] = None
+        self.validation_messages: list[str] = list[str]()
+        self.__c_input = None
+        self.__c_output = None
+        self.__c_validation_result = None
 
     def validate(self) -> bool:
-        if not self.__validateinputdata():
+        if not self.__validate_input_data():
             return False
 
-        self.__cInput = DikernelInputParser.parsedikernelinput(self.Input.getruninput())
-        if self.__cInput is None:
-            self.ValidationMessages.append("Could not parse input")
+        self.__c_input = DikernelInputParser.parse_dikernel_input(
+            self.input.get_run_input()
+        )
+        if self.__c_input is None:
+            self.validation_messages.append("Could not parse input")
             return False
 
-        self.__cValidationResult = Validator.Validate(self.__cInput)
-        self.ValidationMessages.extend(
-            list(i.Message for i in self.__cValidationResult.Events)
+        self.__c_validation_result = Validator.Validate(self.__c_input)
+        self.validation_messages.extend(
+            list(i.Message for i in self.__c_validation_result.Events)
         )
 
-        return self.__cValidationResult.Successful and int(
-            self.__cValidationResult.Data
+        return self.__c_validation_result.Successful and int(
+            self.__c_validation_result.Data
         ) == int(ValidationResultType.Successful)
 
     def run(self) -> bool:
         try:
-            calculator = Calculator(self.__cInput)
+            calculator = Calculator(self.__c_input)
             calculator.WaitForCompletion()
 
-            self.__cOutput = calculator.Result
+            self.__c_output = calculator.Result
 
-            xPositions = list(
-                location.XPosition for location in self.Input.OutputLocations
+            x_positions = list(
+                location.x_position for location in self.input.output_locations
             )
-            self.Output = DikernelOutputParser.parsedikerneloutput(
-                self.__cOutput.Data, xPositions
+            self.output = DikernelOutputParser.parse_dikernel_output(
+                self.__c_output.Data, x_positions
             )
 
             return (
-                self.__cOutput is not None
-                and self.__cOutput.Successful
+                self.__c_output is not None
+                and self.__c_output.Successful
                 and int(calculator.CalculationState)
                 == int(CalculationState.FinishedSuccessfully)
             )
         except:
             return False
 
-    def __validateinputdata(self) -> bool:
-        if self.Input is None:
-            self.ValidationMessages.append("Specify input first")
+    def __validate_input_data(self) -> bool:
+        if self.input is None:
+            self.validation_messages.append("Specify input first")
             return False
 
         result = True
-        if self.Input.HydraulicInput is None:
-            self.ValidationMessages.append("Hydraulic input must be specified.")
+        if self.input.hydraulic_input is None:
+            self.validation_messages.append("Hydraulic input must be specified.")
             result = False
         elif (
-            self.Input.HydraulicInput.TimeSteps is None
-            or len(self.Input.HydraulicInput.TimeSteps) < 2
+            self.input.hydraulic_input.time_steps is None
+            or len(self.input.hydraulic_input.time_steps) < 2
         ):
-            self.ValidationMessages.append(
+            self.validation_messages.append(
                 "At least two time steps need to be specified in the hydraulic input."
             )
             result = False
 
-        if self.Input.DikeSchematization is None:
-            self.ValidationMessages.append("Dike schematization must be specified")
+        if self.input.dike_schematization is None:
+            self.validation_messages.append("Dike schematization must be specified")
             result = False
         if (
-            self.Input.DikeOrientation is None
-            or self.Input.DikeOrientation < 0
-            or self.Input.DikeOrientation > 360
+            self.input.dike_orientation is None
+            or self.input.dike_orientation < 0
+            or self.input.dike_orientation > 360
         ):
-            self.ValidationMessages.append(
+            self.validation_messages.append(
                 "Dike orientation must be specified as a number between 0 and 360 degrees."
             )
             result = False
-        if self.Input.OutputLocations is None or len(self.Input.OutputLocations) < 1:
-            self.ValidationMessages.append(
+        if self.input.output_locations is None or len(self.input.output_locations) < 1:
+            self.validation_messages.append(
                 "At least one outputlocation needs to be specified."
             )
             result = False
-        if self.Input.StartTime is not None and self.Input.StartTime > numpy.max(
-            self.Input.HydraulicInput.TimeSteps
+        if self.input.start_time is not None and self.input.start_time > numpy.max(
+            self.input.hydraulic_input.time_steps
         ):
-            self.ValidationMessages.append(
+            self.validation_messages.append(
                 "Start time should not exceed the specified hydraulic boundary conditions."
             )
             result = False
         if (
-            self.Input.OutputTimeSteps is not None
-            and len(self.Input.OutputTimeSteps) > 0
+            self.input.output_time_steps is not None
+            and len(self.input.output_time_steps) > 0
         ):
-            minimumOutputTime = numpy.min(self.Input.OutputTimeSteps)
+            minimumOutputTime = numpy.min(self.input.output_time_steps)
             if (
-                self.Input.StartTime is not None
-                and minimumOutputTime < self.Input.StartTime
+                self.input.start_time is not None
+                and minimumOutputTime < self.input.start_time
             ):
-                self.ValidationMessages.append(
+                self.validation_messages.append(
                     "Specified output time steps should all be greater than the specified start time."
                 )
                 result = False
-            if self.Input.HydraulicInput is not None and minimumOutputTime < numpy.min(
-                self.Input.HydraulicInput.TimeSteps
+            if (
+                self.input.hydraulic_input is not None
+                and minimumOutputTime < numpy.min(self.input.hydraulic_input.time_steps)
             ):
-                self.ValidationMessages.append(
+                self.validation_messages.append(
                     "Specified output time steps should all be greater than the minimum specified time step of the hydraulic conditions."
                 )
                 result = False
-            maximumOutputTime = numpy.max(self.Input.OutputTimeSteps)
-            if self.Input.HydraulicInput is not None and maximumOutputTime > numpy.max(
-                self.Input.HydraulicInput.TimeSteps
+            maximumOutputTime = numpy.max(self.input.output_time_steps)
+            if (
+                self.input.hydraulic_input is not None
+                and maximumOutputTime > numpy.max(self.input.hydraulic_input.time_steps)
             ):
-                self.ValidationMessages.append(
+                self.validation_messages.append(
                     "Specified output time steps should not be greater than the maximum specified time step of the hydraulic conditions."
                 )
                 result = False

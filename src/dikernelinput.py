@@ -7,76 +7,76 @@ import numpy as numpy
 class DikeSchematization:
     def __init__(
         self,
-        xPositions: list[float],
-        zPositions: list[float],
+        x_positions: list[float],
+        z_positions: list[float],
         roughnesses: list[float],
-        xOuterToe: float,
-        xOuterCrest: float,
+        x_outer_toe: float,
+        x_outer_crest: float,
     ):
         """Contructor for a schematization of a dike profile.
 
         Args:
-            xPositions (list[float]): list of cross-shore positions
-            zPositions (list[float]): list of dike heights in meter correspoinding to the cross-shore positions. zPositions needs to be of the samen length as xPositions
+            x_positions (list[float]): list of cross-shore positions
+            z_positions (list[float]): list of dike heights in meter correspoinding to the cross-shore positions. zPositions needs to be of the samen length as xPositions
             roughnesses (list[float]): a list of roughness coefficients per dike segment. By definition the length of this list is equal to the length of xPositions - 1
-            xOuterToe (float): The cross-shore location of the toe of the dike at the outer slope
-            xOuterCrest (float): The cross-shore location of the (outer) crest of the dike
+            x_outer_toe (float): The cross-shore location of the toe of the dike at the outer slope
+            x_outer_crest (float): The cross-shore location of the (outer) crest of the dike
         """
-        self.XPositions: list[float] = xPositions
-        self.ZPositions: list[float] = zPositions
-        self.Roughnesses: list[float] = roughnesses
-        self.OuterToe: float = xOuterToe
-        self.OuterCrest: float = xOuterCrest
-        self.CrestOuterBerm: float = None
-        self.NotchOuterBerm: float = None
-        self.InnerCrest: float = None
-        self.InnerToe: float = None
+        self.x_positions: list[float] = x_positions
+        self.z_positions: list[float] = z_positions
+        self.roughnesses: list[float] = roughnesses
+        self.outer_toe: float = x_outer_toe
+        self.outer_crest: float = x_outer_crest
+        self.crest_outer_berm: float = None
+        self.notch_outer_berm: float = None
+        self.inner_crest: float = None
+        self.inner_toe: float = None
 
 
-class HydraulicInput:
+class HydraulicConditions:
     def __init__(
         self,
-        timeSteps: list[float],
-        waterLevels: list[float],
-        waveHeights: list[float],
-        wavePeriods: list[float],
-        waveDirections: list[float],
+        time_steps: list[float],
+        water_levels: list[float],
+        wave_heights: list[float],
+        wave_periods: list[float],
+        wave_directions: list[float],
     ):
         """Constructor for the hydraulic input.
 
         Args:
-            timeSteps (list[float]): list of timesteps.
-            waterLevels (list[float]): list of waterlevels
-            waveHeights (list[float]): list of significant wave heights (Hs)
-            wavePeriods (list[float]): list of wave periods
-            waveAngles (list[float]): list of wave angles
+            time_steps (list[float]): list of timesteps.
+            water_levels (list[float]): list of waterlevels
+            wave_heights (list[float]): list of significant wave heights (Hs)
+            wave_periods (list[float]): list of wave periods
+            wave_directions (list[float]): list of wave directions
         Raises:
             Exception: In case the length of either the specified water level series, the wave heights, wave periods or wave angles is not exactly 1 less than the length of the specified time steps.
         """
-        nrTimeSteps = len(timeSteps)
+        nr_time_steps = len(time_steps)
         if (
-            nrTimeSteps - 1 != len(waterLevels)
-            or nrTimeSteps - 1 != len(waveHeights)
-            or nrTimeSteps - 1 != len(wavePeriods)
-            or nrTimeSteps - 1 != len(waveDirections)
+            nr_time_steps - 1 != len(water_levels)
+            or nr_time_steps - 1 != len(wave_heights)
+            or nr_time_steps - 1 != len(wave_periods)
+            or nr_time_steps - 1 != len(wave_directions)
         ):
             raise Exception(
                 "length of the specified series for waterlevels, wave heights, wave periods and wave angles needs to be exactly 1 less than the length of the specified time steps."
             )
 
-        self.TimeSteps = timeSteps
-        self.WaterLevels = waterLevels
-        self.WaveHeights = waveHeights
-        self.WavePeriods = wavePeriods
-        self.WaveDirections = waveDirections
+        self.time_steps = time_steps
+        self.water_levels = water_levels
+        self.wave_heights = wave_heights
+        self.wave_periods = wave_periods
+        self.wave_directions = wave_directions
 
 
 class DikernelInput:
     def __init__(
         self,
-        dikeOrientation: float,
-        hydraulicInput: HydraulicInput,
-        dikeSchematization: DikeSchematization,
+        dike_orientation: float,
+        hydraulic_input: HydraulicConditions,
+        dike_schematization: DikeSchematization,
     ):
         """Constructor for the DikernelInput class.
 
@@ -85,71 +85,69 @@ class DikernelInput:
             hydraulicInput (HydraulicInput): object containing the hydraulics input
             dikeSchematization (DikeSchematization): object containing the dike schematization
         """
-        self.DikeOrientation: float = dikeOrientation
-        self.HydraulicInput: HydraulicInput = hydraulicInput
-        self.DikeSchematization: DikeSchematization = dikeSchematization
-        self.OutputLocations: list[OutputLocationSpecification] = None
-        self.Settings: list[CalculationSettings] = None
-        self.StartTime: float = None
-        self.OutputTimeSteps: list[float] = None
+        self.dike_orientation: float = dike_orientation
+        self.hydraulic_input: HydraulicConditions = hydraulic_input
+        self.dike_schematization: DikeSchematization = dike_schematization
+        self.output_locations: list[OutputLocationSpecification] = None
+        self.settings: list[CalculationSettings] = None
+        self.start_time: float = None
+        self.output_time_steps: list[float] = None
 
     def getruntimesteps(self) -> list[float]:
-        runTimeSteps = self.HydraulicInput.TimeSteps
-        if self.OutputTimeSteps is not None:
-            runTimeSteps = numpy.union1d(runTimeSteps, self.OutputTimeSteps).tolist()
+        run_time_steps = self.hydraulic_input.time_steps
+        if self.output_time_steps is not None:
+            run_time_steps = numpy.union1d(
+                run_time_steps, self.output_time_steps
+            ).tolist()
 
-        if self.StartTime is not None:
-            runTimeSteps = list(
-                timeStep
-                for timeStep in numpy.union1d(runTimeSteps, [self.StartTime])
-                if timeStep >= self.StartTime
+        if self.start_time is not None:
+            run_time_steps = list(
+                time_step
+                for time_step in numpy.union1d(run_time_steps, [self.start_time])
+                if time_step >= self.start_time
             )
-        return runTimeSteps
+        return run_time_steps
 
-    def getruninput(self) -> DikernelInput:
-        timeSteps = self.HydraulicInput.TimeSteps
-        runTimeSteps = self.getruntimesteps()
-        runWaterLevels = self.__interpolatetimeseries(
-            timeSteps, self.HydraulicInput.WaterLevels, runTimeSteps
+    def get_run_input(self) -> DikernelInput:
+        time_steps = self.hydraulic_input.time_steps
+        run_time_steps = self.getruntimesteps()
+        run_hydraulics = HydraulicConditions(
+            run_time_steps,
+            self.__interpolate_time_series(
+                time_steps, self.hydraulic_input.water_levels, run_time_steps
+            ),
+            self.__interpolate_time_series(
+                time_steps, self.hydraulic_input.wave_heights, run_time_steps
+            ),
+            self.__interpolate_time_series(
+                time_steps, self.hydraulic_input.wave_periods, run_time_steps
+            ),
+            self.__interpolate_time_series(
+                time_steps, self.hydraulic_input.wave_directions, run_time_steps
+            ),
         )
-        runWaveHeights = self.__interpolatetimeseries(
-            timeSteps, self.HydraulicInput.WaveHeights, runTimeSteps
+        run_input = DikernelInput(
+            self.dike_orientation, run_hydraulics, self.dike_schematization
         )
-        runWavePeriods = self.__interpolatetimeseries(
-            timeSteps, self.HydraulicInput.WavePeriods, runTimeSteps
-        )
-        runWaveDirections = self.__interpolatetimeseries(
-            timeSteps, self.HydraulicInput.WaveDirections, runTimeSteps
-        )
-        runHydraulics = HydraulicInput(
-            runTimeSteps,
-            runWaterLevels,
-            runWaveHeights,
-            runWavePeriods,
-            runWaveDirections,
-        )
-        runInput = DikernelInput(
-            self.DikeOrientation, runHydraulics, self.DikeSchematization
-        )
-        runInput.OutputLocations = self.OutputLocations
-        runInput.Settings = self.Settings
-        return runInput
+        run_input.output_locations = self.output_locations
+        run_input.settings = self.settings
+        return run_input
 
     @staticmethod
-    def __interpolatetimeseries(
-        timeSteps: list[float], values: list[float], targetTimeSteps: list[float]
+    def __interpolate_time_series(
+        time_steps: list[float], values: list[float], target_time_steps: list[float]
     ) -> list[float]:
         iargs = 1
         itarget = 1
-        targetValues = list[float]()
-        while itarget < len(targetTimeSteps):
+        target_values = list[float]()
+        while itarget < len(target_time_steps):
             if (
-                targetTimeSteps[itarget] > timeSteps[iargs]
-                and iargs < len(timeSteps) - 1
+                target_time_steps[itarget] > time_steps[iargs]
+                and iargs < len(time_steps) - 1
             ):
                 iargs = iargs + 1
                 continue
-            targetValues.append(values[iargs - 1])
+            target_values.append(values[iargs - 1])
             itarget = itarget + 1
 
-        return targetValues
+        return target_values

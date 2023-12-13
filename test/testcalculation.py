@@ -10,7 +10,7 @@ from toplayertypes import TopLayerType
 from dikernelinput import (
     DikernelInput,
     DikeSchematization,
-    HydraulicInput,
+    HydraulicConditions,
 )
 from dikerneloutputlocations import (
     OutputLocationSpecification,
@@ -35,15 +35,15 @@ from dikernel import Dikernel
 
 
 # region define calculation input
-def getcalculationinput() -> DikernelInput:
-    input = DikernelInput(0.0, getyydraulicinput(), getdikeprofile())
-    input.OutputLocations = getoutputlocations()
-    input.Settings = getcalculationsettings()
+def get_calculation_input() -> DikernelInput:
+    input = DikernelInput(0.0, get_hydraulic_conditions(), get_dike_profile())
+    input.output_locations = get_output_locations()
+    input.settings = get_calculation_settings()
     return input
 
 
-def getyydraulicinput() -> HydraulicInput:
-    timeSteps = [
+def get_hydraulic_conditions() -> HydraulicConditions:
+    time_steps = [
         0.0,
         2269.440000000016,
         4538.879999999999,
@@ -146,7 +146,7 @@ def getyydraulicinput() -> HydraulicInput:
         124808.39024390245,
         126000.0,
     ]
-    waterLevels = [
+    water_levels = [
         0.50,
         0.50,
         0.51,
@@ -248,7 +248,7 @@ def getyydraulicinput() -> HydraulicInput:
         0.51,
         0.50,
     ]
-    waveHeights = [
+    wave_heights = [
         0.80,
         0.80,
         0.80,
@@ -350,7 +350,7 @@ def getyydraulicinput() -> HydraulicInput:
         0.80,
         0.80,
     ]
-    wavePeriods = [
+    wave_periods = [
         7,
         7.06,
         7.12,
@@ -452,7 +452,7 @@ def getyydraulicinput() -> HydraulicInput:
         12.88,
         12.94,
     ]
-    waveAngles = [
+    wave_directions = [
         -20 + 360,
         -19.5 + 360,
         -19 + 360,
@@ -554,24 +554,26 @@ def getyydraulicinput() -> HydraulicInput:
         29,
         29.5,
     ]
-    return HydraulicInput(timeSteps, waterLevels, waveHeights, wavePeriods, waveAngles)
+    return HydraulicConditions(
+        time_steps, water_levels, wave_heights, wave_periods, wave_directions
+    )
 
 
-def getdikeprofile() -> DikeSchematization:
-    xPositions = [0.0, 25.0, 35.0, 41.0, 45, 50, 60, 70]
-    zPositions = [-3, 0.0, 1.5, 1.7, 3.0, 3.1, 0, -1]
+def get_dike_profile() -> DikeSchematization:
+    x_positions = [0.0, 25.0, 35.0, 41.0, 45, 50, 60, 70]
+    z_positions = [-3, 0.0, 1.5, 1.7, 3.0, 3.1, 0, -1]
     roughnesses = [1, 1, 0.75, 0.5, 0.8, 0.8, 0.8]
-    schematization = DikeSchematization(xPositions, zPositions, roughnesses)
-    schematization.OuterToe = 25.0
-    schematization.OuterCrest = 45.0
-    schematization.CrestOuterBerm = 35.0
-    schematization.NotchOuterBerm = 41.0
-    schematization.InnerCrest = 50.0
-    schematization.InnerToe = 60.0
+    schematization = DikeSchematization(x_positions, z_positions, roughnesses)
+    schematization.outer_toe = 25.0
+    schematization.outer_crest = 45.0
+    schematization.crest_outer_berm = 35.0
+    schematization.notch_outer_berm = 41.0
+    schematization.inner_crest = 50.0
+    schematization.inner_toe = 60.0
     return schematization
 
 
-def getoutputlocations() -> list[OutputLocationSpecification]:
+def get_output_locations() -> list[OutputLocationSpecification]:
     return [
         NordicStoneOutputLocationSpecification(25.01, 0, 0.28, 2.45),
         NordicStoneOutputLocationSpecification(25.5, 0, 0.28, 2.45),
@@ -686,26 +688,26 @@ def getoutputlocations() -> list[OutputLocationSpecification]:
 
 
 # region calculation settings
-def getcalculationsettings() -> list[CalculationSettings]:
+def get_calculation_settings() -> list[CalculationSettings]:
     return [
-        getasphaltcalculationsettings(),
-        getnaturalstonecalculationsettings(),
-        getgrasswaveimpactcalculationsettings(),
-        getgrasswaveovertoppingcalculationsettings(),
+        get_asphalt_calculation_settings(),
+        get_natural_stone_calculation_settings(),
+        get_grass_wave_impact_calculation_settings(),
+        get_grass_wave_overtopping_calculation_settings(),
     ]
 
 
-def getasphaltcalculationsettings() -> AsphaltCalculationSettings:
-    topLayer = AsphaltTopLayerSettings()
-    topLayer.StiffnessRatioNu = 0.35
-    topLayer.FatigueAsphaltAlpha = 0.5
-    topLayer.FatigueAsphaltBeta = 5.4
+def get_asphalt_calculation_settings() -> AsphaltCalculationSettings:
+    top_layer = AsphaltTopLayerSettings()
+    top_layer.stiffness_ratio_nu = 0.35
+    top_layer.fatigue_asphalt_alpha = 0.5
+    top_layer.fatigue_asphalt_beta = 5.4
 
-    settings = AsphaltCalculationSettings([topLayer])
-    settings.DensityOfWater = 1000.0
-    settings.FactorCtm = 1.0
-    settings.ImpactNumberC = 1.0
-    settings.WidthFactors = [
+    settings = AsphaltCalculationSettings([top_layer])
+    settings.density_of_water = 1000.0
+    settings.factor_ctm = 1.0
+    settings.impact_number_c = 1.0
+    settings.width_factors = [
         [0.1, 0.0392],
         [0.2, 0.0738],
         [0.3, 0.1002],
@@ -722,7 +724,7 @@ def getasphaltcalculationsettings() -> AsphaltCalculationSettings:
         [1.4, 0.015],
         [1.5, 0.0105],
     ]
-    settings.DepthFactors = [
+    settings.depth_factors = [
         [-1.0, 0.005040816326530646],
         [-0.9744897959183674, 0.00596482278562177],
         [-0.9489795918367347, 0.007049651822326582],
@@ -774,7 +776,7 @@ def getasphaltcalculationsettings() -> AsphaltCalculationSettings:
         [0.22448979591836737, 0.003263202667360069],
         [0.25, 0.0031645408163265307],
     ]
-    settings.ImpactFactors = [
+    settings.impact_factors = [
         [2.0, 0.039],
         [2.4, 0.1],
         [2.8, 0.18],
@@ -791,99 +793,101 @@ def getasphaltcalculationsettings() -> AsphaltCalculationSettings:
     return settings
 
 
-def getnaturalstonecalculationsettings() -> NaturalStoneCalculationSettings:
+def get_natural_stone_calculation_settings() -> NaturalStoneCalculationSettings:
     topLayer = NaturalStoneTopLayerSettings()
-    topLayer.StabilityPlungingA = 4.0
-    topLayer.StabilityPlungingC = 0.0
-    topLayer.StabilityPlungingB = 0.0
-    topLayer.StabilityPlungingN = -0.9
-    topLayer.StabilitySurgingA = 0.8
-    topLayer.StabilitySurgingB = 0.0
-    topLayer.StabilitySurgingC = 0.0
-    topLayer.StabilitySurgingN = 0.6
-    topLayer.Xib = 2.9
+    topLayer.stability_plunging_a = 4.0
+    topLayer.stability_plunging_b = 0.0
+    topLayer.stability_plunging_c = 0.0
+    topLayer.stability_plunging_n = -0.9
+    topLayer.stability_surging_a = 0.8
+    topLayer.stability_surging_b = 0.0
+    topLayer.stability_surging_c = 0.0
+    topLayer.stability_surging_n = 0.6
+    topLayer.xib = 2.9
 
     settings = NaturalStoneCalculationSettings([topLayer])
-    settings.DistanceMaximumWaveElevationA = 0.42
-    settings.DistanceMaximumWaveElevationB = 0.9
-    settings.SlopeUpperLevel = 0.05
-    settings.SLopeLowerLevel = 1.5
-    settings.NormativeWidthOfWaveImpactA = 0.96
-    settings.NormativeWidthOfWaveImpactB = 0.11
-    settings.UpperLimitLoadingA = 0.1
-    settings.UpperLimitLoadingB = 0.6
-    settings.UpperLimitLoadingC = 4.0
-    settings.LowerLimitLoadingA = 0.1
-    settings.LowerLimitLoadingB = 0.2
-    settings.LowerLimitLoadingC = 4.0
-    settings.WaveAngleImpactBetaMax = 78.0
+    settings.distance_maximum_wave_elevation_a = 0.42
+    settings.distance_maximum_wave_elevation_b = 0.9
+    settings.slope_upper_level = 0.05
+    settings.sLope_lower_level = 1.5
+    settings.normative_width_of_wave_impact_a = 0.96
+    settings.normative_width_of_wave_impact_b = 0.11
+    settings.upper_limit_loading_a = 0.1
+    settings.upper_limit_loading_b = 0.6
+    settings.upper_limit_loading_c = 4.0
+    settings.lower_limit_loading_a = 0.1
+    settings.lower_limit_loading_b = 0.2
+    settings.lower_limit_loading_c = 4.0
+    settings.wave_angle_impact_beta_max = 78.0
     return settings
 
 
-def getgrasswaveimpactcalculationsettings() -> GrassWaveImpactCalculationSettings:
-    topLayerClosedSod = GrassCoverWaveImpactTopLayerSettings(
+def get_grass_wave_impact_calculation_settings() -> GrassWaveImpactCalculationSettings:
+    top_layer_closed_sod = GrassCoverWaveImpactTopLayerSettings(
         TopLayerType.GrassClosedSod
     )
-    topLayerClosedSod.StanceTimeLineA = 1
-    topLayerClosedSod.StanceTimeLineB = -0.000009722
-    topLayerClosedSod.StanceTimeLineC = 0.25
-    topLayerOpenSod = GrassCoverWaveImpactTopLayerSettings(TopLayerType.GrassOpenSod)
-    topLayerOpenSod.StanceTimeLineA = 0.8
-    topLayerOpenSod.StanceTimeLineB = -0.00001944
-    topLayerOpenSod.StanceTimeLineC = 0.25
+    top_layer_closed_sod.stance_time_line_a = 1
+    top_layer_closed_sod.stance_time_line_b = -0.000009722
+    top_layer_closed_sod.stance_time_line_c = 0.25
+    top_layer_open_sod = GrassCoverWaveImpactTopLayerSettings(TopLayerType.GrassOpenSod)
+    top_layer_open_sod.stance_time_line_a = 0.8
+    top_layer_open_sod.stance_time_line_b = -0.00001944
+    top_layer_open_sod.stance_time_line_c = 0.25
 
-    settings = GrassWaveImpactCalculationSettings([topLayerClosedSod, topLayerOpenSod])
-    settings.LoadingUpperLimit = 0.0
-    settings.LoadingLowerLimit = 0.5
-    settings.WaveAngleImpactN = 0.6666666666666667
-    settings.WaveAngleImpactQ = 0.35
-    settings.WaveAngleImpactR = 10.0
-    settings.Temax = 3600000.0
-    settings.Temin = 3.6
+    settings = GrassWaveImpactCalculationSettings(
+        [top_layer_closed_sod, top_layer_open_sod]
+    )
+    settings.loading_upper_limit = 0.0
+    settings.loading_lower_limit = 0.5
+    settings.wave_angle_impact_n = 0.6666666666666667
+    settings.wave_angle_impact_q = 0.35
+    settings.wave_angle_impact_r = 10.0
+    settings.te_max = 3600000.0
+    settings.te_min = 3.6
     return settings
 
 
-def getgrasswaveovertoppingcalculationsettings() -> (
+def get_grass_wave_overtopping_calculation_settings() -> (
     GrassWaveOvertoppingCalculationSettings
 ):
-    topLayerClosedSod = GrasCoverOvertoppingTopLayerSettings(
+    top_layer_closed_sod = GrasCoverOvertoppingTopLayerSettings(
         TopLayerType.GrassClosedSod
     )
-    topLayerClosedSod.CriticalCumulativeOverload = 7000.0
-    topLayerClosedSod.CriticalFrontVelocity = 6.6
+    top_layer_closed_sod.critical_cumulative_overload = 7000.0
+    top_layer_closed_sod.critical_front_velocity = 6.6
 
-    settings = GrassWaveOvertoppingCalculationSettings([topLayerClosedSod])
-    settings.AccelerationAlphaAForCrest = 1.0
-    settings.AccelerationAlphaAForInnerSlope = 1.4
-    settings.FixedNumberOfWaves = 10000
-    settings.FrontVelocityCwo = 1.45
-    settings.FactorCtm = 0.92
+    settings = GrassWaveOvertoppingCalculationSettings([top_layer_closed_sod])
+    settings.acceleration_alpha_a_for_crest = 1.0
+    settings.acceleration_alpha_a_for_inner_slope = 1.4
+    settings.fixed_number_of_waves = 10000
+    settings.front_velocity_c_wo = 1.45
+    settings.factor_ctm = 0.92
     return settings
 
 
 # endregion
 # endregion
 
-input = getcalculationinput()
+input = get_calculation_input()
 dikernel = Dikernel(input)
 
 print("Starting validation")
-validationresult = dikernel.validate()
-print("   Validation was: " + "succesfull" if validationresult else "unsuccessfull")
+validation_result = dikernel.validate()
+print("   Validation was: " + "succesfull" if validation_result else "unsuccessfull")
 
 print("Starting calculation")
-runresult = dikernel.run()
-print("   Run was: " + "succesfull" if runresult else "unsuccessfull")
+run_result = dikernel.run()
+print("   Run was: " + "succesfull" if run_result else "unsuccessfull")
 
-output = dikernel.Output
+output = dikernel.output
 print("   number of output locations: " + str(len(output)))
-print("   Number of failed locations: " + str(len([l for l in output if l.Failed])))
-stones = [o for o in output if o.CalculationMethod == CalculationMethod.NaturalStone]
+print("   Number of failed locations: " + str(len([l for l in output if l.failed])))
+stones = [o for o in output if o.calculation_method == CalculationMethod.NaturalStone]
 print("   Number of natural stone output locations: " + str(len(stones)))
 for stone in stones:
     print(
         "      X: "
-        + str(stone.XPosition)
+        + str(stone.x_position)
         + ", Damage lvel = "
-        + str(stone.DamageDevelopment[-1])
+        + str(stone.damage_development[-1])
     )

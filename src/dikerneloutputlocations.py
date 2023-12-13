@@ -5,82 +5,85 @@ from calculationmethods import CalculationMethod
 class OutputLocationSpecification:
     def __init__(
         self,
-        xPosition: float,
-        initialDamage: float,
-        calculationMethod: CalculationMethod,
-        topLayerType: TopLayerType,
+        x_position: float,
+        initial_damage: float,
+        calculation_method: CalculationMethod,
+        top_layer_type: TopLayerType,
     ):
-        self.XPosition = xPosition
-        self.InitialDamage = initialDamage
-        self.CalculationMethod = calculationMethod
-        self.TopLayerType = topLayerType
+        self.x_position = x_position
+        self.initial_damage = initial_damage
+        self.calculation_method = calculation_method
+        self.top_layer_type = top_layer_type
 
 
 class AsphaltOutputLocationSpecification(OutputLocationSpecification):
     def __init__(
         self,
-        xPosition: float,
-        beginDamage: float,
-        breakStrentAsphalt: float,
-        springConstantSoil: float,
-        topLayerThickness: float,
-        topLayerStiffnessModulus: float,
+        x_position: float,
+        begin_damage: float,
+        break_strent_asphalt: float,
+        spring_constant_soil: float,
+        top_layer_thickness: float,
+        top_layer_stiffness_modulus: float,
     ):
         super().__init__(
-            xPosition,
-            beginDamage,
+            x_position,
+            begin_damage,
             CalculationMethod.AsphaltWaveImpact,
             TopLayerType.WAB,
         )
-        self.FlexuralStrent = breakStrentAsphalt
-        self.SoilElasticity = springConstantSoil
-        self.TopLayerThickness = topLayerThickness
-        self.TopLayerElasticModulus = topLayerStiffnessModulus
-        self.SubLayerThickness = None
-        self.SubLayerElasticModulus = None
-        self.FatigueAlpha = None
-        self.FatigueBeta = None
-        self.TopLayerStiffnessRelationNu = None
+        self.flexural_strent = break_strent_asphalt
+        self.soil_elasticity = spring_constant_soil
+        self.top_layer_thickness = top_layer_thickness
+        self.top_layer_elastic_modulus = top_layer_stiffness_modulus
+        self.sub_layer_thickness = None
+        self.sub_layer_elastic_modulus = None
+        self.fatigue_alpha = None
+        self.fatigue_beta = None
+        self.top_layer_stiffness_relation_nu = None
 
 
 class NordicStoneOutputLocationSpecification(OutputLocationSpecification):
     def __init__(
         self,
-        xPosition: float,
-        beginDamage: float,
-        topLayerThickness: float,
-        relativeDensity: float,
+        x_position: float,
+        begin_damage: float,
+        top_layer_thickness: float,
+        relative_density: float,
     ):
         super().__init__(
-            xPosition,
-            beginDamage,
+            x_position,
+            begin_damage,
             CalculationMethod.NaturalStone,
             TopLayerType.NordicStone,
         )
-        self.TopLayerThickness = topLayerThickness
-        self.RelativeDensity = relativeDensity
+        self.top_layer_thickness = top_layer_thickness
+        self.relative_density = relative_density
 
 
 class GrassWaveImpactOutputLocationSpecification(OutputLocationSpecification):
     def __init__(
-        self, xPosition: float, beginDamage: float, topLayerType: TopLayerType
+        self, x_position: float, begin_damage: float, top_layer_type: TopLayerType
     ):
         super().__init__(
-            xPosition, beginDamage, CalculationMethod.GrassWaveImpact, topLayerType
+            x_position, begin_damage, CalculationMethod.GrassWaveImpact, top_layer_type
         )
 
 
 class GrassOvertoppingOutputLocationSpecification(OutputLocationSpecification):
     def __init__(
         self,
-        xPosition: float,
-        beginDamage: float,
-        topLayerType: TopLayerType,
-        alphaM: float = 1.0,
-        alphaS: float = 1.0,
+        x_position: float,
+        begin_damage: float,
+        top_layer_type: TopLayerType,
+        alpha_m: float = 1.0,
+        alpha_s: float = 1.0,
     ):
         super().__init__(
-            xPosition, beginDamage, CalculationMethod.GrassWaveOvertopping, topLayerType
+            x_position,
+            begin_damage,
+            CalculationMethod.GrassWaveOvertopping,
+            top_layer_type,
         )
-        self.IncreasedLoadTransitionAlphaM = alphaM
-        self.ReducedStrengthTransitionAlphaS = alphaS
+        self.increased_load_transition_alpha_m = alpha_m
+        self.increased_load_transition_alpha_s = alpha_s

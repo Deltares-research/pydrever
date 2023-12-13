@@ -1,4 +1,4 @@
-from dikernelinput import DikernelInput, HydraulicInput, DikeSchematization
+from dikernelinput import DikernelInput, HydraulicConditions, DikeSchematization
 from dikerneloutputlocations import (
     AsphaltOutputLocationSpecification,
     NordicStoneOutputLocationSpecification,
@@ -10,6 +10,10 @@ from dikernelcalculationsettings import (
     GrassWaveOvertoppingCalculationSettings,
     GrassWaveImpactCalculationSettings,
     NaturalStoneCalculationSettings,
+    AsphaltTopLayerSettings,
+    NaturalStoneTopLayerSettings,
+    GrasCoverOvertoppingTopLayerSettings,
+    GrassCoverWaveImpactTopLayerSettings,
 )
 from dikernelcreferences import *
 from toplayertypes import TopLayerType
@@ -17,158 +21,156 @@ from toplayertypes import TopLayerType
 
 class DikernelInputParser:
     @staticmethod
-    def parsedikernelinput(dikernelInput: DikernelInput):
-        builder = CalculationInputBuilder(dikernelInput.DikeOrientation)
-        DikernelInputParser.__addDikeProfileToBuilder(
-            builder, dikernelInput.DikeSchematization
+    def parse_dikernel_input(input: DikernelInput):
+        builder = CalculationInputBuilder(input.dike_orientation)
+        DikernelInputParser.__add_dike_profile_to_builder(
+            builder, input.dike_schematization
         )
-        DikernelInputParser.__addHydraulicsToBuilder(
-            builder, dikernelInput.HydraulicInput
+        DikernelInputParser.__add_hydraulics_to_builder(builder, input.hydraulic_input)
+        DikernelInputParser.__add_output_location_specifications_to_builder(
+            builder, input
         )
-        DikernelInputParser.__addOutputLocationSpecificationsToBuilder(
-            builder, dikernelInput
-        )
-        composedInput = builder.Build()
-        return composedInput.Data
+        composed_input = builder.Build()
+        return composed_input.Data
 
     @staticmethod
-    def __addDikeProfileToBuilder(
-        builder: CalculationInputBuilder, dikeSchematization: DikeSchematization
+    def __add_dike_profile_to_builder(
+        builder: CalculationInputBuilder, dike_schematization: DikeSchematization
     ):
         """This function adds the specified dike profile to the C# input builder.
         First all dike segments are added, then all characteristic points are translated to C#
 
         Args:
             builder (CalculationInputBuilder): The C# object used to build DiKErnel input
-            dikernelInput (DikernelInput): The python object containing all calculation input
+            dike_schematization (DikeSchematization): The python object containing the dike schematization
         """
-        for i in range(len(dikeSchematization.XPositions) - 1):
-            xStart = dikeSchematization.XPositions[i]
-            zStart = dikeSchematization.ZPositions[i]
-            xEnd = dikeSchematization.XPositions[i + 1]
-            zEnd = dikeSchematization.ZPositions[i + 1]
-            roughness = dikeSchematization.Roughnesses[i]
-            builder.AddDikeProfileSegment(xStart, zStart, xEnd, zEnd, roughness)
+        for i in range(len(dike_schematization.x_positions) - 1):
+            x_start = dike_schematization.x_positions[i]
+            z_start = dike_schematization.z_positions[i]
+            x_end = dike_schematization.x_positions[i + 1]
+            z_end = dike_schematization.z_positions[i + 1]
+            roughness = dike_schematization.roughnesses[i]
+            builder.AddDikeProfileSegment(x_start, z_start, x_end, z_end, roughness)
 
-        if dikeSchematization.OuterToe is not None:
+        if dike_schematization.outer_toe is not None:
             builder.AddDikeProfilePoint(
-                dikeSchematization.OuterToe, CharacteristicPointType.OuterToe
+                dike_schematization.outer_toe, CharacteristicPointType.OuterToe
             )
 
-        if dikeSchematization.CrestOuterBerm is not None:
+        if dike_schematization.crest_outer_berm is not None:
             builder.AddDikeProfilePoint(
-                dikeSchematization.CrestOuterBerm,
+                dike_schematization.crest_outer_berm,
                 CharacteristicPointType.CrestOuterBerm,
             )
 
-        if dikeSchematization.NotchOuterBerm is not None:
+        if dike_schematization.notch_outer_berm is not None:
             builder.AddDikeProfilePoint(
-                dikeSchematization.NotchOuterBerm,
+                dike_schematization.notch_outer_berm,
                 CharacteristicPointType.NotchOuterBerm,
             )
 
-        if dikeSchematization.OuterCrest is not None:
+        if dike_schematization.outer_crest is not None:
             builder.AddDikeProfilePoint(
-                dikeSchematization.OuterCrest, CharacteristicPointType.OuterCrest
+                dike_schematization.outer_crest, CharacteristicPointType.OuterCrest
             )
 
-        if dikeSchematization.InnerCrest is not None:
+        if dike_schematization.inner_crest is not None:
             builder.AddDikeProfilePoint(
-                dikeSchematization.InnerCrest, CharacteristicPointType.InnerCrest
+                dike_schematization.inner_crest, CharacteristicPointType.InnerCrest
             )
 
-        if dikeSchematization.InnerToe is not None:
+        if dike_schematization.inner_toe is not None:
             builder.AddDikeProfilePoint(
-                dikeSchematization.InnerToe, CharacteristicPointType.InnerToe
+                dike_schematization.inner_toe, CharacteristicPointType.InnerToe
             )
 
     @staticmethod
-    def __addHydraulicsToBuilder(
-        builder: CalculationInputBuilder, hydraulicInput: HydraulicInput
+    def __add_hydraulics_to_builder(
+        builder: CalculationInputBuilder, hydraulic_conditions: HydraulicConditions
     ):
-        for i in range(len(hydraulicInput.WaterLevels) - 1):
+        for i in range(len(hydraulic_conditions.water_levels) - 1):
             builder.AddTimeStep(
-                Double(hydraulicInput.TimeSteps[i]),
-                Double(hydraulicInput.TimeSteps[i + 1]),
-                Double(hydraulicInput.WaterLevels[i]),
-                Double(hydraulicInput.WaveHeights[i]),
-                Double(hydraulicInput.WavePeriods[i]),
-                Double(hydraulicInput.WaveDirections[i]),
+                Double(hydraulic_conditions.time_steps[i]),
+                Double(hydraulic_conditions.time_steps[i + 1]),
+                Double(hydraulic_conditions.water_levels[i]),
+                Double(hydraulic_conditions.wave_heights[i]),
+                Double(hydraulic_conditions.wave_periods[i]),
+                Double(hydraulic_conditions.wave_directions[i]),
             )
 
         return builder
 
     @staticmethod
-    def __addOutputLocationSpecificationsToBuilder(
-        builder: CalculationInputBuilder, dikernelInput: DikernelInput
+    def __add_output_location_specifications_to_builder(
+        builder: CalculationInputBuilder, input: DikernelInput
     ) -> CalculationInputBuilder:
-        locationDataItems = dikernelInput.OutputLocations
-        calculationSettings = dikernelInput.Settings
+        locations = input.output_locations
+        settings = input.settings
 
-        for locationData in locationDataItems:
-            match locationData:
+        for location in locations:
+            match location:
                 case AsphaltOutputLocationSpecification():
                     builder.AddAsphaltWaveImpactLocation(
-                        DikernelInputParser.__createAsphaltWaveImpactConstructionProperties(
-                            locationData,
+                        DikernelInputParser.__create_asphalt_wave_impact_construction_properties(
+                            location,
                             next(
                                 (
                                     ci
-                                    for ci in calculationSettings
+                                    for ci in settings
                                     if isinstance(ci, AsphaltCalculationSettings)
                                 )
                             )
-                            if calculationSettings is not None
+                            if settings is not None
                             else None,
                         )
                     )
                 case NordicStoneOutputLocationSpecification():
                     builder.AddNaturalStoneLocation(
-                        DikernelInputParser.__createNaturalStoneConstructionProperties(
-                            locationData,
+                        DikernelInputParser.__create_natural_stone_construction_properties(
+                            location,
                             next(
                                 (
                                     ci
-                                    for ci in calculationSettings
+                                    for ci in settings
                                     if isinstance(ci, NaturalStoneCalculationSettings)
                                 )
                             )
-                            if calculationSettings is not None
+                            if settings is not None
                             else None,
                         )
                     )
 
                 case GrassWaveImpactOutputLocationSpecification():
                     builder.AddGrassWaveImpactLocation(
-                        DikernelInputParser.__createGrassWaveImpactConstructionProperties(
-                            locationData,
+                        DikernelInputParser.__create_grass_wave_impact_construction_properties(
+                            location,
                             next(
                                 (
                                     ci
-                                    for ci in calculationSettings
+                                    for ci in settings
                                     if isinstance(
                                         ci, GrassWaveImpactCalculationSettings
                                     )
                                 )
                             )
-                            if calculationSettings is not None
+                            if settings is not None
                             else None,
                         )
                     )
                 case GrassOvertoppingOutputLocationSpecification():
                     builder.AddGrassOvertoppingLocation(
-                        DikernelInputParser.__createGrassOvertoppingConstructionProperties(
-                            locationData,
+                        DikernelInputParser.__create_grass_overtopping_construction_properties(
+                            location,
                             next(
                                 (
                                     ci
-                                    for ci in calculationSettings
+                                    for ci in settings
                                     if isinstance(
                                         ci, GrassWaveOvertoppingCalculationSettings
                                     )
                                 )
                             )
-                            if calculationSettings is not None
+                            if settings is not None
                             else None,
                         )
                     )
@@ -188,68 +190,59 @@ class DikernelInputParser:
         return builder
 
     @staticmethod
-    def __createAsphaltWaveImpactConstructionProperties(
-        locationData: AsphaltOutputLocationSpecification,
+    def __create_asphalt_wave_impact_construction_properties(
+        location: AsphaltOutputLocationSpecification,
         settings: AsphaltCalculationSettings,
     ):
         properties = AsphaltRevetmentWaveImpactLocationConstructionProperties(
-            locationData.XPosition,
+            location.x_position,
             AsphaltRevetmentTopLayerType.HydraulicAsphaltConcrete,
-            locationData.FlexuralStrent,
-            locationData.SoilElasticity,
-            locationData.TopLayerThickness,
-            locationData.TopLayerElasticModulus,
+            location.flexural_strent,
+            location.soil_elasticity,
+            location.top_layer_thickness,
+            location.top_layer_elastic_modulus,
         )
 
-        topLayer = (
-            next(
-                (
-                    l
-                    for l in settings.TopLayersSettings
-                    if l.TopLayerType == locationData.TopLayerType
-                ),
-                None,
-            )
-            if settings is not None
-            else None
+        top_layer = DikernelInputParser.__get_first_asphalt_toplayer_of_type(
+            settings, location.top_layer_type
         )
 
-        properties.InitialDamage = locationData.InitialDamage
-        properties.ThicknessSubLayer = locationData.SubLayerThickness
-        properties.ElasticModulusSubLayer = locationData.SubLayerElasticModulus
+        properties.InitialDamage = location.initial_damage
+        properties.ThicknessSubLayer = location.sub_layer_thickness
+        properties.ElasticModulusSubLayer = location.sub_layer_elastic_modulus
         properties.FailureNumber = (
-            settings.FailureNumber if settings is not None else None
+            settings.failure_number if settings is not None else None
         )
         properties.DensityOfWater = (
-            settings.DensityOfWater if settings is not None else None
+            settings.density_of_water if settings is not None else None
         )
         properties.AverageNumberOfWavesCtm = (
-            settings.FactorCtm if settings is not None else None
+            settings.factor_ctm if settings is not None else None
         )
         properties.FatigueAlpha = (
-            topLayer.FatigueAsphaltAlpha if topLayer is not None else None
+            top_layer.fatigue_asphalt_alpha if top_layer is not None else None
         )
         properties.FatigueBeta = (
-            topLayer.FatigueAsphaltBeta if topLayer is not None else None
+            top_layer.fatigue_asphalt_beta if top_layer is not None else None
         )
         properties.StiffnessRelationNu = (
-            topLayer.StiffnessRatioNu if topLayer is not None else None
+            top_layer.stiffness_ratio_nu if top_layer is not None else None
         )
         properties.ImpactNumberC = (
-            settings.ImpactNumberC if settings is not None else None
+            settings.impact_number_c if settings is not None else None
         )
         properties.WidthFactors = (
-            DikernelInputParser.__convertToCList(settings.WidthFactors)
+            DikernelInputParser.__convert_to_cList(settings.width_factors)
             if settings is not None
             else None
         )
         properties.DepthFactors = (
-            DikernelInputParser.__convertToCList(settings.DepthFactors)
+            DikernelInputParser.__convert_to_cList(settings.depth_factors)
             if settings is not None
             else None
         )
         properties.ImpactFactors = (
-            DikernelInputParser.__convertToCList(settings.ImpactFactors)
+            DikernelInputParser.__convert_to_cList(settings.impact_factors)
             if settings is not None
             else None
         )
@@ -257,187 +250,222 @@ class DikernelInputParser:
         return properties
 
     @staticmethod
-    def __createNaturalStoneConstructionProperties(
-        locationData: NordicStoneOutputLocationSpecification,
+    def __create_natural_stone_construction_properties(
+        location: NordicStoneOutputLocationSpecification,
         settings: NaturalStoneCalculationSettings,
     ):
         properties = NaturalStoneRevetmentLocationConstructionProperties(
-            locationData.XPosition,
+            location.x_position,
             NaturalStoneRevetmentTopLayerType.NordicStone,
-            locationData.TopLayerThickness,
-            locationData.RelativeDensity,
+            location.top_layer_thickness,
+            location.relative_density,
         )
 
-        topLayer = (
-            next(
-                (
-                    l
-                    for l in settings.TopLayersSettings
-                    if l.TopLayerType == locationData.TopLayerType
-                ),
-                None,
-            )
-            if settings is not None
-            else None
+        top_layer = DikernelInputParser.__get_first_natural_stone_toplayer_of_type(
+            settings, location.top_layer_type
         )
 
-        properties.InitialDamage = locationData.InitialDamage
+        properties.InitialDamage = location.initial_damage
         properties.FailureNumber = (
-            settings.FailureNumber if settings is not None else None
+            settings.failure_number if settings is not None else None
         )
         properties.HydraulicLoadAp = (
-            topLayer.StabilityPlungingA if topLayer is not None else None
+            top_layer.stability_plunging_a if top_layer is not None else None
         )
         properties.HydraulicLoadBp = (
-            topLayer.StabilityPlungingB if topLayer is not None else None
+            top_layer.stability_plunging_b if top_layer is not None else None
         )
         properties.HydraulicLoadCp = (
-            topLayer.StabilityPlungingC if topLayer is not None else None
+            top_layer.stability_plunging_c if top_layer is not None else None
         )
         properties.HydraulicLoadNp = (
-            topLayer.StabilityPlungingN if topLayer is not None else None
+            top_layer.stability_plunging_n if top_layer is not None else None
         )
         properties.HydraulicLoadAs = (
-            topLayer.StabilitySurgingA if topLayer is not None else None
+            top_layer.stability_surging_a if top_layer is not None else None
         )
         properties.HydraulicLoadBs = (
-            topLayer.StabilitySurgingB if topLayer is not None else None
+            top_layer.stability_surging_b if top_layer is not None else None
         )
         properties.HydraulicLoadCs = (
-            topLayer.StabilitySurgingC if topLayer is not None else None
+            top_layer.stability_surging_c if top_layer is not None else None
         )
         properties.HydraulicLoadNs = (
-            topLayer.StabilitySurgingN if topLayer is not None else None
+            top_layer.stability_surging_n if top_layer is not None else None
         )
-        properties.HydraulicLoadXib = topLayer.Xib if topLayer is not None else None
+        properties.HydraulicLoadXib = top_layer.xib if top_layer is not None else None
         properties.SlopeUpperLevelAus = (
-            settings.SlopeUpperLevel if settings is not None else None
+            settings.slope_upper_level if settings is not None else None
         )
         properties.SlopeLowerLevelAls = (
-            settings.SLopeLowerLevel if settings is not None else None
+            settings.sLope_lower_level if settings is not None else None
         )
         properties.UpperLimitLoadingAul = (
-            settings.UpperLimitLoadingA if settings is not None else None
+            settings.upper_limit_loading_a if settings is not None else None
         )
         properties.UpperLimitLoadingBul = (
-            settings.UpperLimitLoadingB if settings is not None else None
+            settings.upper_limit_loading_b if settings is not None else None
         )
         properties.UpperLimitLoadingCul = (
-            settings.UpperLimitLoadingC if settings is not None else None
+            settings.upper_limit_loading_c if settings is not None else None
         )
         properties.LowerLimitLoadingAll = (
-            settings.LowerLimitLoadingA if settings is not None else None
+            settings.lower_limit_loading_a if settings is not None else None
         )
         properties.LowerLimitLoadingBll = (
-            settings.LowerLimitLoadingB if settings is not None else None
+            settings.lower_limit_loading_b if settings is not None else None
         )
         properties.LowerLimitLoadingCll = (
-            settings.LowerLimitLoadingC if settings is not None else None
+            settings.lower_limit_loading_c if settings is not None else None
         )
         properties.DistanceMaximumWaveElevationAsmax = (
-            settings.DistanceMaximumWaveElevationA if settings is not None else None
+            settings.distance_maximum_wave_elevation_a if settings is not None else None
         )
         properties.DistanceMaximumWaveElevationBsmax = (
-            settings.DistanceMaximumWaveElevationB if settings is not None else None
+            settings.distance_maximum_wave_elevation_b if settings is not None else None
         )
         properties.NormativeWidthOfWaveImpactAwi = (
-            settings.NormativeWidthOfWaveImpactA if settings is not None else None
+            settings.normative_width_of_wave_impact_a if settings is not None else None
         )
         properties.NormativeWidthOfWaveImpactBwi = (
-            settings.NormativeWidthOfWaveImpactB if settings is not None else None
+            settings.normative_width_of_wave_impact_b if settings is not None else None
         )
         properties.WaveAngleImpactBetamax = (
-            settings.WaveAngleImpactBetaMax if settings is not None else None
+            settings.wave_angle_impact_beta_max if settings is not None else None
         )
 
         return properties
 
     @staticmethod
-    def __createGrassWaveImpactConstructionProperties(
-        locationData: GrassWaveImpactOutputLocationSpecification,
+    def __create_grass_wave_impact_construction_properties(
+        location: GrassWaveImpactOutputLocationSpecification,
         settings: GrassWaveImpactCalculationSettings,
     ):
-        topLayerType = (
+        top_layer_type = (
             GrassRevetmentTopLayerType.ClosedSod
-            if locationData.TopLayerType == TopLayerType.GrassClosedSod
+            if location.top_layer_type == TopLayerType.GrassClosedSod
             else GrassRevetmentTopLayerType.OpenSod
         )
         properties = GrassRevetmentWaveImpactLocationConstructionProperties(
-            locationData.XPosition, topLayerType
+            location.x_position, top_layer_type
         )
 
-        topLayer = (
-            next(
-                (
-                    l
-                    for l in settings.TopLayersSettings
-                    if l.TopLayerType == locationData.TopLayerType
-                ),
-                None,
-            )
-            if settings is not None
-            else None
+        topLayer = DikernelInputParser.__get_first_grass_wave_impact_toplayer_of_type(
+            settings, location.top_layer_type
         )
 
-        properties.InitialDamage = locationData.InitialDamage
+        properties.InitialDamage = location.initial_damage
         properties.FailureNumber = (
-            settings.FailureNumber if settings is not None else None
+            settings.failure_number if settings is not None else None
         )
         properties.TimeLineAgwi = (
-            topLayer.StanceTimeLineA if topLayer is not None else None
+            topLayer.stance_time_line_a if topLayer is not None else None
         )
         properties.TimeLineBgwi = (
-            topLayer.StanceTimeLineB if topLayer is not None else None
+            topLayer.stance_time_line_b if topLayer is not None else None
         )
         properties.TimeLineCgwi = (
-            topLayer.StanceTimeLineC if topLayer is not None else None
+            topLayer.stance_time_line_c if topLayer is not None else None
         )
         properties.MinimumWaveHeightTemax = (
-            settings.Temax if settings is not None else None
+            settings.te_max if settings is not None else None
         )
         properties.MaximumWaveHeightTemin = (
-            settings.Temin if settings is not None else None
+            settings.te_min if settings is not None else None
         )
         properties.WaveAngleImpactNwa = (
-            settings.WaveAngleImpactN if settings is not None else None
+            settings.wave_angle_impact_n if settings is not None else None
         )
         properties.WaveAngleImpactQwa = (
-            settings.WaveAngleImpactQ if settings is not None else None
+            settings.wave_angle_impact_q if settings is not None else None
         )
         properties.WaveAngleImpactRwa = (
-            settings.WaveAngleImpactR if settings is not None else None
+            settings.wave_angle_impact_r if settings is not None else None
         )
         properties.UpperLimitLoadingAul = (
-            settings.LoadingUpperLimit if settings is not None else None
+            settings.loading_upper_limit if settings is not None else None
         )
         properties.LowerLimitLoadingAll = (
-            settings.LoadingLowerLimit if settings is not None else None
+            settings.loading_lower_limit if settings is not None else None
         )
 
         return properties
 
     @staticmethod
-    def __createGrassOvertoppingConstructionProperties(
-        locationData: GrassOvertoppingOutputLocationSpecification,
+    def __create_grass_overtopping_construction_properties(
+        location: GrassOvertoppingOutputLocationSpecification,
         settings: GrassWaveOvertoppingCalculationSettings,
     ):
         topLayerType = None
-        match locationData.TopLayerType:
+        match location.top_layer_type:
             case TopLayerType.GrassClosedSod:
                 topLayerType = GrassRevetmentTopLayerType.ClosedSod
             case TopLayerType.GrassOpenSod:
                 topLayerType = GrassRevetmentTopLayerType.OpenSod
 
         properties = GrassRevetmentOvertoppingLocationConstructionProperties(
-            locationData.XPosition, topLayerType
+            location.x_position, topLayerType
         )
 
-        topLayer = (
+        topLayer = DikernelInputParser.__get_first_grass_overtopping_toplayer_of_type(
+            settings, location.top_layer_type
+        )
+
+        properties.InitialDamage = location.initial_damage
+        properties.IncreasedLoadTransitionAlphaM = (
+            location.increased_load_transition_alpha_m
+        )
+        properties.ReducedStrengthTransitionAlphaS = (
+            location.increased_load_transition_alpha_s
+        )
+        properties.FailureNumber = (
+            settings.failure_number if settings is not None else None
+        )
+        properties.CriticalCumulativeOverload = (
+            topLayer.critical_cumulative_overload if topLayer is not None else None
+        )
+        properties.CriticalFrontVelocity = (
+            topLayer.critical_front_velocity if topLayer is not None else None
+        )
+        properties.DikeHeight = settings.DikeHeight if settings is not None else None
+        properties.AccelerationAlphaAForCrest = (
+            settings.acceleration_alpha_a_for_crest if settings is not None else None
+        )
+        properties.AccelerationAlphaAForInnerSlope = (
+            settings.acceleration_alpha_a_for_inner_slope
+            if settings is not None
+            else None
+        )
+        properties.FixedNumberOfWaves = (
+            settings.fixed_number_of_waves if settings is not None else None
+        )
+        properties.FrontVelocityCwo = (
+            settings.front_velocity_c_wo if settings is not None else None
+        )
+        properties.AverageNumberOfWavesCtm = (
+            settings.factor_ctm if settings is not None else None
+        )
+
+        return properties
+
+    @staticmethod
+    def __convert_to_cList(lst: list[list[float]]):
+        cList = List[ValueTuple[Double, Double]]()
+        if lst is not None:
+            for l in lst:
+                cList.Add(ValueTuple[Double, Double](l[0], l[1]))
+        return cList
+
+    @staticmethod
+    def __get_first_asphalt_toplayer_of_type(
+        settings: AsphaltCalculationSettings, top_layer_type: TopLayerType
+    ) -> AsphaltTopLayerSettings:
+        return (
             next(
                 (
                     l
-                    for l in settings.TopLayersSettings
-                    if l.TopLayerType == locationData.TopLayerType
+                    for l in settings.top_layers_settings
+                    if l.top_layer_type == top_layer_type
                 ),
                 None,
             )
@@ -445,45 +473,53 @@ class DikernelInputParser:
             else None
         )
 
-        properties.InitialDamage = locationData.InitialDamage
-        properties.IncreasedLoadTransitionAlphaM = (
-            locationData.IncreasedLoadTransitionAlphaM
+    @staticmethod
+    def __get_first_natural_stone_toplayer_of_type(
+        settings: NaturalStoneCalculationSettings, top_layer_type: TopLayerType
+    ) -> NaturalStoneTopLayerSettings:
+        return (
+            next(
+                (
+                    l
+                    for l in settings.top_layers_settings
+                    if l.top_layer_type == top_layer_type
+                ),
+                None,
+            )
+            if settings is not None
+            else None
         )
-        properties.ReducedStrengthTransitionAlphaS = (
-            locationData.ReducedStrengthTransitionAlphaS
-        )
-        properties.FailureNumber = (
-            settings.FailureNumber if settings is not None else None
-        )
-        properties.CriticalCumulativeOverload = (
-            topLayer.CriticalCumulativeOverload if topLayer is not None else None
-        )
-        properties.CriticalFrontVelocity = (
-            topLayer.CriticalFrontVelocity if topLayer is not None else None
-        )
-        properties.DikeHeight = settings.DikeHeight if settings is not None else None
-        properties.AccelerationAlphaAForCrest = (
-            settings.AccelerationAlphaAForCrest if settings is not None else None
-        )
-        properties.AccelerationAlphaAForInnerSlope = (
-            settings.AccelerationAlphaAForInnerSlope if settings is not None else None
-        )
-        properties.FixedNumberOfWaves = (
-            settings.FixedNumberOfWaves if settings is not None else None
-        )
-        properties.FrontVelocityCwo = (
-            settings.FrontVelocityCwo if settings is not None else None
-        )
-        properties.AverageNumberOfWavesCtm = (
-            settings.FactorCtm if settings is not None else None
-        )
-
-        return properties
 
     @staticmethod
-    def __convertToCList(lst: list[list[float]]):
-        cList = List[ValueTuple[Double, Double]]()
-        if lst is not None:
-            for l in lst:
-                cList.Add(ValueTuple[Double, Double](l[0], l[1]))
-        return cList
+    def __get_first_grass_wave_impact_toplayer_of_type(
+        settings: GrassWaveImpactCalculationSettings, top_layer_type: TopLayerType
+    ) -> GrassCoverWaveImpactTopLayerSettings:
+        return (
+            next(
+                (
+                    l
+                    for l in settings.top_layers_settings
+                    if l.top_layer_type == top_layer_type
+                ),
+                None,
+            )
+            if settings is not None
+            else None
+        )
+
+    @staticmethod
+    def __get_first_grass_overtopping_toplayer_of_type(
+        settings: GrassWaveOvertoppingCalculationSettings, top_layer_type: TopLayerType
+    ) -> GrasCoverOvertoppingTopLayerSettings:
+        return (
+            next(
+                (
+                    l
+                    for l in settings.top_layers_settings
+                    if l.top_layer_type == top_layer_type
+                ),
+                None,
+            )
+            if settings is not None
+            else None
+        )

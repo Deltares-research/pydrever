@@ -4,384 +4,386 @@ from calculationmethods import CalculationMethod
 class DikernelOutputLocation:
     def __init__(
         self,
-        calculationType: CalculationMethod,
-        xPosition: float,
-        timeOfFailure: float,
-        damageDevelopment: list[float],
-        damageIncrement: list[float],
+        calculation_type: CalculationMethod,
+        x_position: float,
+        time_of_failure: float,
+        damage_development: list[float],
+        damage_increment: list[float],
     ):
-        self.__xPosition = xPosition
-        self.__timeOfFailure = timeOfFailure
-        self.__damageDevelopment = damageDevelopment
-        self.__damageIncrement = damageIncrement
-        self.__calculationType = calculationType
+        self.__x_position = x_position
+        self.__time_of_failure = time_of_failure
+        self.__damage_development = damage_development
+        self.__damage_increment = damage_increment
+        self.__calculation_type = calculation_type
 
     @property
-    def CalculationMethod(self) -> CalculationMethod:
+    def calculation_method(self) -> CalculationMethod:
         """
         Returns:
             CalculationMethod: The calculation method that was used at this output location.
         """
-        return self.__calculationType
+        return self.__calculation_type
 
     @property
-    def XPosition(self) -> float:
+    def x_position(self) -> float:
         """
         Returns:
             float: The cross-shore position of the calculated location.
         """
-        return self.__xPosition
+        return self.__x_position
 
     @property
-    def Failed(self) -> bool:
+    def failed(self) -> bool:
         """
         Returns:
             bool: Whether the revetment has failed at this position.
         """
-        return self.__timeOfFailure is not None
+        return self.__time_of_failure is not None
 
     @property
-    def TimeOfFailure(self) -> float:
+    def time_of_failure(self) -> float:
         """
         Returns:
             float: The moment (time step) this location failed. None if it did not fail.
         """
-        return self.__timeOfFailure
+        return self.__time_of_failure
 
     @property
-    def DamageDevelopment(self) -> list[float]:
+    def damage_development(self) -> list[float]:
         """
         Returns:
             list[float]: The damage level at the end of each time step.
         """
-        return self.__damageDevelopment
+        return self.__damage_development
 
     @property
-    def Damage(self) -> float:
+    def final_damage(self) -> float:
         return (
-            self.__damageDevelopment[-1]
-            if self.__damageDevelopment is not None
+            self.__damage_development[-1]
+            if self.__damage_development is not None
             else 0.0
         )
 
     @property
-    def DamageIncrement(self) -> list[float]:
+    def damage_increment(self) -> list[float]:
         """
         Returns:
             list[float]: The increment of the damage level during each time step.
         """
-        return self.__damageIncrement
+        return self.__damage_increment
 
 
 class AsphaltWaveImpactOutputLocation(DikernelOutputLocation):
     def __init__(
         self,
-        xPosition: float,
-        timeOfFailure: float,
-        damageDevelopment: list[float],
-        damageIncrement: list[float],
+        x_position: float,
+        time_of_failure: float,
+        damage_development: list[float],
+        damage_increment: list[float],
         z: float,
-        outerSlope: float,
-        logFlexuralStrength: float,
-        stiffnessRelation: float,
-        computationalThickness: float,
-        equivalentElasticModulus: float,
-        maximumPeakStress: list[float],
-        averageNumberOfWaves: list[float],
+        outer_slope: float,
+        log_flexural_strength: float,
+        stiffness_relation: float,
+        computational_thickness: float,
+        equivalent_elastic_modulus: float,
+        maximum_peak_stress: list[float],
+        average_number_of_waves: list[float],
     ):
         super().__init__(
             CalculationMethod.AsphaltWaveImpact,
-            xPosition,
-            timeOfFailure,
-            damageDevelopment,
-            damageIncrement,
+            x_position,
+            time_of_failure,
+            damage_development,
+            damage_increment,
         )
         self.__zPosition = z
-        self.__outerSlope = outerSlope
-        self.__logFlexuralStrength = logFlexuralStrength
-        self.__stiffnessRelation = stiffnessRelation
-        self.__computationalThickness = computationalThickness
-        self.__equivalentElasticModulus = equivalentElasticModulus
-        self.__maximumPeakStress = maximumPeakStress
-        self.__averageNumberOfWaves = averageNumberOfWaves
+        self.__outer_slope = outer_slope
+        self.__log_flexural_strength = log_flexural_strength
+        self.__stiffness_relation = stiffness_relation
+        self.__computational_thickness = computational_thickness
+        self.__equivalent_elastic_modulus = equivalent_elastic_modulus
+        self.__maximum_peak_stress = maximum_peak_stress
+        self.__average_number_of_waves = average_number_of_waves
 
     @property
-    def ZPosition(self) -> float:
+    def z_position(self) -> float:
         return self.__zPosition
 
     @property
-    def OuterSlope(self) -> float:
-        return self.__outerSlope
+    def outer_slope(self) -> float:
+        return self.__outer_slope
 
     @property
-    def LogFlexuralStrength(self) -> float:
-        return self.__logFlexuralStrength
+    def log_flexural_strength(self) -> float:
+        return self.__log_flexural_strength
 
     @property
-    def StiffnessRelation(self) -> float:
-        return self.__stiffnessRelation
+    def stiffness_relation(self) -> float:
+        return self.__stiffness_relation
 
     @property
-    def ComputationalThickness(self) -> float:
-        return self.__computationalThickness
+    def computational_thickness(self) -> float:
+        return self.__computational_thickness
 
     @property
-    def EquivalentElasticModulus(self) -> float:
-        return self.__equivalentElasticModulus
+    def equivalent_elastic_modulus(self) -> float:
+        return self.__equivalent_elastic_modulus
 
     @property
-    def MaximumPeakStress(self) -> list[float]:
-        return self.__maximumPeakStress
+    def maximum_peak_stress(self) -> list[float]:
+        return self.__maximum_peak_stress
 
     @property
-    def AverageNumberOfWaves(self) -> list[float]:
-        return self.__averageNumberOfWaves
+    def average_number_of_waves(self) -> list[float]:
+        return self.__average_number_of_waves
 
 
 class GrassOvertoppingOutputLocation(DikernelOutputLocation):
     def __init__(
         self,
-        xPosition: float,
-        timeOfFailure: float,
-        damageDevelopment: list[float],
-        damageIncrement: list[float],
-        verticalDistanceWaterLevelElevation: list[float],
-        representativeWaveRunup2P: list[float],
-        cumulativeOverload: list[float],
-        averageNumberOfWaves: list[float],
+        x_position: float,
+        time_of_failure: float,
+        damage_development: list[float],
+        damage_increment: list[float],
+        vertical_distance_water_level_elevation: list[float],
+        representative_wave_runup_2p: list[float],
+        cumulative_overload: list[float],
+        average_number_of_waves: list[float],
     ):
         super().__init__(
             CalculationMethod.GrassWaveOvertopping,
-            xPosition,
-            timeOfFailure,
-            damageDevelopment,
-            damageIncrement,
+            x_position,
+            time_of_failure,
+            damage_development,
+            damage_increment,
         )
-        self.__verticalDistanceWaterLevelElevation = verticalDistanceWaterLevelElevation
-        self.__representativeWaveRunup2P = representativeWaveRunup2P
-        self.__cumulativeOverload = cumulativeOverload
-        self.__averageNumberOfWaves = averageNumberOfWaves
+        self.__vertical_distance_water_level_elevation = (
+            vertical_distance_water_level_elevation
+        )
+        self.__representative_wave_runup_2p = representative_wave_runup_2p
+        self.__cumulative_overload = cumulative_overload
+        self.__average_number_of_waves = average_number_of_waves
 
     @property
-    def VerticalDistanceWaterLevelElevation(self) -> list[float]:
-        return self.__verticalDistanceWaterLevelElevation
+    def vertical_distance_water_level_elevation(self) -> list[float]:
+        return self.__vertical_distance_water_level_elevation
 
     @property
-    def RepresentativeWaveRunup2P(self) -> list[float]:
-        return self.__representativeWaveRunup2P
+    def representative_wave_runup_2p(self) -> list[float]:
+        return self.__representative_wave_runup_2p
 
     @property
-    def CumulativeOverload(self) -> list[float]:
-        return self.__cumulativeOverload
+    def cumulative_overload(self) -> list[float]:
+        return self.__cumulative_overload
 
     @property
-    def AverageNumberOfWaves(self) -> list[float]:
-        return self.__averageNumberOfWaves
+    def average_number_of_waves(self) -> list[float]:
+        return self.__average_number_of_waves
 
 
 class GrassWaveImpactOutputLocation(DikernelOutputLocation):
     def __init__(
         self,
-        xPosition: float,
-        timeOfFailure: float,
-        damageDevelopment: list[float],
-        damageIncrement: list[float],
+        x_position: float,
+        time_of_failure: float,
+        damage_development: list[float],
+        damage_increment: list[float],
         z: float,
-        minimumWaveHeight: float,
-        maximumWaveHeight: float,
-        loadingRevetment: list[float],
-        upperLimitLoading: list[float],
-        lowerLimitLoading: list[float],
-        waveAngle: list[float],
-        waveAngleImpact: list[float],
-        waveHeightImpact: list[float],
+        minimum_wave_height: float,
+        maximum_wave_height: float,
+        loading_revetment: list[float],
+        upper_limit_loading: list[float],
+        lower_limit_loading: list[float],
+        wave_angle: list[float],
+        wave_angle_impact: list[float],
+        wave_height_impactt: list[float],
     ):
         super().__init__(
             CalculationMethod.GrassWaveImpact,
-            xPosition,
-            timeOfFailure,
-            damageDevelopment,
-            damageIncrement,
+            x_position,
+            time_of_failure,
+            damage_development,
+            damage_increment,
         )
-        self.__zPosition = z
-        self.__minimumWaveHeight = minimumWaveHeight
-        self.__maximumWaveHeight = maximumWaveHeight
-        self.__loadingRevetment = loadingRevetment
-        self.__upperLimitLoading = upperLimitLoading
-        self.__lowerLimitLoading = lowerLimitLoading
-        self.__waveAngle = waveAngle
-        self.__waveAngleImpact = waveAngleImpact
-        self.__waveHeightImpact = waveHeightImpact
+        self.__z_position = z
+        self.__minimum_wave_height = minimum_wave_height
+        self.__maximum_wave_height = maximum_wave_height
+        self.__loading_revetment = loading_revetment
+        self.__upper_limit_loading = upper_limit_loading
+        self.__lower_limit_loading = lower_limit_loading
+        self.__wave_angle = wave_angle
+        self.__wave_angle_impact = wave_angle_impact
+        self.__wave_height_impactt = wave_height_impactt
 
     @property
-    def ZPosition(self) -> float:
-        return self.__zPosition
+    def z_position(self) -> float:
+        return self.__z_position
 
     @property
-    def MinimumWaveHeight(self) -> float:
-        return self.__minimumWaveHeight
+    def minimum_wave_height(self) -> float:
+        return self.__minimum_wave_height
 
     @property
-    def MaximumWaveHeight(self) -> float:
-        return self.__maximumWaveHeight
+    def maximum_wave_height(self) -> float:
+        return self.__maximum_wave_height
 
     @property
-    def LoadingRevetment(self) -> list[float]:
-        return self.__loadingRevetment
+    def loading_revetment(self) -> list[float]:
+        return self.__loading_revetment
 
     @property
-    def UpperLimitLoading(self) -> list[float]:
-        return self.__upperLimitLoading
+    def upper_limit_loading(self) -> list[float]:
+        return self.__upper_limit_loading
 
     @property
-    def LowerLimitLoading(self) -> list[float]:
-        return self.__lowerLimitLoading
+    def lower_limit_loading(self) -> list[float]:
+        return self.__lower_limit_loading
 
     @property
-    def WaveAngle(self) -> list[float]:
-        return self.__waveAngle
+    def wave_angle(self) -> list[float]:
+        return self.__wave_angle
 
     @property
-    def WaveAngleImpact(self) -> list[float]:
-        return self.__waveAngleImpact
+    def wave_angle_impact(self) -> list[float]:
+        return self.__wave_angle_impact
 
     @property
-    def WaveHeightImpact(self) -> list[float]:
-        return self.__waveHeightImpact
+    def wave_height_impactt(self) -> list[float]:
+        return self.__wave_height_impactt
 
 
 class NaturalStoneOutputLocation(DikernelOutputLocation):
     def __init__(
         self,
-        xPosition: float,
-        timeOfFailure: float,
-        damageDevelopment: list[float],
-        damageIncrement: list[float],
+        x_position: float,
+        time_of_failure: float,
+        damage_development: list[float],
+        damage_increment: list[float],
         z: float,
         resistance: float,
-        outerSlope: list[float],
-        slopeUpperLevel: list[float],
-        slopeUpperPosition: list[float],
-        slopeLowerLevel: list[float],
-        slopeLowerPosition: list[float],
-        loadingRevetment: list[float],
-        surfSimilarityParameter: list[float],
-        waveSteepnessDeepWater: list[float],
-        upperLimitLoading: list[float],
-        lowerLimitLoading: list[float],
-        depthMaximumWaveLoad: list[float],
-        distanceMaximumWaveElevation: list[float],
-        normativeWidthOfWaveImpact: list[float],
-        hydraulicLoad: list[float],
-        waveAngle: list[float],
-        waveAngleImpact: list[float],
-        referenceTimeDegradation: list[float],
-        referenceDegradation: list[float],
+        outer_slope: list[float],
+        slope_upper_level: list[float],
+        slope_upper_position: list[float],
+        slope_lower_level: list[float],
+        slope_lower_position: list[float],
+        loading_revetment: list[float],
+        surf_similarity_parameter: list[float],
+        wave_steepness_deep_water: list[float],
+        upper_limit_loading: list[float],
+        lower_limit_loading: list[float],
+        depth_maximum_wave_load: list[float],
+        distance_maximum_wave_elevation: list[float],
+        normative_width_of_wave_impact: list[float],
+        hydraulic_load: list[float],
+        wave_angle: list[float],
+        wave_angle_impact: list[float],
+        reference_time_degradation: list[float],
+        reference_degradation: list[float],
     ):
         super().__init__(
             CalculationMethod.NaturalStone,
-            xPosition,
-            timeOfFailure,
-            damageDevelopment,
-            damageIncrement,
+            x_position,
+            time_of_failure,
+            damage_development,
+            damage_increment,
         )
-        self.__zPosition = z
+        self.__z_position = z
         self.__resistance = resistance
-        self.__outerSlope = outerSlope
-        self.__slopeUpperLevel = slopeUpperLevel
-        self.__slopeUpperPosition = slopeUpperPosition
-        self.__slopeLowerLevel = slopeLowerLevel
-        self.__slopeLowerPosition = slopeLowerPosition
-        self.__loadingRevetment = loadingRevetment
-        self.__surfSimilarityParameter = surfSimilarityParameter
-        self.__waveSteepnessDeepWater = waveSteepnessDeepWater
-        self.__upperLimitLoading = upperLimitLoading
-        self.__lowerLimitLoading = lowerLimitLoading
-        self.__depthMaximumWaveLoad = depthMaximumWaveLoad
-        self.__distanceMaximumWaveElevation = distanceMaximumWaveElevation
-        self.__normativeWidthOfWaveImpact = normativeWidthOfWaveImpact
-        self.__hydraulicLoad = hydraulicLoad
-        self.__waveAngle = waveAngle
-        self.__waveAngleImpact = waveAngleImpact
-        self.__referenceTimeDegradation = referenceTimeDegradation
-        self.__referenceDegradation = referenceDegradation
+        self.__outer_slope = outer_slope
+        self.__slope_upper_level = slope_upper_level
+        self.__slope_upper_position = slope_upper_position
+        self.__slope_lower_level = slope_lower_level
+        self.__slope_lower_position = slope_lower_position
+        self.__loading_revetment = loading_revetment
+        self.__surf_similarity_parameter = surf_similarity_parameter
+        self.__wave_steepness_deep_water = wave_steepness_deep_water
+        self.__upper_limit_loading = upper_limit_loading
+        self.__lower_limit_loading = lower_limit_loading
+        self.__depth_maximum_wave_load = depth_maximum_wave_load
+        self.__distance_maximum_wave_elevation = distance_maximum_wave_elevation
+        self.__normative_width_of_wave_impact = normative_width_of_wave_impact
+        self.__hydraulic_load = hydraulic_load
+        self.__wave_angle = wave_angle
+        self.__wave_angle_impact = wave_angle_impact
+        self.__reference_time_degradation = reference_time_degradation
+        self.__reference_degradation = reference_degradation
 
     @property
-    def ZPosition(self) -> float:
-        return self.__zPosition
+    def z_position(self) -> float:
+        return self.__z_position
 
     @property
-    def Resistance(self) -> float:
+    def resistance(self) -> float:
         return self.__resistance
 
     @property
-    def OuterSlope(self) -> list[float]:
-        return self.__outerSlope
+    def outer_slope(self) -> list[float]:
+        return self.__outer_slope
 
     @property
-    def SlopeUpperLevel(self) -> list[float]:
-        return self.__slopeUpperLevel
+    def slope_upper_level(self) -> list[float]:
+        return self.__slope_upper_level
 
     @property
-    def SlopeUpperPosition(self) -> list[float]:
-        return self.__slopeUpperPosition
+    def slope_upper_position(self) -> list[float]:
+        return self.__slope_upper_position
 
     @property
-    def SlopeLowerLevel(self) -> list[float]:
-        return self.__slopeLowerLevel
+    def slope_lower_level(self) -> list[float]:
+        return self.__slope_lower_level
 
     @property
-    def SlopeLowerPosition(self) -> list[float]:
-        return self.__slopeLowerPosition
+    def slope_lower_position(self) -> list[float]:
+        return self.__slope_lower_position
 
     @property
-    def LoadingRevetment(self) -> list[float]:
-        return self.__loadingRevetment
+    def loading_revetment(self) -> list[float]:
+        return self.__loading_revetment
 
     @property
-    def SurfSimilarityParameter(self) -> list[float]:
-        return self.__surfSimilarityParameter
+    def surf_similarity_parameter(self) -> list[float]:
+        return self.__surf_similarity_parameter
 
     @property
-    def WaveSteepnessDeepWater(self) -> list[float]:
-        return self.__waveSteepnessDeepWater
+    def wave_steepness_deep_water(self) -> list[float]:
+        return self.__wave_steepness_deep_water
 
     @property
-    def UpperLimitLoading(self) -> list[float]:
-        return self.__upperLimitLoading
+    def upper_limit_loading(self) -> list[float]:
+        return self.__upper_limit_loading
 
     @property
-    def LowerLimitLoading(self) -> list[float]:
-        return self.__lowerLimitLoading
+    def lower_limit_loading(self) -> list[float]:
+        return self.__lower_limit_loading
 
     @property
-    def DepthMaximumWaveLoad(self) -> list[float]:
-        return self.__depthMaximumWaveLoad
+    def depth_maximum_wave_load(self) -> list[float]:
+        return self.__depth_maximum_wave_load
 
     @property
-    def DistanceMaximumWaveElevation(self) -> list[float]:
-        return self.__distanceMaximumWaveElevation
+    def distance_maximum_wave_elevation(self) -> list[float]:
+        return self.__distance_maximum_wave_elevation
 
     @property
-    def NormativeWidthOfWaveImpact(self) -> list[float]:
-        return self.__normativeWidthOfWaveImpact
+    def normative_width_of_wave_impact(self) -> list[float]:
+        return self.__normative_width_of_wave_impact
 
     @property
-    def HydraulicLoad(self) -> list[float]:
-        return self.__hydraulicLoad
+    def hydraulic_load(self) -> list[float]:
+        return self.__hydraulic_load
 
     @property
-    def WaveAngle(self) -> list[float]:
-        return self.__waveAngle
+    def wave_angle(self) -> list[float]:
+        return self.__wave_angle
 
     @property
-    def WaveAngleImpact(self) -> list[float]:
-        return self.__waveAngleImpact
+    def wave_angle_impact(self) -> list[float]:
+        return self.__wave_angle_impact
 
     @property
-    def ReferenceTimeDegradation(self) -> list[float]:
-        return self.__referenceTimeDegradation
+    def reference_time_degradation(self) -> list[float]:
+        return self.__reference_time_degradation
 
     @property
-    def ReferenceDegradation(self) -> list[float]:
-        return self.__referenceDegradation
+    def reference_degradation(self) -> list[float]:
+        return self.__reference_degradation
