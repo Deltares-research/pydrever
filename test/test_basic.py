@@ -28,7 +28,8 @@ import matplotlib.pyplot as plt
 sys.path.append(os.getcwd() + "\src")
 sys.path.append(os.getcwd() + "\src\dikerneldll")
 
-from visualization import *
+# region Imports
+from visualization import plot_damage_levels, plot_hydraulic_conditions
 
 from dikernelinput import (
     DikernelInput,
@@ -41,32 +42,58 @@ from dikerneloutputlocations import (
 from toplayertypes import TopLayerType
 from dikernel import Dikernel
 
+# endregion
 
+# region Input specification
+"""
+Define the dike schematization:
+    x-coordinates
+    z-coordinate
+    roughnesses (per segment, from one x towards the next x)
+    characteristic points (outer toe and outer crest are )
+"""
 x_positions = [0.0, 25.0, 35.0, 41.0, 45, 50, 60, 70]
 z_positions = [-3, 0.0, 1.5, 1.7, 3.0, 3.1, 0, -1]
 roughnesses = [1, 1, 0.75, 0.5, 0.8, 0.8, 0.8]
 dike_schematization = DikeSchematization(
     x_positions, z_positions, roughnesses, 25.0, 45.0
 )
+
+"""
+Specify hydrodynamic conditions"
+    Time steps (always start with the start time of the time series)
+    Water levels (for each period between two time steps)
+    Wave heights (for each period between two time steps)
+    Wave periods (for each period between two time steps)
+    Wave directions (relative to north, for each period between two time steps)
+"""
 time_steps = [0.0, 25000.0, 50000.0, 75000.0, 100000.0, 126000.0]
-time_steps = list(numpy.array(time_steps) * 0.0001)
-water_levels = [1.5, 2.3, 3.5, 3.2, 2.4]
-water_levels = list(numpy.array(water_levels) * 0.8)
-wave_heights = [3.5, 3.9, 4.2, 4.1, 2.8]
-wave_periods = [8.0, 8.0, 8.0, 8.0, 8.0]
+water_levels = [1.2, 1.9, 2.8, 2.7, 2.0]
+wave_heights = [0.5, 0.9, 1.2, 1.1, 0.8]
+wave_periods = [6.0, 6.0, 6.0, 6.0, 6.0]
 wave_directions = [60.0, 70.0, 80.0, 90.0, 100.0]
 
 hydraulic_conditions = HydraulicConditions(
     time_steps, water_levels, wave_heights, wave_periods, wave_directions
 )
 
-output_time_steps = numpy.arange(0.0, 12.6, 0.1)
-output_time_steps = numpy.union1d(time_steps, output_time_steps)
-
+"""
+Create the input object
+"""
 input = DikernelInput(90.0, hydraulic_conditions, dike_schematization)
+
+"""
+Define output time steps and start time for the calculation
+"""
 input.start_time = 0.0
+output_time_steps = numpy.arange(0.0, 126000, 1000)
+output_time_steps = numpy.union1d(time_steps, output_time_steps)
 input.output_time_steps = output_time_steps
 
+"""
+Define output locations. For eacht location where a calculation should be performed, 
+define a locations that specifies the required input (based on the type of revetment)
+"""
 input.output_locations = [
     GrassWaveImpactOutputLocationSpecification(41.1, TopLayerType.GrassClosedSod),
     GrassWaveImpactOutputLocationSpecification(41.5, TopLayerType.GrassClosedSod),
@@ -78,65 +105,62 @@ input.output_locations = [
     GrassWaveImpactOutputLocationSpecification(44.5, TopLayerType.GrassOpenSod),
     GrassWaveImpactOutputLocationSpecification(44.99, TopLayerType.GrassClosedSod),
 ]
+# endregion
 
+# region Validation
+"""
+Validate the input of the calculation
+"""
 kernel = Dikernel(input)
 validation_result = kernel.validate()
-if validation_result:
-    runresult = kernel.run()
-    print("Run was: " + "succesfull" if runresult else "unsuccessfull")
-    output = kernel.output
-    print("Number of output locations: " + str(len(output)))
-    for location in output:
-        print(
-            "   "
-            + ("Failed" if location.failed else "Not failed")
-            + ", X: "
-            + str(location.x_position)
-            + ", Damage level = "
-            + str(location.damage_development[-1])
-        )
 
-    runInput = input.get_run_input()
-    runTimeSteps = runInput.hydraulic_input.time_steps
-    waterLevels2 = runInput.hydraulic_input.water_levels
-    waveHeights2 = runInput.hydraulic_input.wave_heights
-    wavePeriods2 = runInput.hydraulic_input.wave_periods
-    waveDirections2 = runInput.hydraulic_input.wave_directions
-
-    fig = plot_hydraulic_conditions(input)
-    # fig.savefig("C:/Test/testimage.png")
-
-    damagelevels = list(loc.final_damage for loc in output)
-    xLocationPositions = list(loc.x_position for loc in output)
-
-    fig2, ax = plt.subplots(ncols=1, nrows=1)
-    ax.set(xlabel="Cross-shore position [x]", ylabel="Damage (end of storm)")
-    ax.tick_params(axis="y", colors="b")
-    ax.yaxis.label.set_color("b")
-    plt.axhline(1.0, color="red", linewidth=2.0, linestyle="--")
-    ax.grid()
-    ax.set_facecolor("None")
-    ax.plot(xLocationPositions, damagelevels, color="b")
-
-    ax2 = ax.twinx()
-    ax2.set(ylabel="Height [m]")
-    ax2.plot(
-        dike_schematization.x_positions,
-        dike_schematization.z_positions,
-        linestyle="solid",
-        color="lightgray",
-        marker="o",
-    )
-    ax2.set_facecolor("white")
-    ax2.tick_params(axis="y", colors="lightgray")
-    ax2.yaxis.label.set_color("lightgray")
-
-    ax.set_zorder(1)
-    ax2.set_zorder(0)
-
-    fig2.tight_layout()
-    plt.show()
-
-else:
+if not validation_result:
     for message in kernel.validation_messages:
         print(message)
+    quit()
+# endregion
+
+# region Perform calculation
+"""
+Run the calculation
+"""
+runresult = kernel.run()
+
+"""
+Print success (or not)
+"""
+print("Run was: " + "succesfull" if runresult else "unsuccessfull")
+if not runresult:
+    for message in kernel.validation_messages:
+        print(message)
+    quit()
+# endregion
+
+# region Output visualization
+output = kernel.output
+
+"""
+Process the output and print results
+"""
+print("Number of output locations: " + str(len(output)))
+for location in output:
+    print(
+        "   "
+        + ("Failed" if location.failed else "Not failed")
+        + ", X: "
+        + str(location.x_position)
+        + ", Damage level = "
+        + str(location.damage_development[-1])
+    )
+
+"""
+Plot hydrodynamic input
+"""
+fig = plot_hydraulic_conditions(input)
+# fig.savefig("C:/Test/testimage.png")
+
+fig2 = plot_damage_levels(output, input)
+# fig2.savefig("C:/Test/testimage.png")
+
+plt.show()
+# endregion

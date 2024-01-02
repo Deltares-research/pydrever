@@ -23,9 +23,9 @@
 import clr  # This reguires the package pythonnet to be added to the environment.
 import os
 
-base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dikerneldll")
-clr.AddReference(os.path.join(base_path, "DiKErnel.Core.dll"))
-clr.AddReference(os.path.join(base_path, "DiKErnel.Integration.dll"))
+dll_base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dikerneldll")
+clr.AddReference(os.path.join(dll_base_path, "DiKErnel.Core.dll"))
+clr.AddReference(os.path.join(dll_base_path, "DiKErnel.Integration.dll"))
 
 from System import Double, ValueTuple
 from System.Collections.Generic import List
