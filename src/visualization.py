@@ -67,14 +67,14 @@ def plot_damage_levels(output: list[DikernelOutputLocation], input: DikernelInpu
     damagelevels = list(loc.final_damage for loc in output)
     xLocationPositions = list(loc.x_position for loc in output)
 
-    fig2, ax = plt.subplots(ncols=1, nrows=1)
-    ax.set(xlabel="Cross-shore position [x]", ylabel="Damage (end of storm)")
-    ax.tick_params(axis="y", colors="b")
-    ax.yaxis.label.set_color("b")
+    fig = plt.figure()
+    ax1 = plt.subplot(2, 1, 1)
+    ax1.grid()
+    ax1.set(xlabel="Cross-shore position [x]", ylabel="Damage (end of storm)")
     plt.axhline(1.0, color="red", linewidth=2.0, linestyle="--")
-    ax.grid()
-    ax.set_facecolor("None")
-    ax.plot(xLocationPositions, damagelevels, color="b")
+    ax1.plot(
+        xLocationPositions, damagelevels, linestyle="none", marker="o", color="black"
+    )
 
     xFailed = list(loc.x_position for loc in output if loc.failed)
     xPassed = list(loc.x_position for loc in output if not loc.failed)
@@ -89,25 +89,19 @@ def plot_damage_levels(output: list[DikernelOutputLocation], input: DikernelInpu
         input.dike_schematization.z_positions,
     )
 
-    ax2 = ax.twinx()
-    ax2.set(ylabel="Height [m]")
+    ax2 = plt.subplot(2, 1, 2, sharex=ax1)
+    ax2.grid()
+    ax2.set(ylabel="Height [m]", xlabel="Cross-shore position [x]")
     ax2.plot(
         input.dike_schematization.x_positions,
         input.dike_schematization.z_positions,
         linestyle="solid",
-        color="lightgray",
+        color="black",
         marker="o",
     )
     ax2.plot(xPassed, zPassed, marker="o", color="g")
     ax2.plot(xFailed, zFailed, marker="x", color="r")
 
-    ax2.set_facecolor("white")
-    ax2.tick_params(axis="y", colors="lightgray")
-    ax2.yaxis.label.set_color("lightgray")
+    fig.tight_layout()
 
-    ax.set_zorder(1)
-    ax2.set_zorder(0)
-
-    fig2.tight_layout()
-
-    return fig2
+    return fig
