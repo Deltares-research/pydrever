@@ -235,7 +235,7 @@ class DikernelOutputParser:
             damage_increment,
             z_position,
             resistance,
-            list(item.outer_slope for item in time_dependent_output_items),
+            list(item.OuterSlope for item in time_dependent_output_items),
             list(item.SlopeUpperLevel for item in time_dependent_output_items),
             list(item.SlopeUpperPosition for item in time_dependent_output_items),
             list(item.SlopeLowerLevel for item in time_dependent_output_items),

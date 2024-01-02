@@ -23,8 +23,8 @@
 import clr  # This reguires the package pythonnet to be added to the environment.
 
 # TODO: How to dynamically locate and add these dll's?
-clr.AddReference("C:/src/dikerosion-pyton/src/dikerneldll/DiKErnel.Integration.dll")
 clr.AddReference("C:/src/dikerosion-pyton/src/dikerneldll/DiKErnel.Core.dll")
+clr.AddReference("C:/src/dikerosion-pyton/src/dikerneldll/DiKErnel.Integration.dll")
 
 from System import Double, ValueTuple
 from System.Collections.Generic import List

@@ -585,9 +585,9 @@ def get_dike_profile() -> DikeSchematization:
     x_positions = [0.0, 25.0, 35.0, 41.0, 45, 50, 60, 70]
     z_positions = [-3, 0.0, 1.5, 1.7, 3.0, 3.1, 0, -1]
     roughnesses = [1, 1, 0.75, 0.5, 0.8, 0.8, 0.8]
-    schematization = DikeSchematization(x_positions, z_positions, roughnesses)
-    schematization.outer_toe = 25.0
-    schematization.outer_crest = 45.0
+    schematization = DikeSchematization(
+        x_positions, z_positions, roughnesses, 25.0, 45.0
+    )
     schematization.crest_outer_berm = 35.0
     schematization.notch_outer_berm = 41.0
     schematization.inner_crest = 50.0
