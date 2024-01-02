@@ -68,15 +68,15 @@ input.start_time = 0.0
 input.output_time_steps = output_time_steps
 
 input.output_locations = [
-    GrassWaveImpactOutputLocationSpecification(41.1, 0.0, TopLayerType.GrassClosedSod),
-    GrassWaveImpactOutputLocationSpecification(41.5, 0.0, TopLayerType.GrassClosedSod),
-    GrassWaveImpactOutputLocationSpecification(42.0, 0.0, TopLayerType.GrassClosedSod),
-    GrassWaveImpactOutputLocationSpecification(42.5, 0.0, TopLayerType.GrassClosedSod),
-    GrassWaveImpactOutputLocationSpecification(43.0, 0.0, TopLayerType.GrassClosedSod),
-    GrassWaveImpactOutputLocationSpecification(43.5, 0.0, TopLayerType.GrassClosedSod),
-    GrassWaveImpactOutputLocationSpecification(44.0, 0.0, TopLayerType.GrassOpenSod),
-    GrassWaveImpactOutputLocationSpecification(44.5, 0.0, TopLayerType.GrassOpenSod),
-    GrassWaveImpactOutputLocationSpecification(44.99, 0.0, TopLayerType.GrassClosedSod),
+    GrassWaveImpactOutputLocationSpecification(41.1, TopLayerType.GrassClosedSod),
+    GrassWaveImpactOutputLocationSpecification(41.5, TopLayerType.GrassClosedSod),
+    GrassWaveImpactOutputLocationSpecification(42.0, TopLayerType.GrassClosedSod),
+    GrassWaveImpactOutputLocationSpecification(42.5, TopLayerType.GrassClosedSod),
+    GrassWaveImpactOutputLocationSpecification(43.0, TopLayerType.GrassClosedSod),
+    GrassWaveImpactOutputLocationSpecification(43.5, TopLayerType.GrassClosedSod),
+    GrassWaveImpactOutputLocationSpecification(44.0, TopLayerType.GrassOpenSod),
+    GrassWaveImpactOutputLocationSpecification(44.5, TopLayerType.GrassOpenSod),
+    GrassWaveImpactOutputLocationSpecification(44.99, TopLayerType.GrassClosedSod),
 ]
 
 kernel = Dikernel(input)
