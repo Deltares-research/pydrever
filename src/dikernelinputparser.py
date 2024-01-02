@@ -221,8 +221,8 @@ class DikernelInputParser:
             AsphaltRevetmentTopLayerType.HydraulicAsphaltConcrete,
             location.flexural_strent,
             location.soil_elasticity,
-            location.top_layer_thickness,
-            location.top_layer_elastic_modulus,
+            location.upper_layer_thickness,
+            location.upper_layer_elastic_modulus,
         )
 
         top_layer = DikernelInputParser.__get_first_asphalt_toplayer_of_type(
@@ -230,14 +230,14 @@ class DikernelInputParser:
         )
 
         properties.InitialDamage = location.initial_damage
-        properties.ThicknessSubLayer = location.sub_layer_thickness
-        properties.ElasticModulusSubLayer = location.sub_layer_elastic_modulus
         properties.FailureNumber = (
             settings.failure_number if settings is not None else None
         )
         properties.DensityOfWater = (
             settings.density_of_water if settings is not None else None
         )
+        properties.ThicknessSubLayer = location.sub_layer_thickness
+        properties.ElasticModulusSubLayer = location.sub_layer_elastic_modulus
         properties.AverageNumberOfWavesCtm = (
             settings.factor_ctm if settings is not None else None
         )
@@ -247,11 +247,11 @@ class DikernelInputParser:
         properties.FatigueBeta = (
             top_layer.fatigue_asphalt_beta if top_layer is not None else None
         )
-        properties.StiffnessRelationNu = (
-            top_layer.stiffness_ratio_nu if top_layer is not None else None
-        )
         properties.ImpactNumberC = (
             settings.impact_number_c if settings is not None else None
+        )
+        properties.StiffnessRelationNu = (
+            top_layer.stiffness_ratio_nu if top_layer is not None else None
         )
         properties.WidthFactors = (
             DikernelInputParser.__convert_to_cList(settings.width_factors)
@@ -434,12 +434,6 @@ class DikernelInputParser:
         )
 
         properties.InitialDamage = location.initial_damage
-        properties.IncreasedLoadTransitionAlphaM = (
-            location.increased_load_transition_alpha_m
-        )
-        properties.ReducedStrengthTransitionAlphaS = (
-            location.increased_load_transition_alpha_s
-        )
         properties.FailureNumber = (
             settings.failure_number if settings is not None else None
         )
@@ -449,7 +443,21 @@ class DikernelInputParser:
         properties.CriticalFrontVelocity = (
             topLayer.critical_front_velocity if topLayer is not None else None
         )
-        properties.DikeHeight = settings.DikeHeight if settings is not None else None
+        properties.IncreasedLoadTransitionAlphaM = (
+            location.increased_load_transition_alpha_m
+        )
+        properties.ReducedStrengthTransitionAlphaS = (
+            location.increased_load_transition_alpha_s
+        )
+        properties.AverageNumberOfWavesCtm = (
+            settings.factor_ctm if settings is not None else None
+        )
+        properties.FixedNumberOfWaves = (
+            settings.fixed_number_of_waves if settings is not None else None
+        )
+        properties.FrontVelocityCwo = (
+            settings.front_velocity_c_wo if settings is not None else None
+        )
         properties.AccelerationAlphaAForCrest = (
             settings.acceleration_alpha_a_for_crest if settings is not None else None
         )
@@ -458,15 +466,7 @@ class DikernelInputParser:
             if settings is not None
             else None
         )
-        properties.FixedNumberOfWaves = (
-            settings.fixed_number_of_waves if settings is not None else None
-        )
-        properties.FrontVelocityCwo = (
-            settings.front_velocity_c_wo if settings is not None else None
-        )
-        properties.AverageNumberOfWavesCtm = (
-            settings.factor_ctm if settings is not None else None
-        )
+        properties.DikeHeight = settings.DikeHeight if settings is not None else None
 
         return properties
 

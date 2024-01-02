@@ -597,116 +597,75 @@ def get_dike_profile() -> DikeSchematization:
 
 def get_output_locations() -> list[OutputLocationSpecification]:
     return [
-        NordicStoneOutputLocationSpecification(25.01, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(25.5, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(26.0, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(26.5, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(27.0, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(27.5, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(28.0, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(28.5, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(29.0, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(29.5, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(30.0, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(30.5, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(31.0, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(31.5, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(32.0, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(32.5, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(33.0, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(33.5, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(34.0, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(34.5, 0, 0.28, 2.45),
-        NordicStoneOutputLocationSpecification(34.9, 0, 0.28, 2.45),
-        AsphaltOutputLocationSpecification(35.1, 0.0, 0.9, 64.0, 0.146, 5712.0),
-        AsphaltOutputLocationSpecification(35.5, 0.0, 0.9, 64.0, 0.146, 5712.0),
-        AsphaltOutputLocationSpecification(36.0, 0.0, 0.9, 64.0, 0.146, 5712.0),
-        AsphaltOutputLocationSpecification(36.5, 0.0, 0.9, 64.0, 0.146, 5712.0),
-        AsphaltOutputLocationSpecification(37.0, 0.0, 0.9, 64.0, 0.146, 5712.0),
-        AsphaltOutputLocationSpecification(37.5, 0.0, 0.9, 64.0, 0.146, 5712.0),
-        AsphaltOutputLocationSpecification(38.0, 0.0, 0.9, 64.0, 0.146, 5712.0),
-        AsphaltOutputLocationSpecification(38.5, 0.0, 0.9, 64.0, 0.146, 5712.0),
-        AsphaltOutputLocationSpecification(39.0, 0.0, 0.9, 64.0, 0.146, 5712.0),
-        AsphaltOutputLocationSpecification(39.5, 0.0, 0.9, 64.0, 0.146, 5712.0),
-        AsphaltOutputLocationSpecification(40.0, 0.0, 0.9, 64.0, 0.146, 5712.0),
-        AsphaltOutputLocationSpecification(40.5, 0.0, 0.9, 64.0, 0.146, 5712.0),
-        AsphaltOutputLocationSpecification(40.9, 0.0, 0.9, 64.0, 0.146, 5712.0),
-        GrassWaveImpactOutputLocationSpecification(
-            41.1, 0.0, TopLayerType.GrassClosedSod
-        ),
-        GrassWaveImpactOutputLocationSpecification(
-            41.5, 0.0, TopLayerType.GrassClosedSod
-        ),
-        GrassWaveImpactOutputLocationSpecification(
-            42.0, 0.0, TopLayerType.GrassClosedSod
-        ),
-        GrassWaveImpactOutputLocationSpecification(
-            42.5, 0.0, TopLayerType.GrassClosedSod
-        ),
-        GrassWaveImpactOutputLocationSpecification(
-            43.0, 0.0, TopLayerType.GrassClosedSod
-        ),
-        GrassWaveImpactOutputLocationSpecification(
-            43.5, 0.0, TopLayerType.GrassClosedSod
-        ),
-        GrassWaveImpactOutputLocationSpecification(
-            44.0, 0.0, TopLayerType.GrassOpenSod
-        ),
-        GrassWaveImpactOutputLocationSpecification(
-            44.5, 0.0, TopLayerType.GrassOpenSod
-        ),
-        GrassWaveImpactOutputLocationSpecification(
-            44.99, 0.0, TopLayerType.GrassClosedSod
-        ),
-        GrassOvertoppingOutputLocationSpecification(
-            45.0, 0.02, TopLayerType.GrassClosedSod
-        ),
-        GrassOvertoppingOutputLocationSpecification(
-            45.5, 0.02, TopLayerType.GrassClosedSod
-        ),
-        GrassOvertoppingOutputLocationSpecification(
-            46.0, 0.02, TopLayerType.GrassClosedSod
-        ),
-        GrassOvertoppingOutputLocationSpecification(
-            46.5, 0.02, TopLayerType.GrassClosedSod
-        ),
-        GrassOvertoppingOutputLocationSpecification(
-            47.0, 0.02, TopLayerType.GrassClosedSod
-        ),
-        GrassOvertoppingOutputLocationSpecification(
-            47.5, 0.02, TopLayerType.GrassClosedSod
-        ),
-        GrassOvertoppingOutputLocationSpecification(
-            48.0, 0.02, TopLayerType.GrassClosedSod
-        ),
-        GrassOvertoppingOutputLocationSpecification(
-            48.5, 0.02, TopLayerType.GrassClosedSod
-        ),
-        GrassOvertoppingOutputLocationSpecification(
-            49.0, 0.02, TopLayerType.GrassClosedSod
-        ),
-        GrassOvertoppingOutputLocationSpecification(
-            49.5, 0.02, TopLayerType.GrassClosedSod
-        ),
-        GrassOvertoppingOutputLocationSpecification(
-            49.99, 0.02, TopLayerType.GrassClosedSod
-        ),
-        GrassOvertoppingOutputLocationSpecification(
-            45.0, 0.02, TopLayerType.GrassClosedSod
-        ),
-        GrassOvertoppingOutputLocationSpecification(
-            52.0, 0.02, TopLayerType.GrassClosedSod
-        ),
-        GrassOvertoppingOutputLocationSpecification(
-            54.0, 0.02, TopLayerType.GrassClosedSod
-        ),
-        GrassOvertoppingOutputLocationSpecification(
-            56.0, 0.02, TopLayerType.GrassClosedSod
-        ),
-        GrassOvertoppingOutputLocationSpecification(
-            58.0, 0.02, TopLayerType.GrassClosedSod
-        ),
+        NordicStoneOutputLocationSpecification(25.01, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(25.5, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(26.0, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(26.5, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(27.0, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(27.5, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(28.0, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(28.5, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(29.0, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(29.5, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(30.0, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(30.5, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(31.0, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(31.5, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(32.0, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(32.5, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(33.0, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(33.5, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(34.0, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(34.5, 0.28, 2.45),
+        NordicStoneOutputLocationSpecification(34.9, 0.28, 2.45),
+        AsphaltOutputLocationSpecification(35.1, 0.9, 64.0, 0.146, 5712.0),
+        AsphaltOutputLocationSpecification(35.5, 0.9, 64.0, 0.146, 5712.0),
+        AsphaltOutputLocationSpecification(36.0, 0.9, 64.0, 0.146, 5712.0),
+        AsphaltOutputLocationSpecification(36.5, 0.9, 64.0, 0.146, 5712.0),
+        AsphaltOutputLocationSpecification(37.0, 0.9, 64.0, 0.146, 5712.0),
+        AsphaltOutputLocationSpecification(37.5, 0.9, 64.0, 0.146, 5712.0),
+        AsphaltOutputLocationSpecification(38.0, 0.9, 64.0, 0.146, 5712.0),
+        AsphaltOutputLocationSpecification(38.5, 0.9, 64.0, 0.146, 5712.0),
+        AsphaltOutputLocationSpecification(39.0, 0.9, 64.0, 0.146, 5712.0),
+        AsphaltOutputLocationSpecification(39.5, 0.9, 64.0, 0.146, 5712.0),
+        AsphaltOutputLocationSpecification(40.0, 0.9, 64.0, 0.146, 5712.0),
+        AsphaltOutputLocationSpecification(40.5, 0.9, 64.0, 0.146, 5712.0),
+        AsphaltOutputLocationSpecification(40.9, 0.9, 64.0, 0.146, 5712.0),
+        GrassWaveImpactOutputLocationSpecification(41.1, TopLayerType.GrassClosedSod),
+        GrassWaveImpactOutputLocationSpecification(41.5, TopLayerType.GrassClosedSod),
+        GrassWaveImpactOutputLocationSpecification(42.0, TopLayerType.GrassClosedSod),
+        GrassWaveImpactOutputLocationSpecification(42.5, TopLayerType.GrassClosedSod),
+        GrassWaveImpactOutputLocationSpecification(43.0, TopLayerType.GrassClosedSod),
+        GrassWaveImpactOutputLocationSpecification(43.5, TopLayerType.GrassClosedSod),
+        GrassWaveImpactOutputLocationSpecification(44.0, TopLayerType.GrassOpenSod),
+        GrassWaveImpactOutputLocationSpecification(44.5, TopLayerType.GrassOpenSod),
+        GrassWaveImpactOutputLocationSpecification(44.99, TopLayerType.GrassClosedSod),
+        create_grass_overtopping_output_location_closed_sod(45.0, 0.02),
+        create_grass_overtopping_output_location_closed_sod(45.5, 0.02),
+        create_grass_overtopping_output_location_closed_sod(46.0, 0.02),
+        create_grass_overtopping_output_location_closed_sod(46.5, 0.02),
+        create_grass_overtopping_output_location_closed_sod(47.0, 0.02),
+        create_grass_overtopping_output_location_closed_sod(47.5, 0.02),
+        create_grass_overtopping_output_location_closed_sod(48.0, 0.02),
+        create_grass_overtopping_output_location_closed_sod(48.5, 0.02),
+        create_grass_overtopping_output_location_closed_sod(49.0, 0.02),
+        create_grass_overtopping_output_location_closed_sod(49.5, 0.02),
+        create_grass_overtopping_output_location_closed_sod(49.99, 0.02),
+        create_grass_overtopping_output_location_closed_sod(52.0, 0.02),
+        create_grass_overtopping_output_location_closed_sod(54.0, 0.02),
+        create_grass_overtopping_output_location_closed_sod(56.0, 0.02),
+        create_grass_overtopping_output_location_closed_sod(58.0, 0.02),
     ]
+
+
+def create_grass_overtopping_output_location_closed_sod(
+    x: float, initial_damage: float = 0.0
+) -> GrassOvertoppingOutputLocationSpecification:
+    specification = GrassOvertoppingOutputLocationSpecification(
+        x, TopLayerType.GrassClosedSod
+    )
+    specification.initial_damage = initial_damage
+    return specification
 
 
 # region calculation settings
