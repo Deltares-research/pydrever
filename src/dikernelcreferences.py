@@ -21,10 +21,11 @@
 """
 
 import clr  # This reguires the package pythonnet to be added to the environment.
+import os
 
-# TODO: How to dynamically locate and add these dll's?
-clr.AddReference("C:/src/dikerosion-pyton/src/dikerneldll/DiKErnel.Core.dll")
-clr.AddReference("C:/src/dikerosion-pyton/src/dikerneldll/DiKErnel.Integration.dll")
+base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dikerneldll")
+clr.AddReference(os.path.join(base_path, "DiKErnel.Core.dll"))
+clr.AddReference(os.path.join(base_path, "DiKErnel.Integration.dll"))
 
 from System import Double, ValueTuple
 from System.Collections.Generic import List
