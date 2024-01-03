@@ -127,7 +127,7 @@ class DikernelInput:
         """Optional list of desired output time steps. This will add output times to the calculation - instance variable."""
         # Results are not filtered based on this list (cumulative values such as the damage increment in the results would not make sense anymore).
 
-    def getruntimesteps(self) -> list[float]:
+    def get_run_time_steps(self) -> list[float]:
         """
         This method combines all time steps and required output time steps to for
         a list of time steps that needs to be used during calculation.
@@ -165,7 +165,7 @@ class DikernelInput:
             DikernelInput: A manipulated input object that can be used to calculate.
         """
         time_steps = self.hydraulic_input.time_steps
-        run_time_steps = self.getruntimesteps()
+        run_time_steps = self.get_run_time_steps()
         run_hydraulics = HydraulicConditions(
             run_time_steps,
             self.__interpolate_time_series(

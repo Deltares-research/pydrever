@@ -54,7 +54,14 @@ from dikernelcalculationsettings import (
 
 from dikernel import Dikernel
 
-from visualization import plot_damage_levels, plot_hydraulic_conditions
+from quantities import TimeDependentOutputQuantity
+
+from visualization import (
+    plot_damage_levels,
+    plot_hydraulic_conditions,
+    plot_development_per_location,
+    plot_development,
+)
 import matplotlib.pyplot as plt
 
 # endregion
@@ -882,5 +889,12 @@ for stone in stones:
 plot_hydraulic_conditions(input)
 
 plot_damage_levels(output, input)
+
+# for location in output:
+#    plot_development_per_location(
+#       location, TimeDependentOutputQuantity.DamageDevelopment, input
+#    )
+
+plot_development(output, TimeDependentOutputQuantity.DamageDevelopment, input)
 
 plt.show()

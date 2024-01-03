@@ -135,7 +135,7 @@ class DikernelInputParser:
         Returns:
             CalculationInputBuilder[C#]: The C#-typed builder with the added hydrodynamic conditions.
         """
-        for i in range(len(hydraulic_conditions.water_levels) - 1):
+        for i in range(len(hydraulic_conditions.water_levels)):
             builder.AddTimeStep(
                 Double(hydraulic_conditions.time_steps[i]),
                 Double(hydraulic_conditions.time_steps[i + 1]),

@@ -19,7 +19,14 @@
 """
 
 from dikernelinput import DikernelInput
-from dikerneloutput import DikernelOutputLocation
+from dikerneloutput import (
+    DikernelOutputLocation,
+    AsphaltWaveImpactOutputLocation,
+    GrassOvertoppingOutputLocation,
+    GrassWaveImpactOutputLocation,
+    NaturalStoneOutputLocation,
+)
+from quantities import TimeDependentOutputQuantity
 import matplotlib.pyplot as plt
 import numpy as numpy
 
@@ -113,9 +120,15 @@ def plot_hydraulic_conditions(input: DikernelInput):
     return fig
 
 
-def plot_damage_levels(output: list[DikernelOutputLocation], input: DikernelInput):
+def plot_damage_levels(
+    output: list[DikernelOutputLocation],
+    input: DikernelInput,
+    plot_development: bool = True,
+):
     """
-    This
+    This method plots the damage levels at all output locations (upper plot) and whether
+    an output location failed or not (lower plot). Optional (default is True), the
+    method also includes the development in time of the damage level in the first plot.
 
     Args:
         output (list[DikernelOutputLocation]): The calculation output
@@ -125,34 +138,60 @@ def plot_damage_levels(output: list[DikernelOutputLocation], input: DikernelInpu
         figure handle: The handle of the produced figure
     """
 
-    damagelevels = list(loc.final_damage for loc in output)
-    xLocationPositions = list(loc.x_position for loc in output)
+    final_damage_levels = list(loc.final_damage for loc in output)
+    x_positions_output_locations = list(loc.x_position for loc in output)
 
     fig = plt.figure()
     """
-    Plot the final damage level.
+    Plot the final damage level and development.
     """
     ax1 = plt.subplot(2, 1, 1)
     ax1.grid()
     ax1.set(xlabel="Cross-shore position [x]", ylabel="Damage (end of storm)")
+
+    if plot_development:
+        run_times = input.get_run_time_steps()
+        x_positions = [loc.x_position for loc in output]
+
+        values = [[None for x in range(len(run_times) - 1)] for y in range(len(output))]
+        for i_loc, location in enumerate(output):
+            values[i_loc] = getattr(
+                location, TimeDependentOutputQuantity.DamageDevelopment.value
+            )
+
+        colors = plt.cm.winter(numpy.linspace(0, 1, len(run_times) - 1))
+        for i in range(len(values[0])):
+            ax1.plot(
+                x_positions,
+                [row[i] for row in values],
+                color=colors[i],
+                linestyle="-",
+                marker="o",
+                markersize=4,
+            )
+
     plt.axhline(1.0, color="red", linewidth=2.0, linestyle="--")
     ax1.plot(
-        xLocationPositions, damagelevels, linestyle="none", marker="o", color="black"
+        x_positions_output_locations,
+        final_damage_levels,
+        linestyle="none",
+        marker="o",
+        color="black",
     )
 
     """
     Plot the cross-shore profile and output locations indicating whether the critical 
     damage level was reached or not.
     """
-    xFailed = list(loc.x_position for loc in output if loc.failed)
-    xPassed = list(loc.x_position for loc in output if not loc.failed)
-    zFailed = numpy.interp(
-        xFailed,
+    x_failed = list(loc.x_position for loc in output if loc.failed)
+    x_passed = list(loc.x_position for loc in output if not loc.failed)
+    z_failed = numpy.interp(
+        x_failed,
         input.dike_schematization.x_positions,
         input.dike_schematization.z_positions,
     )
-    zPassed = numpy.interp(
-        xPassed,
+    z_passed = numpy.interp(
+        x_passed,
         input.dike_schematization.x_positions,
         input.dike_schematization.z_positions,
     )
@@ -167,8 +206,96 @@ def plot_damage_levels(output: list[DikernelOutputLocation], input: DikernelInpu
         color="black",
         marker="o",
     )
-    ax2.plot(xPassed, zPassed, linestyle="none", marker="o", color="g")
-    ax2.plot(xFailed, zFailed, linestyle="none", marker="x", color="r")
+    ax2.plot(x_passed, z_passed, linestyle="none", marker="o", color="g")
+    ax2.plot(x_failed, z_failed, linestyle="none", marker="x", color="r")
+
+    fig.tight_layout()
+
+    return fig
+
+
+def plot_development_per_location(
+    location: DikernelOutputLocation,
+    quantity: TimeDependentOutputQuantity,  # TODO: Maybe plot multiple quantities?
+    input: DikernelInput,
+):
+    """
+    This method plots the development of a particular output variable in time for a specific location.
+
+    Args:
+        location (DikernelOutputLocation): The location holding the output that should be visualized.
+        quantity (TimeDependentOutputQuantity): The quantity that should be visualized.
+
+    Returns:
+        figure handle: The handle of the produced figure
+    """
+    fig = plt.figure()
+
+    run_times = input.get_run_time_steps()
+    try:
+        values: list[float] = getattr(location, quantity.value)
+    except:
+        # No such variable in this output locations
+        return None
+
+    color = "black"
+    match location:
+        case AsphaltWaveImpactOutputLocation():
+            color = "gray"
+        case GrassOvertoppingOutputLocation():
+            color = "darkgreen"
+        case GrassWaveImpactOutputLocation():
+            color = "darkgreen"
+        case NaturalStoneOutputLocation():
+            color = "black"
+
+    ax = plt.subplot(111)
+    ax.grid()
+    ax.plot(run_times, [None] + values, color=color)
+    ax.set(ylabel=quantity.name, xlabel="Time step [s]")
+    fig.suptitle(
+        quantity.name + " in time [x = " + str(location.x_position) + " m]",
+        fontsize=14,
+    )
+    fig.tight_layout()
+
+    return fig
+
+
+def plot_development(
+    locations: list[DikernelOutputLocation],
+    quantity: TimeDependentOutputQuantity,
+    input: DikernelInput,
+):
+    """
+    This method plots the development of a specific quantity in time for all output
+    locations (for all cross-shore positions).
+
+    Args:
+        locations (list[DikernelOutputLocation]): The output locations to plot results for.
+        quantity (TimeDependentOutputQuantity): The quantity that should be visualized.
+        input (DikernelInput): Input containing the time steps of the generated output.
+
+    Returns:
+        _type_: _description_
+    """
+    fig = plt.figure()
+
+    run_times = input.get_run_time_steps()
+    x_positions = [loc.x_position for loc in locations]
+
+    values = [[None for x in range(len(run_times) - 1)] for y in range(len(locations))]
+    for i_loc, location in enumerate(locations):
+        values[i_loc] = getattr(location, quantity.value)
+
+    colors = plt.cm.winter(numpy.linspace(0, 1, len(run_times) - 1))
+
+    ax = plt.subplot(111)
+    ax.grid()
+    for i in range(len(values[0])):
+        ax.plot(x_positions, [row[i] for row in values], color=colors[i])
+
+    ax.set(ylabel=quantity.name, xlabel="Cross-shore position [m]")
 
     fig.tight_layout()
 

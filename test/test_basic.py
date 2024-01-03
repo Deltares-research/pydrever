@@ -27,7 +27,11 @@ sys.path.append(os.getcwd() + "\src")
 sys.path.append(os.getcwd() + "\src\dikerneldll")
 
 # region Imports
-from visualization import plot_damage_levels, plot_hydraulic_conditions
+from visualization import (
+    plot_damage_levels,
+    plot_hydraulic_conditions,
+    plot_development_per_location,
+)
 
 from dikernelinput import (
     DikernelInput,
@@ -39,6 +43,7 @@ from dikerneloutputlocations import (
 )
 from toplayertypes import TopLayerType
 from dikernel import Dikernel
+from quantities import TimeDependentOutputQuantity
 
 # endregion
 
@@ -159,6 +164,10 @@ fig = plot_hydraulic_conditions(input)
 
 fig2 = plot_damage_levels(output, input)
 # fig2.savefig("C:/Test/testimage.png")
+
+fig3 = plot_development_per_location(
+    output[3], TimeDependentOutputQuantity.UpperLimitLoading, input
+)
 
 plt.show()
 # endregion
