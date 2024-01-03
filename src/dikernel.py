@@ -93,6 +93,8 @@ class Dikernel:
                 self.__c_output.Data, x_positions
             )
 
+            # TODO: Filter the output times.
+
             return (
                 self.__c_output is not None
                 and self.__c_output.Successful

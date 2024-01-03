@@ -33,7 +33,8 @@ class DikeSchematization:
         x_outer_toe: float,
         x_outer_crest: float,
     ):
-        """Contructor for a schematization of a dike profile.
+        """
+        Contructor for a schematization of a dike profile.
 
         Args:
             x_positions (list[float]): list of cross-shore positions
@@ -62,7 +63,8 @@ class HydraulicConditions:
         wave_periods: list[float],
         wave_directions: list[float],
     ):
-        """Constructor for the hydraulic input.
+        """
+        Constructor for the hydraulic input.
 
         Args:
             time_steps (list[float]): list of timesteps.
@@ -89,6 +91,7 @@ class HydraulicConditions:
         self.wave_heights = wave_heights
         self.wave_periods = wave_periods
         self.wave_directions = wave_directions
+        # TODO: Maybe automatically correct the wave directions?
 
 
 class DikernelInput:
@@ -98,7 +101,8 @@ class DikernelInput:
         hydraulic_input: HydraulicConditions,
         dike_schematization: DikeSchematization,
     ):
-        """Constructor for the DikernelInput class.
+        """
+        Constructor for the DikernelInput class.
 
         Args:
             dikeOrientation (float): orientation of the dike normal
@@ -106,14 +110,25 @@ class DikernelInput:
             dikeSchematization (DikeSchematization): object containing the dike schematization
         """
         self.dike_orientation: float = dike_orientation
+        """Orientation of the dike normal relative to North - instance variable."""
         self.hydraulic_input: HydraulicConditions = hydraulic_input
+        """Hydrodynamic input specification - instance variable."""
         self.dike_schematization: DikeSchematization = dike_schematization
+        """Schematization of the dike cross-shore profile and characteristic points - instance variable."""
         self.output_locations: list[OutputLocationSpecification] = None
+        """Specification of the desired calculation and output locations - instance variable."""
         self.settings: list[CalculationSettings] = None
+        """List of calculation settings that are used for the various types of revetments - instance variable."""
         self.start_time: float = None
+        """Optonal start time of the calculation - instance variable."""
         self.output_time_steps: list[float] = None
+        """Optional list of desired output time steps - instance variable."""
 
     def getruntimesteps(self) -> list[float]:
+        """
+        This method combines all time steps and required output time steps to for
+        a list of time steps that needs to be used during calculation.
+        """
         run_time_steps = self.hydraulic_input.time_steps
         if self.output_time_steps is not None:
             run_time_steps = numpy.union1d(
@@ -129,6 +144,12 @@ class DikernelInput:
         return run_time_steps
 
     def get_run_input(self) -> DikernelInput:
+        """
+        Returns manipulated input that incorporates the desired output time steps and start time of the calculation in the hydrodynamic input.
+
+        Returns:
+            DikernelInput: A manipulated input object that can be used to calculate.
+        """
         time_steps = self.hydraulic_input.time_steps
         run_time_steps = self.getruntimesteps()
         run_hydraulics = HydraulicConditions(
@@ -157,6 +178,17 @@ class DikernelInput:
     def __interpolate_time_series(
         time_steps: list[float], values: list[float], target_time_steps: list[float]
     ) -> list[float]:
+        """
+        Private method to interpolate time series and add the target_time_steps to the list.
+
+        Args:
+            time_steps (list[float]): Original specification of the time steps of the hydrodynamic forcing.
+            values (list[float]): Values for each time step in the original time series.
+            target_time_steps (list[float]): Desired output time steps that needs to be added to the time series.
+
+        Returns:
+            list[float]: A list of values for the combined list of time steps and target_time_steps.
+        """
         iargs = 1
         itarget = 1
         target_values = list[float]()

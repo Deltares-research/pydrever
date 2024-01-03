@@ -16,10 +16,9 @@
  
  All names, logos, and references to "Deltares" are registered trademarks of Stichting
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
- 
- This is a license template.
 """
 
+# region Imports
 import sys
 import os
 
@@ -54,6 +53,11 @@ from dikernelcalculationsettings import (
 )
 
 from dikernel import Dikernel
+
+from visualization import plot_damage_levels, plot_hydraulic_conditions
+import matplotlib.pyplot as plt
+
+# endregion
 
 
 # region define calculation input
@@ -668,7 +672,6 @@ def create_grass_overtopping_output_location_closed_sod(
     return specification
 
 
-# region calculation settings
 def get_calculation_settings() -> list[CalculationSettings]:
     return [
         get_asphalt_calculation_settings(),
@@ -847,7 +850,6 @@ def get_grass_wave_overtopping_calculation_settings() -> (
 
 
 # endregion
-# endregion
 
 input = get_calculation_input()
 dikernel = Dikernel(input)
@@ -855,10 +857,14 @@ dikernel = Dikernel(input)
 print("Starting validation")
 validation_result = dikernel.validate()
 print("   Validation was: " + "succesfull" if validation_result else "unsuccessfull")
+if not validation_result:
+    quit()
 
 print("Starting calculation")
 run_result = dikernel.run()
 print("   Run was: " + "succesfull" if run_result else "unsuccessfull")
+if not run_result:
+    quit()
 
 output = dikernel.output
 print("   number of output locations: " + str(len(output)))
@@ -872,3 +878,9 @@ for stone in stones:
         + ", Damage lvel = "
         + str(stone.damage_development[-1])
     )
+
+plot_hydraulic_conditions(input)
+
+plot_damage_levels(output, input)
+
+plt.show()

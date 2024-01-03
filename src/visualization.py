@@ -167,8 +167,8 @@ def plot_damage_levels(output: list[DikernelOutputLocation], input: DikernelInpu
         color="black",
         marker="o",
     )
-    ax2.plot(xPassed, zPassed, marker="o", color="g")
-    ax2.plot(xFailed, zFailed, marker="x", color="r")
+    ax2.plot(xPassed, zPassed, linestyle="none", marker="o", color="g")
+    ax2.plot(xFailed, zFailed, linestyle="none", marker="x", color="r")
 
     fig.tight_layout()
 
