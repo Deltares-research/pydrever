@@ -16,8 +16,6 @@
  
  All names, logos, and references to "Deltares" are registered trademarks of Stichting
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
- 
- This is a license template.
 """
 
 from dikernelcreferences import *
@@ -29,7 +27,17 @@ import numpy as numpy
 
 
 class Dikernel:
+    """
+    Class to facilitate calculations with the (C#-typed) Dikernel.
+    """
+
     def __init__(self, input: DikernelInput):
+        """
+        Initiates an instance of the Dikernel class that can be used to perform a calculation.
+
+        Args:
+            input (DikernelInput): The specified input for the calculation.
+        """
         self.input: DikernelInput = input
         self.output: list[DikernelOutputLocation] = None
         self.validation_messages: list[str] = list[str]()
@@ -38,6 +46,14 @@ class Dikernel:
         self.__c_validation_result = None
 
     def validate(self) -> bool:
+        """
+        Calls the validation method of Dikernel to validate the specified input. First this
+        method validates part of the specified input in order to convert the input to
+        C#-typed input. The C#-typed input is then used to validate with Dikernel.
+
+        Returns:
+            bool: The result of validation. In case it is false, validation messages are added to the instance variable "validation_messages" of this class.
+        """
         if not self.__validate_input_data():
             return False
 
@@ -45,7 +61,7 @@ class Dikernel:
             self.input.get_run_input()
         )
         if self.__c_input is None:
-            self.validation_messages.append("Could not parse input")
+            self.validation_messages.append("Could not parse input.")
             return False
 
         self.__c_validation_result = Validator.Validate(self.__c_input)
@@ -58,6 +74,12 @@ class Dikernel:
         ) == int(ValidationResultType.Successful)
 
     def run(self) -> bool:
+        """
+        Method to run a calculation.
+
+        Returns:
+            bool: Indicating whether the calculation was seccessfull or not.
+        """
         try:
             calculator = Calculator(self.__c_input)
             calculator.WaitForCompletion()
@@ -81,6 +103,12 @@ class Dikernel:
             return False
 
     def __validate_input_data(self) -> bool:
+        """
+        Internal method to validate the specified input to avoid problems when converting it to C#.
+
+        Returns:
+            bool: True if the specified input meets criteria to be able to convert to C#. In case it is false, the instanve variable "validation_messages" contains information on why validation was not successfull.
+        """
         if self.input is None:
             self.validation_messages.append("Specify input first")
             return False

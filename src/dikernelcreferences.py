@@ -16,16 +16,20 @@
  
  All names, logos, and references to "Deltares" are registered trademarks of Stichting
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
- 
- This is a license template.
 """
 
-import clr  # This reguires the package pythonnet to be added to the environment.
+"""
+This file adds all relevent C# classes as import. 
+"""
+
+import clr
 import os
+
 
 dll_base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dikerneldll")
 clr.AddReference(os.path.join(dll_base_path, "DiKErnel.Core.dll"))
 clr.AddReference(os.path.join(dll_base_path, "DiKErnel.Integration.dll"))
+
 
 from System import Double, ValueTuple
 from System.Collections.Generic import List
@@ -37,6 +41,7 @@ from DiKErnel.Core.Data import (
     CharacteristicPointType,
     ValidationResultType,
     CalculationState,
+    ICalculationInput,
 )
 
 from DiKErnel.Integration.Data.AsphaltRevetmentWaveImpact import (

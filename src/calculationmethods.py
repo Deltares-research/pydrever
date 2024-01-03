@@ -16,14 +16,16 @@
  
  All names, logos, and references to "Deltares" are registered trademarks of Stichting
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
- 
- This is a license template.
 """
 
 from enum import Enum
 
 
 class CalculationMethod(Enum):
+    """
+    An enumeration to specify the type of calculation for a specific output location.
+    """
+
     GrassWaveOvertopping = "grasGolfoverslag"
     GrassWaveImpact = "grasGolfklap"
     NaturalStone = "natuursteen"

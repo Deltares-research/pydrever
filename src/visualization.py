@@ -16,8 +16,6 @@
  
  All names, logos, and references to "Deltares" are registered trademarks of Stichting
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
- 
- This is a license template.
 """
 
 from dikernelinput import DikernelInput
@@ -27,47 +25,113 @@ import numpy as numpy
 
 
 def plot_hydraulic_conditions(input: DikernelInput):
-    run_input = input.get_run_input()
-    time_steps = input.hydraulic_input.time_steps
-    water_levels = input.hydraulic_input.water_levels
-    wave_heights = input.hydraulic_input.wave_heights
-    wave_periods = input.hydraulic_input.wave_periods
-    wave_directions = input.hydraulic_input.wave_directions
+    """
+    This method produces a plot that shows the specified hydrodynamic boundary
+    conditions as well as the schematized intervals to produce output steps.
 
-    run_time_steps = run_input.hydraulic_input.time_steps
-    run_water_levels = run_input.hydraulic_input.water_levels
-    run_wave_heights = run_input.hydraulic_input.wave_heights
-    run_wave_periods = run_input.hydraulic_input.wave_periods
-    run_wave_directions = run_input.hydraulic_input.wave_directions
+    Args:
+        input (DikernelInput): The dikernel input that needs to be visualized.
+
+    Returns:
+        figure handle: The handle of the produced figure
+    """
+    run_input = input.get_run_input()
 
     fig, axs = plt.subplots(ncols=2, nrows=2)
     fig.suptitle("Hydraulic conditions", fontsize=16)
-    axs[0, 0].plot(run_time_steps, [None] + run_water_levels, "gx", linestyle="dotted")
-    axs[0, 0].plot(time_steps, [None] + water_levels, "bo")
+
+    """
+    Water levels
+    """
+    axs[0, 0].plot(
+        run_input.hydraulic_input.time_steps,
+        [None] + run_input.hydraulic_input.water_levels,
+        "gx",
+        linestyle="dotted",
+    )
+    axs[0, 0].plot(
+        input.hydraulic_input.time_steps,
+        [None] + input.hydraulic_input.water_levels,
+        "bo",
+    )
     axs[0, 0].set(ylabel="Water level [m]")
     axs[0, 0].grid()
-    axs[1, 0].plot(run_time_steps, [None] + run_wave_heights, "gx", linestyle="dotted")
-    axs[1, 0].plot(time_steps, [None] + wave_heights, "bo")
+
+    """
+    Wave heights
+    """
+    axs[1, 0].plot(
+        run_input.hydraulic_input.time_steps,
+        [None] + run_input.hydraulic_input.wave_heights,
+        "gx",
+        linestyle="dotted",
+    )
+    axs[1, 0].plot(
+        input.hydraulic_input.time_steps,
+        [None] + input.hydraulic_input.wave_heights,
+        "bo",
+    )
     axs[1, 0].set(xlabel="Time step [s]", ylabel="Wave height [m]")
     axs[1, 0].grid()
-    axs[0, 1].plot(run_time_steps, [None] + run_wave_periods, "gx", linestyle="dotted")
-    axs[0, 1].plot(time_steps, [None] + wave_periods, "bo")
+
+    """
+    Wave periods
+    """
+    axs[0, 1].plot(
+        run_input.hydraulic_input.time_steps,
+        [None] + run_input.hydraulic_input.wave_periods,
+        "gx",
+        linestyle="dotted",
+    )
+    axs[0, 1].plot(
+        input.hydraulic_input.time_steps,
+        [None] + input.hydraulic_input.wave_periods,
+        "bo",
+    )
     axs[0, 1].set(ylabel="Wave periods [s]")
     axs[0, 1].grid()
+
+    """
+    Wave directions
+    """
     axs[1, 1].plot(
-        run_time_steps, [None] + run_wave_directions, "gx", linestyle="dotted"
+        run_input.hydraulic_input.time_steps,
+        [None] + run_input.hydraulic_input.wave_directions,
+        "gx",
+        linestyle="dotted",
     )
-    axs[1, 1].plot(time_steps, [None] + wave_directions, "bo")
+    axs[1, 1].plot(
+        input.hydraulic_input.time_steps,
+        [None] + input.hydraulic_input.wave_directions,
+        "bo",
+    )
     axs[1, 1].set(xlabel="Time step [s]", ylabel="Wave angles [degrees]")
     axs[1, 1].grid()
+
     fig.tight_layout()
+
+    return fig
 
 
 def plot_damage_levels(output: list[DikernelOutputLocation], input: DikernelInput):
+    """
+    This
+
+    Args:
+        output (list[DikernelOutputLocation]): The calculation output
+        input (DikernelInput): The specified calculation input (containing the cross-shore profile)
+
+    Returns:
+        figure handle: The handle of the produced figure
+    """
+
     damagelevels = list(loc.final_damage for loc in output)
     xLocationPositions = list(loc.x_position for loc in output)
 
     fig = plt.figure()
+    """
+    Plot the final damage level.
+    """
     ax1 = plt.subplot(2, 1, 1)
     ax1.grid()
     ax1.set(xlabel="Cross-shore position [x]", ylabel="Damage (end of storm)")
@@ -76,6 +140,10 @@ def plot_damage_levels(output: list[DikernelOutputLocation], input: DikernelInpu
         xLocationPositions, damagelevels, linestyle="none", marker="o", color="black"
     )
 
+    """
+    Plot the cross-shore profile and output locations indicating whether the critical 
+    damage level was reached or not.
+    """
     xFailed = list(loc.x_position for loc in output if loc.failed)
     xPassed = list(loc.x_position for loc in output if not loc.failed)
     zFailed = numpy.interp(

@@ -16,8 +16,6 @@
  
  All names, logos, and references to "Deltares" are registered trademarks of Stichting
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
- 
- This is a license template.
 """
 
 from dikernelinput import DikernelInput, HydraulicConditions, DikeSchematization
@@ -42,8 +40,22 @@ from toplayertypes import TopLayerType
 
 
 class DikernelInputParser:
+    """
+    Class that converts python specification of the input for a dikernel calculation to
+    the equivalent C#-typed input class.
+    """
+
     @staticmethod
-    def parse_dikernel_input(input: DikernelInput):
+    def parse_dikernel_input(input: DikernelInput) -> ICalculationInput:
+        """
+        Static method to parse a DikernelInput class to the equivalent C#-typed class.
+
+        Args:
+            input (DikernelInput): The specified calculation input.
+
+        Returns:
+            CalculationInput[C#]: The C#-typed input class produced by dikernels "CalculationInputBuilder".
+        """
         builder = CalculationInputBuilder(input.dike_orientation)
         DikernelInputParser.__add_dike_profile_to_builder(
             builder, input.dike_schematization
@@ -58,13 +70,16 @@ class DikernelInputParser:
     @staticmethod
     def __add_dike_profile_to_builder(
         builder: CalculationInputBuilder, dike_schematization: DikeSchematization
-    ):
+    ) -> CalculationInputBuilder:
         """This function adds the specified dike profile to the C# input builder.
         First all dike segments are added, then all characteristic points are translated to C#
 
         Args:
             builder (CalculationInputBuilder): The C# object used to build DiKErnel input
             dike_schematization (DikeSchematization): The python object containing the dike schematization
+
+        Returns:
+            CalculationInputBuilder[C#]: The C#-typed builder with the added hydrodynamic conditions.
         """
         for i in range(len(dike_schematization.x_positions) - 1):
             x_start = dike_schematization.x_positions[i]
@@ -109,7 +124,17 @@ class DikernelInputParser:
     @staticmethod
     def __add_hydraulics_to_builder(
         builder: CalculationInputBuilder, hydraulic_conditions: HydraulicConditions
-    ):
+    ) -> CalculationInputBuilder:
+        """
+        This method adds the specified hydrodynamic input to the C# builder.
+
+        Args:
+            builder (CalculationInputBuilder): The C# object used to build DiKErnel input.
+            hydraulic_conditions (HydraulicConditions): The specified hydrodynamic conditions.
+
+        Returns:
+            CalculationInputBuilder[C#]: The C#-typed builder with the added hydrodynamic conditions.
+        """
         for i in range(len(hydraulic_conditions.water_levels) - 1):
             builder.AddTimeStep(
                 Double(hydraulic_conditions.time_steps[i]),
@@ -472,6 +497,15 @@ class DikernelInputParser:
 
     @staticmethod
     def __convert_to_cList(lst: list[list[float]]):
+        """
+        Private method to convert a list of floats (2d) to a C# equivalent.
+
+        Args:
+            lst (list[list[float]]): The python typed list
+
+        Returns:
+            List[Double] [C#]: The C#-typed equivalent of the specified list.
+        """
         cList = List[ValueTuple[Double, Double]]()
         if lst is not None:
             for l in lst:

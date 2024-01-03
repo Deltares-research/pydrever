@@ -16,8 +16,6 @@
  
  All names, logos, and references to "Deltares" are registered trademarks of Stichting
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
- 
- This is a license template.
 """
 
 from dikerneloutput import (
@@ -31,10 +29,26 @@ from dikernelcreferences import *
 
 
 class DikernelOutputParser:
+    """
+    A class containing static methods to convert C#-typed DiKErnel output to python
+    class output
+    """
+
     @staticmethod
     def parse_dikernel_output(
         c_output: CalculationOutput, x_positions: list[float]
     ) -> list[DikernelOutputLocation]:
+        """
+        Converts C#-typed output to a list of DikernelOutputLocations
+
+        Args:
+            c_output (CalculationOutput): The obtained C# output.
+            x_positions (list[float]): X-positions of the specfied output locations.
+
+        Returns:
+            list[DikernelOutputLocation]: A list of output locations translated
+            to a (derived) type of DikernelOutputLocation containing all calculation results.
+        """
         output_locations = list[float]()
         i = 0
         for c_output_location in c_output.LocationDependentOutputItems:
@@ -50,7 +64,21 @@ class DikernelOutputParser:
     @staticmethod
     def __create_output_location(
         c_output_location: LocationDependentOutput, x_position: float
-    ):
+    ) -> DikernelOutputLocation:
+        """
+        Converts a single C#-typed output location to an equivalent python class
+
+        Args:
+            c_output_location (LocationDependentOutput): The C# output.
+            x_position (float): The X-positions of the specfied output location.
+
+        Returns:
+            DikernelOutputLocation: The translated output for this location.
+        """
+
+        """
+        Calculate commonly used output variables
+        """
         moment_of_failure = (
             next(
                 (
@@ -63,12 +91,16 @@ class DikernelOutputParser:
             if not None
             else None
         )
-        time_dependent_output_items = c_output_location.TimeDependentOutputItems
-        damage_development = list(item.Damage for item in time_dependent_output_items)
+        damage_development = list(
+            item.Damage for item in c_output_location.TimeDependentOutputItems
+        )
         damage_increment = list(
-            item.IncrementDamage for item in time_dependent_output_items
+            item.IncrementDamage for item in c_output_location.TimeDependentOutputItems
         )
 
+        """
+        Switch between the various type of possible output (different types of calculation)
+        """
         match c_output_location:
             case AsphaltRevetmentWaveImpactLocationDependentOutput():
                 return (
@@ -83,7 +115,7 @@ class DikernelOutputParser:
                         c_output_location.EquivalentElasticModulus,
                         damage_development,
                         damage_increment,
-                        time_dependent_output_items,
+                        c_output_location.TimeDependentOutputItems,
                     )
                 )
             case GrassRevetmentOvertoppingLocationDependentOutput():
@@ -92,7 +124,7 @@ class DikernelOutputParser:
                     moment_of_failure,
                     damage_development,
                     damage_increment,
-                    time_dependent_output_items,
+                    c_output_location.TimeDependentOutputItems,
                 )
             case GrassRevetmentWaveImpactLocationDependentOutput():
                 return DikernelOutputParser.__create_grass_wave_impact_output_location(
@@ -103,7 +135,7 @@ class DikernelOutputParser:
                     c_output_location.MaximumWaveHeight,
                     damage_development,
                     damage_increment,
-                    time_dependent_output_items,
+                    c_output_location.TimeDependentOutputItems,
                 )
             case GrassRevetmentWaveRunupRayleighLocationDependentOutput():
                 return None
@@ -135,7 +167,7 @@ class DikernelOutputParser:
                     c_output_location.Resistance,
                     damage_development,
                     damage_increment,
-                    time_dependent_output_items,
+                    c_output_location.TimeDependentOutputItems,
                 )
 
     @staticmethod
