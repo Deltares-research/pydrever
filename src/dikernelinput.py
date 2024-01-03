@@ -121,13 +121,20 @@ class DikernelInput:
         """List of calculation settings that are used for the various types of revetments - instance variable."""
         self.start_time: float = None
         """Optonal start time of the calculation - instance variable."""
+        self.stop_time: float = None
+        """Optonal stop time of the calculation - instance variable."""
         self.output_time_steps: list[float] = None
-        """Optional list of desired output time steps - instance variable."""
+        """Optional list of desired output time steps. This will add output times to the calculation - instance variable."""
+        # Results are not filtered based on this list (cumulative values such as the damage increment in the results would not make sense anymore).
 
     def getruntimesteps(self) -> list[float]:
         """
         This method combines all time steps and required output time steps to for
         a list of time steps that needs to be used during calculation.
+
+        It combines the specified time steps for hydrodynamic conditions and the
+        specified output time steps and then takes all time steps between the
+        optional start and stop times (including the start and stop times).
         """
         run_time_steps = self.hydraulic_input.time_steps
         if self.output_time_steps is not None:
@@ -140,6 +147,13 @@ class DikernelInput:
                 time_step
                 for time_step in numpy.union1d(run_time_steps, [self.start_time])
                 if time_step >= self.start_time
+            )
+
+        if self.stop_time is not None:
+            run_time_steps = list(
+                time_step
+                for time_step in numpy.union1d(run_time_steps, [self.stop_time])
+                if time_step <= self.start_time
             )
         return run_time_steps
 
