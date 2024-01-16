@@ -65,7 +65,12 @@ class DikernelInputParser:
             builder, input
         )
         composed_input = builder.Build()
-        return composed_input.Data
+
+        messages = []
+        if not composed_input.Successful:
+            messages = [ev.Message for ev in composed_input.Events]
+
+        return composed_input.Data, messages
 
     @staticmethod
     def __add_dike_profile_to_builder(

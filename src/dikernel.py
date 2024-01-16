@@ -57,11 +57,13 @@ class Dikernel:
         if not self.__validate_input_data():
             return False
 
-        self.__c_input = DikernelInputParser.parse_dikernel_input(
+        self.__c_input, messages = DikernelInputParser.parse_dikernel_input(
             self.input.get_run_input()
         )
         if self.__c_input is None:
             self.validation_messages.append("Could not parse input.")
+            for m in messages:
+                self.validation_messages.append(m)
             return False
 
         self.__c_validation_result = Validator.Validate(self.__c_input)
