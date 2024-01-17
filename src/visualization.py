@@ -26,6 +26,7 @@ from dikerneloutput import (
     GrassWaveImpactOutputLocation,
     NaturalStoneOutputLocation,
 )
+from visualization_animated import animate_damage_development
 from quantities import TimeDependentOutputQuantity
 import matplotlib.pyplot as plt
 import numpy as numpy
