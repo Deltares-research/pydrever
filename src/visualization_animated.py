@@ -35,7 +35,7 @@ def animate_damage_development(
     run_input = input.get_run_input()
     x_positions = [l.x_position for l in output]
     damage_development = [[0.0] * len(x_positions)]
-    t_output = run_input.hydraulic_input.time_steps
+    t_output = run_input.hydrodynamic_input.time_steps
     for i_time, time in enumerate(t_output[1:]):
         damage_development.append([l.damage_development[i_time] for l in output])
     max_damage = max(max(damage_development))
@@ -80,14 +80,14 @@ def animate_damage_development(
     ax3.grid()
     ax3.set(ylabel="Water level [m]", xlabel="Time step [s]")
     ax3.plot(
-        run_input.hydraulic_input.time_steps,
-        [None] + run_input.hydraulic_input.water_levels,
+        run_input.hydrodynamic_input.time_steps,
+        [None] + run_input.hydrodynamic_input.water_levels,
         linestyle="dotted",
     )
     scat = ax3.scatter(
-        run_input.hydraulic_input.time_steps,
-        [None] + run_input.hydraulic_input.water_levels,
-        c=[None] + run_input.hydraulic_input.wave_heights,
+        run_input.hydrodynamic_input.time_steps,
+        [None] + run_input.hydrodynamic_input.water_levels,
+        c=[None] + run_input.hydrodynamic_input.wave_heights,
         s=10,
         cmap=mpl.colormaps["winter"],
         marker="o",
@@ -123,7 +123,9 @@ def animate_damage_development(
             print("Oops")
         fig.suptitle("Tijd = %0.0f [sec]" % (t_output[i]))
         vline.set_xdata(t_output[i])
-        water_level.set_ydata(run_input.hydraulic_input.water_levels[max([0, i - 1])])
+        water_level.set_ydata(
+            run_input.hydrodynamic_input.water_levels[max([0, i - 1])]
+        )
         fig.canvas.draw()
         return (line,)
 

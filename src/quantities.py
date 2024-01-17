@@ -47,6 +47,6 @@ class TimeDependentOutputQuantity(Enum):
     DepthMaximumWaveLoad = "depth_maximum_wave_load"  # NaturalStone
     DistanceMaximumWaveElevation = "distance_maximum_wave_elevation"  # NaturalStone
     NormativeWidthOfWaveImpact = "normative_width_of_wave_impact"  # NaturalStone
-    HydraulicLoad = "hydraulic_load"  # NaturalStone
+    HydrodynamicLoad = "hydrodynamic_load"  # NaturalStone
     ReferenceTimeDegradation = "reference_time_degradation"  # NaturalStone
     ReferenceDegradation = "reference_degradation"  # NaturalStone

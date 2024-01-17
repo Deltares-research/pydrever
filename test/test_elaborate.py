@@ -31,7 +31,7 @@ from toplayertypes import TopLayerType
 from dikernelinput import (
     DikernelInput,
     DikeSchematization,
-    HydraulicConditions,
+    HydrodynamicConditions,
 )
 from dikerneloutputspecification import (
     OutputLocationSpecification,
@@ -58,7 +58,7 @@ from quantities import TimeDependentOutputQuantity
 
 from visualization import (
     plot_damage_levels,
-    plot_hydraulic_conditions,
+    plot_hydrodynamic_conditions,
     plot_development_per_location,
     plot_development,
 )
@@ -69,13 +69,13 @@ import matplotlib.pyplot as plt
 
 # region define calculation input
 def get_calculation_input() -> DikernelInput:
-    input = DikernelInput(0.0, get_hydraulic_conditions(), get_dike_profile())
+    input = DikernelInput(0.0, get_hydrodynamic_conditions(), get_dike_profile())
     input.output_locations = get_output_locations()
     input.settings = get_calculation_settings()
     return input
 
 
-def get_hydraulic_conditions() -> HydraulicConditions:
+def get_hydrodynamic_conditions() -> HydrodynamicConditions:
     time_steps = [
         0.0,
         2269.440000000016,
@@ -587,7 +587,7 @@ def get_hydraulic_conditions() -> HydraulicConditions:
         29,
         29.5,
     ]
-    return HydraulicConditions(
+    return HydrodynamicConditions(
         time_steps, water_levels, wave_heights, wave_periods, wave_directions
     )
 
@@ -886,7 +886,7 @@ for stone in stones:
         + str(stone.damage_development[-1])
     )
 
-plot_hydraulic_conditions(input)
+plot_hydrodynamic_conditions(input)
 
 plot_damage_levels(output, input)
 

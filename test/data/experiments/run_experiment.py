@@ -28,7 +28,7 @@ sys.path.append(os.getcwd() + "\src\dikerneldll")
 from experiment_bgd_deltaflume import BgdDeltaFlumeExperiment
 from dikernel import Dikernel
 from visualization import (
-    plot_hydraulic_conditions,
+    plot_hydrodynamic_conditions,
     plot_damage_levels,
     plot_development_per_location,
     TimeDependentOutputQuantity,
@@ -36,7 +36,7 @@ from visualization import (
 
 input = BgdDeltaFlumeExperiment.get_calculation_input()
 kernel = Dikernel(input)
-plot_hydraulic_conditions(input)
+plot_hydrodynamic_conditions(input)
 
 validationResult = kernel.validate()
 if not validationResult:
@@ -54,10 +54,11 @@ output = kernel.output
 
 plot_damage_levels(output, input)
 for location in output:
-    f = plot_development_per_location(
-        location, TimeDependentOutputQuantity.DamageDevelopment, input
-    )
-    f.suptitle("Location x = %0.2f[m]" % location.x_position)
-    f.tight_layout()
+    if location.damage_development[-1] > 0:
+        f = plot_development_per_location(
+            location, TimeDependentOutputQuantity.DamageDevelopment, input
+        )
+        f.suptitle("Location x = %0.2f[m]" % location.x_position)
+        f.tight_layout()
 
 plt.show()

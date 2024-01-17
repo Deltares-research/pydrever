@@ -29,14 +29,14 @@ sys.path.append(os.getcwd() + "\src\dikerneldll")
 # region Imports
 from visualization import (
     plot_damage_levels,
-    plot_hydraulic_conditions,
+    plot_hydrodynamic_conditions,
     plot_development_per_location,
 )
 
 from dikernelinput import (
     DikernelInput,
     DikeSchematization,
-    HydraulicConditions,
+    HydrodynamicConditions,
 )
 from dikerneloutputspecification import (
     GrassWaveImpactOutputLocationSpecification,
@@ -76,14 +76,14 @@ wave_heights = [0.5, 0.9, 1.2, 1.1, 0.8]
 wave_periods = [6.0, 6.0, 6.0, 6.0, 6.0]
 wave_directions = [60.0, 70.0, 80.0, 90.0, 100.0]
 
-hydraulic_conditions = HydraulicConditions(
+hydrodynamic_conditions = HydrodynamicConditions(
     time_steps, water_levels, wave_heights, wave_periods, wave_directions
 )
 
 """
 Create the input object
 """
-input = DikernelInput(90.0, hydraulic_conditions, dike_schematization)
+input = DikernelInput(90.0, hydrodynamic_conditions, dike_schematization)
 
 """
 Define output time steps and start time for the calculation
@@ -159,7 +159,7 @@ for location in output:
 """
 Plot hydrodynamic input
 """
-fig = plot_hydraulic_conditions(input)
+fig = plot_hydrodynamic_conditions(input)
 # fig.savefig("C:/Test/testimage.png")
 
 fig2 = plot_damage_levels(output, input)

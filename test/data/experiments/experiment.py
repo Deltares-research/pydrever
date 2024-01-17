@@ -19,7 +19,7 @@
 """
 
 from __future__ import annotations
-from dikernelinput import DikernelInput, DikeSchematization, HydraulicConditions
+from dikernelinput import DikernelInput, DikeSchematization, HydrodynamicConditions
 from dikernelcalculationsettings import CalculationSettings
 from abc import ABC, abstractstaticmethod
 
@@ -40,7 +40,7 @@ class Experiment(ABC):
         pass
 
     @abstractstaticmethod
-    def generate_hydrodynamics() -> HydraulicConditions:
+    def generate_hydrodynamics() -> HydrodynamicConditions:
         pass
 
     @abstractstaticmethod

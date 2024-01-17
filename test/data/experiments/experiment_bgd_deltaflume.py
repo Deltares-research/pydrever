@@ -18,7 +18,7 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 from dikernelcalculationsettings import CalculationSettings
-from dikernelinput import DikeSchematization, DikernelInput, HydraulicConditions
+from dikernelinput import DikeSchematization, DikernelInput, HydrodynamicConditions
 from dikerneloutputspecification import (
     OutputLocationSpecification,
     GrassWaveImpactOutputLocationSpecification,
@@ -49,7 +49,7 @@ class BgdDeltaFlumeExperiment(Experiment):
         roughnesses = [1.0, 1.0, 1.0, 1.0]
         return DikeSchematization(x_positions, z_positions, roughnesses, 160.0, 191.48)
 
-    def generate_hydrodynamics() -> HydraulicConditions:
+    def generate_hydrodynamics() -> HydrodynamicConditions:
         time_steps = (
             numpy.array(
                 [
@@ -96,7 +96,7 @@ class BgdDeltaFlumeExperiment(Experiment):
             4.548,
         ]
 
-        return HydraulicConditions(
+        return HydrodynamicConditions(
             time_steps, water_levels, wave_heights, wave_periods, wave_directions
         )
 

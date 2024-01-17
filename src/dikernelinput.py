@@ -54,7 +54,7 @@ class DikeSchematization:
         self.inner_toe: float = None
 
 
-class HydraulicConditions:
+class HydrodynamicConditions:
     def __init__(
         self,
         time_steps: list[float],
@@ -64,7 +64,7 @@ class HydraulicConditions:
         wave_directions: list[float],
     ):
         """
-        Constructor for the hydraulic input.
+        Constructor for the hydrodynamic input.
 
         Args:
             time_steps (list[float]): list of timesteps.
@@ -98,7 +98,7 @@ class DikernelInput:
     def __init__(
         self,
         dike_orientation: float,
-        hydraulic_input: HydraulicConditions,
+        hydrodynamic_input: HydrodynamicConditions,
         dike_schematization: DikeSchematization,
     ):
         """
@@ -106,12 +106,12 @@ class DikernelInput:
 
         Args:
             dikeOrientation (float): orientation of the dike normal
-            hydraulicInput (HydraulicInput): object containing the hydraulics input
+            hydrodynamicInput (HydrodynamicInput): object containing the hydrodynamic input
             dikeSchematization (DikeSchematization): object containing the dike schematization
         """
         self.dike_orientation: float = dike_orientation
         """Orientation of the dike normal relative to North - instance variable."""
-        self.hydraulic_input: HydraulicConditions = hydraulic_input
+        self.hydrodynamic_input: HydrodynamicConditions = hydrodynamic_input
         """Hydrodynamic input specification - instance variable."""
         self.dike_schematization: DikeSchematization = dike_schematization
         """Schematization of the dike cross-shore profile and characteristic points - instance variable."""
@@ -136,7 +136,7 @@ class DikernelInput:
         specified output time steps and then takes all time steps between the
         optional start and stop times (including the start and stop times).
         """
-        run_time_steps = self.hydraulic_input.time_steps
+        run_time_steps = self.hydrodynamic_input.time_steps
         if self.output_time_steps is not None:
             run_time_steps = numpy.union1d(
                 run_time_steps, self.output_time_steps
@@ -164,25 +164,25 @@ class DikernelInput:
         Returns:
             DikernelInput: A manipulated input object that can be used to calculate.
         """
-        time_steps = self.hydraulic_input.time_steps
+        time_steps = self.hydrodynamic_input.time_steps
         run_time_steps = self.get_run_time_steps()
-        run_hydraulics = HydraulicConditions(
+        run_hydrodynamics = HydrodynamicConditions(
             run_time_steps,
             self.__interpolate_time_series(
-                time_steps, self.hydraulic_input.water_levels, run_time_steps
+                time_steps, self.hydrodynamic_input.water_levels, run_time_steps
             ),
             self.__interpolate_time_series(
-                time_steps, self.hydraulic_input.wave_heights, run_time_steps
+                time_steps, self.hydrodynamic_input.wave_heights, run_time_steps
             ),
             self.__interpolate_time_series(
-                time_steps, self.hydraulic_input.wave_periods, run_time_steps
+                time_steps, self.hydrodynamic_input.wave_periods, run_time_steps
             ),
             self.__interpolate_time_series(
-                time_steps, self.hydraulic_input.wave_directions, run_time_steps
+                time_steps, self.hydrodynamic_input.wave_directions, run_time_steps
             ),
         )
         run_input = DikernelInput(
-            self.dike_orientation, run_hydraulics, self.dike_schematization
+            self.dike_orientation, run_hydrodynamics, self.dike_schematization
         )
         run_input.output_locations = self.output_locations
         run_input.settings = self.settings

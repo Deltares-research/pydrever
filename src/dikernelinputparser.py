@@ -18,7 +18,7 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from dikernelinput import DikernelInput, HydraulicConditions, DikeSchematization
+from dikernelinput import DikernelInput, HydrodynamicConditions, DikeSchematization
 from dikerneloutputspecification import (
     AsphaltOutputLocationSpecification,
     NordicStoneOutputLocationSpecification,
@@ -60,7 +60,9 @@ class DikernelInputParser:
         DikernelInputParser.__add_dike_profile_to_builder(
             builder, input.dike_schematization
         )
-        DikernelInputParser.__add_hydraulics_to_builder(builder, input.hydraulic_input)
+        DikernelInputParser.__add_hydrodynamics_to_builder(
+            builder, input.hydrodynamic_input
+        )
         DikernelInputParser.__add_output_location_specifications_to_builder(
             builder, input
         )
@@ -127,27 +129,28 @@ class DikernelInputParser:
             )
 
     @staticmethod
-    def __add_hydraulics_to_builder(
-        builder: CalculationInputBuilder, hydraulic_conditions: HydraulicConditions
+    def __add_hydrodynamics_to_builder(
+        builder: CalculationInputBuilder,
+        hydrodynamic_conditions: HydrodynamicConditions,
     ) -> CalculationInputBuilder:
         """
         This method adds the specified hydrodynamic input to the C# builder.
 
         Args:
             builder (CalculationInputBuilder): The C# object used to build DiKErnel input.
-            hydraulic_conditions (HydraulicConditions): The specified hydrodynamic conditions.
+            hydrodynamic_conditions (HydrodynamicConditions): The specified hydrodynamic conditions.
 
         Returns:
             CalculationInputBuilder[C#]: The C#-typed builder with the added hydrodynamic conditions.
         """
-        for i in range(len(hydraulic_conditions.water_levels)):
+        for i in range(len(hydrodynamic_conditions.water_levels)):
             builder.AddTimeStep(
-                Double(hydraulic_conditions.time_steps[i]),
-                Double(hydraulic_conditions.time_steps[i + 1]),
-                Double(hydraulic_conditions.water_levels[i]),
-                Double(hydraulic_conditions.wave_heights[i]),
-                Double(hydraulic_conditions.wave_periods[i]),
-                Double(hydraulic_conditions.wave_directions[i]),
+                Double(hydrodynamic_conditions.time_steps[i]),
+                Double(hydrodynamic_conditions.time_steps[i + 1]),
+                Double(hydrodynamic_conditions.water_levels[i]),
+                Double(hydrodynamic_conditions.wave_heights[i]),
+                Double(hydrodynamic_conditions.wave_periods[i]),
+                Double(hydrodynamic_conditions.wave_directions[i]),
             )
 
         return builder

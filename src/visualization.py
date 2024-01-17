@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt
 import numpy as numpy
 
 
-def plot_hydraulic_conditions(input: DikernelInput):
+def plot_hydrodynamic_conditions(input: DikernelInput):
     """
     This method produces a plot that shows the specified hydrodynamic boundary
     conditions as well as the schematized intervals to produce output steps.
@@ -46,20 +46,22 @@ def plot_hydraulic_conditions(input: DikernelInput):
     run_input = input.get_run_input()
 
     fig, axs = plt.subplots(ncols=2, nrows=2)
-    fig.suptitle("Hydraulic conditions", fontsize=16)
+    fig.suptitle("Hydrodynamic conditions", fontsize=16)
 
     """
     Water levels
     """
     axs[0, 0].plot(
-        run_input.hydraulic_input.time_steps,
-        numpy.concatenate(([None], run_input.hydraulic_input.water_levels), axis=None),
+        run_input.hydrodynamic_input.time_steps,
+        numpy.concatenate(
+            ([None], run_input.hydrodynamic_input.water_levels), axis=None
+        ),
         "gx",
         linestyle="dotted",
     )
     axs[0, 0].plot(
-        input.hydraulic_input.time_steps,
-        numpy.concatenate(([None], input.hydraulic_input.water_levels), axis=None),
+        input.hydrodynamic_input.time_steps,
+        numpy.concatenate(([None], input.hydrodynamic_input.water_levels), axis=None),
         "bo",
     )
     axs[0, 0].set(ylabel="Water level [m]")
@@ -69,14 +71,16 @@ def plot_hydraulic_conditions(input: DikernelInput):
     Wave heights
     """
     axs[1, 0].plot(
-        run_input.hydraulic_input.time_steps,
-        numpy.concatenate(([None], run_input.hydraulic_input.wave_heights), axis=None),
+        run_input.hydrodynamic_input.time_steps,
+        numpy.concatenate(
+            ([None], run_input.hydrodynamic_input.wave_heights), axis=None
+        ),
         "gx",
         linestyle="dotted",
     )
     axs[1, 0].plot(
-        input.hydraulic_input.time_steps,
-        numpy.concatenate(([None], input.hydraulic_input.wave_heights), axis=None),
+        input.hydrodynamic_input.time_steps,
+        numpy.concatenate(([None], input.hydrodynamic_input.wave_heights), axis=None),
         "bo",
     )
     axs[1, 0].set(xlabel="Time step [s]", ylabel="Wave height [m]")
@@ -86,14 +90,16 @@ def plot_hydraulic_conditions(input: DikernelInput):
     Wave periods
     """
     axs[0, 1].plot(
-        run_input.hydraulic_input.time_steps,
-        numpy.concatenate(([None], run_input.hydraulic_input.wave_periods), axis=None),
+        run_input.hydrodynamic_input.time_steps,
+        numpy.concatenate(
+            ([None], run_input.hydrodynamic_input.wave_periods), axis=None
+        ),
         "gx",
         linestyle="dotted",
     )
     axs[0, 1].plot(
-        input.hydraulic_input.time_steps,
-        numpy.concatenate(([None], input.hydraulic_input.wave_periods), axis=None),
+        input.hydrodynamic_input.time_steps,
+        numpy.concatenate(([None], input.hydrodynamic_input.wave_periods), axis=None),
         "bo",
     )
     axs[0, 1].set(ylabel="Wave periods [s]")
@@ -103,16 +109,18 @@ def plot_hydraulic_conditions(input: DikernelInput):
     Wave directions
     """
     axs[1, 1].plot(
-        run_input.hydraulic_input.time_steps,
+        run_input.hydrodynamic_input.time_steps,
         numpy.concatenate(
-            ([None], run_input.hydraulic_input.wave_directions), axis=None
+            ([None], run_input.hydrodynamic_input.wave_directions), axis=None
         ),
         "gx",
         linestyle="dotted",
     )
     axs[1, 1].plot(
-        input.hydraulic_input.time_steps,
-        numpy.concatenate(([None], input.hydraulic_input.wave_directions), axis=None),
+        input.hydrodynamic_input.time_steps,
+        numpy.concatenate(
+            ([None], input.hydrodynamic_input.wave_directions), axis=None
+        ),
         "bo",
     )
     axs[1, 1].set(xlabel="Time step [s]", ylabel="Wave angles [degrees]")

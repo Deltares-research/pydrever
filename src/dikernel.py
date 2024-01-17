@@ -116,15 +116,15 @@ class Dikernel:
             return False
 
         result = True
-        if self.input.hydraulic_input is None:
-            self.validation_messages.append("Hydraulic input must be specified.")
+        if self.input.hydrodynamic_input is None:
+            self.validation_messages.append("Hydrodynamic input must be specified.")
             result = False
         elif (
-            self.input.hydraulic_input.time_steps is None
-            or len(self.input.hydraulic_input.time_steps) < 2
+            self.input.hydrodynamic_input.time_steps is None
+            or len(self.input.hydrodynamic_input.time_steps) < 2
         ):
             self.validation_messages.append(
-                "At least two time steps need to be specified in the hydraulic input."
+                "At least two time steps need to be specified in the hydrodynamic input."
             )
             result = False
 
@@ -146,10 +146,10 @@ class Dikernel:
             )
             result = False
         if self.input.start_time is not None and self.input.start_time > numpy.max(
-            self.input.hydraulic_input.time_steps
+            self.input.hydrodynamic_input.time_steps
         ):
             self.validation_messages.append(
-                "Start time should not exceed the specified hydraulic boundary conditions."
+                "Start time should not exceed the specified hydrodynamic boundary conditions."
             )
             result = False
         if (
@@ -166,20 +166,22 @@ class Dikernel:
                 )
                 result = False
             if (
-                self.input.hydraulic_input is not None
-                and minimumOutputTime < numpy.min(self.input.hydraulic_input.time_steps)
+                self.input.hydrodynamic_input is not None
+                and minimumOutputTime
+                < numpy.min(self.input.hydrodynamic_input.time_steps)
             ):
                 self.validation_messages.append(
-                    "Specified output time steps should all be greater than the minimum specified time step of the hydraulic conditions."
+                    "Specified output time steps should all be greater than the minimum specified time step of the hydrodynamic conditions."
                 )
                 result = False
             maximumOutputTime = numpy.max(self.input.output_time_steps)
             if (
-                self.input.hydraulic_input is not None
-                and maximumOutputTime > numpy.max(self.input.hydraulic_input.time_steps)
+                self.input.hydrodynamic_input is not None
+                and maximumOutputTime
+                > numpy.max(self.input.hydrodynamic_input.time_steps)
             ):
                 self.validation_messages.append(
-                    "Specified output time steps should not be greater than the maximum specified time step of the hydraulic conditions."
+                    "Specified output time steps should not be greater than the maximum specified time step of the hydrodynamic conditions."
                 )
                 result = False
         return result

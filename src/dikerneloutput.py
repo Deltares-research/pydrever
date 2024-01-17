@@ -294,7 +294,7 @@ class NaturalStoneOutputLocation(DikernelOutputLocation):
         depth_maximum_wave_load: list[float],
         distance_maximum_wave_elevation: list[float],
         normative_width_of_wave_impact: list[float],
-        hydraulic_load: list[float],
+        hydrodynamic_load: list[float],
         wave_angle: list[float],
         wave_angle_impact: list[float],
         reference_time_degradation: list[float],
@@ -322,7 +322,7 @@ class NaturalStoneOutputLocation(DikernelOutputLocation):
         self.__depth_maximum_wave_load = depth_maximum_wave_load
         self.__distance_maximum_wave_elevation = distance_maximum_wave_elevation
         self.__normative_width_of_wave_impact = normative_width_of_wave_impact
-        self.__hydraulic_load = hydraulic_load
+        self.__hydrodynamic_load = hydrodynamic_load
         self.__wave_angle = wave_angle
         self.__wave_angle_impact = wave_angle_impact
         self.__reference_time_degradation = reference_time_degradation
@@ -389,8 +389,8 @@ class NaturalStoneOutputLocation(DikernelOutputLocation):
         return self.__normative_width_of_wave_impact
 
     @property
-    def hydraulic_load(self) -> list[float]:
-        return self.__hydraulic_load
+    def hydrodynamic_load(self) -> list[float]:
+        return self.__hydrodynamic_load
 
     @property
     def wave_angle(self) -> list[float]:
