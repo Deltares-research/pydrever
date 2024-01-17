@@ -19,7 +19,7 @@
 """
 
 from __future__ import annotations
-from dikerneloutputlocations import OutputLocationSpecification
+from dikerneloutputspecification import OutputLocationSpecification
 from dikernelcalculationsettings import CalculationSettings
 import numpy as numpy
 

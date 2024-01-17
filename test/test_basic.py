@@ -38,7 +38,7 @@ from dikernelinput import (
     DikeSchematization,
     HydraulicConditions,
 )
-from dikerneloutputlocations import (
+from dikerneloutputspecification import (
     GrassWaveImpactOutputLocationSpecification,
 )
 from toplayertypes import TopLayerType

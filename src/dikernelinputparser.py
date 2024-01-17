@@ -19,7 +19,7 @@
 """
 
 from dikernelinput import DikernelInput, HydraulicConditions, DikeSchematization
-from dikerneloutputlocations import (
+from dikerneloutputspecification import (
     AsphaltOutputLocationSpecification,
     NordicStoneOutputLocationSpecification,
     GrassWaveImpactOutputLocationSpecification,

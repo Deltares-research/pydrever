@@ -33,7 +33,7 @@ from dikernelinput import (
     DikeSchematization,
     HydraulicConditions,
 )
-from dikerneloutputlocations import (
+from dikerneloutputspecification import (
     OutputLocationSpecification,
     GrassWaveImpactOutputLocationSpecification,
     GrassOvertoppingOutputLocationSpecification,
