@@ -132,9 +132,9 @@ class Dikernel:
             self.validation_messages.append("Dike schematization must be specified")
             result = False
         if (
-            self.input.dike_orientation is None
-            or self.input.dike_orientation < 0
-            or self.input.dike_orientation > 360
+            self.input.dike_schematization.dike_orientation is None
+            or self.input.dike_schematization.dike_orientation < 0
+            or self.input.dike_schematization.dike_orientation > 360
         ):
             self.validation_messages.append(
                 "Dike orientation must be specified as a number between 0 and 360 degrees."

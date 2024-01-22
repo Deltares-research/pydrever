@@ -59,7 +59,7 @@ x_positions = [0.0, 25.0, 35.0, 41.0, 45, 50, 60, 70]
 z_positions = [-3, 0.0, 1.5, 1.7, 3.0, 3.1, 0, -1]
 roughnesses = [1, 1, 0.75, 0.5, 0.8, 0.8, 0.8]
 dike_schematization = DikeSchematization(
-    x_positions, z_positions, roughnesses, 25.0, 45.0
+    90.0, x_positions, z_positions, roughnesses, 25.0, 45.0
 )
 
 """
@@ -83,7 +83,7 @@ hydrodynamic_conditions = HydrodynamicConditions(
 """
 Create the input object
 """
-input = DikernelInput(90.0, hydrodynamic_conditions, dike_schematization)
+input = DikernelInput(hydrodynamic_conditions, dike_schematization)
 
 """
 Define output time steps and start time for the calculation

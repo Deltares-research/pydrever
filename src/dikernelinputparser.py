@@ -59,7 +59,7 @@ class DikernelInputParser:
         Returns:
             CalculationInput[C#]: The C#-typed input class produced by dikernels "CalculationInputBuilder".
         """
-        builder = CalculationInputBuilder(input.dike_orientation)
+        builder = CalculationInputBuilder(input.dike_schematization.dike_orientation)
         DikernelInputParser.__add_dike_profile_to_builder(
             builder, input.dike_schematization
         )

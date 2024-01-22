@@ -70,7 +70,7 @@ import matplotlib.pyplot as plt
 
 # region define calculation input
 def get_calculation_input() -> DikernelInput:
-    input = DikernelInput(0.0, get_hydrodynamic_conditions(), get_dike_profile())
+    input = DikernelInput(get_hydrodynamic_conditions(), get_dike_profile())
     input.output_locations = get_output_locations()
     input.settings = get_calculation_settings()
     return input
@@ -598,7 +598,7 @@ def get_dike_profile() -> DikeSchematization:
     z_positions = [-3, 0.0, 1.5, 1.7, 3.0, 3.1, 0, -1]
     roughnesses = [1, 1, 0.75, 0.5, 0.8, 0.8, 0.8]
     schematization = DikeSchematization(
-        x_positions, z_positions, roughnesses, 25.0, 45.0
+        0.0, x_positions, z_positions, roughnesses, 25.0, 45.0
     )
     schematization.crest_outer_berm = 35.0
     schematization.notch_outer_berm = 41.0

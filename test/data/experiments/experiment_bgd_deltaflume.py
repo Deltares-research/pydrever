@@ -35,7 +35,6 @@ import numpy as numpy
 class BgdDeltaFlumeExperiment(Experiment):
     def get_calculation_input() -> DikernelInput:
         input = DikernelInput(
-            90.0,
             BgdDeltaFlumeExperiment.generate_hydrodynamics(),
             BgdDeltaFlumeExperiment.generate_dike_schematization(),
         )
@@ -47,7 +46,9 @@ class BgdDeltaFlumeExperiment(Experiment):
         x_positions = [154.4, 160.0, 170.48, 191.48]
         z_positions = [0.0, 2.0, 4.325, 8.995]
         roughnesses = [1.0, 1.0, 1.0, 1.0]
-        return DikeSchematization(x_positions, z_positions, roughnesses, 160.0, 191.48)
+        return DikeSchematization(
+            90.0, x_positions, z_positions, roughnesses, 160.0, 191.48
+        )
 
     def generate_hydrodynamics() -> HydrodynamicConditions:
         time_steps = (

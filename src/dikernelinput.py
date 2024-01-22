@@ -27,6 +27,7 @@ import numpy as numpy
 class DikeSchematization:
     def __init__(
         self,
+        dike_orientation: float,
         x_positions: list[float],
         z_positions: list[float],
         roughnesses: list[float],
@@ -37,12 +38,15 @@ class DikeSchematization:
         Contructor for a schematization of a dike profile.
 
         Args:
+            dikeOrientation (float): orientation of the dike normal
             x_positions (list[float]): list of cross-shore positions
             z_positions (list[float]): list of dike heights in meter correspoinding to the cross-shore positions. zPositions needs to be of the samen length as xPositions
             roughnesses (list[float]): a list of roughness coefficients per dike segment. By definition the length of this list is equal to the length of xPositions - 1
             x_outer_toe (float): The cross-shore location of the toe of the dike at the outer slope
             x_outer_crest (float): The cross-shore location of the (outer) crest of the dike
         """
+        self.dike_orientation: float = dike_orientation
+        """Orientation of the dike normal relative to North - instance variable."""
         self.x_positions: list[float] = x_positions
         self.z_positions: list[float] = z_positions
         self.roughnesses: list[float] = roughnesses
@@ -83,7 +87,7 @@ class HydrodynamicConditions:
             or nr_time_steps - 1 != len(wave_directions)
         ):
             raise Exception(
-                "length of the specified series for waterlevels, wave heights, wave periods and wave angles needs to be exactly 1 less than the length of the specified time steps."
+                "Length of the specified series for waterlevels, wave heights, wave periods and wave angles needs to be exactly 1 less than the length of the specified time steps."
             )
 
         self.time_steps = time_steps
@@ -97,7 +101,6 @@ class HydrodynamicConditions:
 class DikernelInput:
     def __init__(
         self,
-        dike_orientation: float,
         hydrodynamic_input: HydrodynamicConditions,
         dike_schematization: DikeSchematization,
     ):
@@ -105,12 +108,9 @@ class DikernelInput:
         Constructor for the DikernelInput class.
 
         Args:
-            dikeOrientation (float): orientation of the dike normal
             hydrodynamicInput (HydrodynamicInput): object containing the hydrodynamic input
             dikeSchematization (DikeSchematization): object containing the dike schematization
         """
-        self.dike_orientation: float = dike_orientation
-        """Orientation of the dike normal relative to North - instance variable."""
         self.hydrodynamic_input: HydrodynamicConditions = hydrodynamic_input
         """Hydrodynamic input specification - instance variable."""
         self.dike_schematization: DikeSchematization = dike_schematization
@@ -120,9 +120,9 @@ class DikernelInput:
         self.settings: list[CalculationSettings] = None
         """List of calculation settings that are used for the various types of revetments - instance variable."""
         self.start_time: float = None
-        """Optonal start time of the calculation - instance variable."""
+        """Optional start time of the calculation - instance variable."""
         self.stop_time: float = None
-        """Optonal stop time of the calculation - instance variable."""
+        """Optional stop time of the calculation - instance variable."""
         self.output_time_steps: list[float] = None
         """Optional list of desired output time steps. This will add output times to the calculation - instance variable."""
         # Results are not filtered based on this list (cumulative values such as the damage increment in the results would not make sense anymore).
@@ -181,9 +181,7 @@ class DikernelInput:
                 time_steps, self.hydrodynamic_input.wave_directions, run_time_steps
             ),
         )
-        run_input = DikernelInput(
-            self.dike_orientation, run_hydrodynamics, self.dike_schematization
-        )
+        run_input = DikernelInput(run_hydrodynamics, self.dike_schematization)
         run_input.output_locations = self.output_locations
         run_input.settings = self.settings
         return run_input
