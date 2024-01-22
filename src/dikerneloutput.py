@@ -201,6 +201,67 @@ class GrassOvertoppingOutputLocation(DikernelOutputLocation):
         return self.__average_number_of_waves
 
 
+class GrassWaveRunupOutputLocation(DikernelOutputLocation):
+    def __init__(
+        self,
+        x_position: float,
+        z_position: float,
+        moment_of_failure: float,
+        damage_development: list[float],
+        damage_increment: list[float],
+        vertical_distance_water_level_elevation: list[float],
+        wave_angle: list[float],
+        wave_angle_impact: list[float],
+        representative_wave_runup_2p: list[float],
+        cumulative_overload: list[float],
+        average_number_of_waves: list[float],
+    ):
+        super().__init__(
+            CalculationMethod.GrassWaveRunup,
+            x_position,
+            moment_of_failure,
+            damage_development,
+            damage_increment,
+        )
+        self.__z_position = z_position
+        self.__vertical_distance_water_level_elevation = (
+            vertical_distance_water_level_elevation
+        )
+        self.__representative_wave_runup_2p = representative_wave_runup_2p
+        self.__wave_angle = wave_angle
+        self.__wave_angle_impact = wave_angle_impact
+        self.__cumulative_overload = cumulative_overload
+        self.__average_number_of_waves = average_number_of_waves
+
+    @property
+    def z_position(self) -> float:
+        return self.__z_position
+
+    @property
+    def vertical_distance_water_level_elevation(self) -> list[float]:
+        return self.__vertical_distance_water_level_elevation
+
+    @property
+    def representative_wave_runup_2p(self) -> list[float]:
+        return self.__representative_wave_runup_2p
+
+    @property
+    def wave_angle(self) -> list[float]:
+        return self.__wave_angle
+
+    @property
+    def wave_angle_impact(self) -> list[float]:
+        return self.__wave_angle_impact
+
+    @property
+    def cumulative_overload(self) -> list[float]:
+        return self.__cumulative_overload
+
+    @property
+    def average_number_of_waves(self) -> list[float]:
+        return self.__average_number_of_waves
+
+
 class GrassWaveImpactOutputLocation(DikernelOutputLocation):
     def __init__(
         self,

@@ -149,3 +149,16 @@ class GrassOvertoppingOutputLocationSpecification(OutputLocationSpecification):
         )
         self.increased_load_transition_alpha_m: float = None
         self.increased_load_transition_alpha_s: float = None
+
+
+class GrassWaveRunupOutputLocationSpecification(OutputLocationSpecification):
+    def __init__(
+        self, x_position: float, outer_slope: float, top_layer_type: TopLayerType
+    ) -> OutputLocationSpecification:
+        super().__init__(x_position, CalculationMethod.GrassWaveRunup, top_layer_type)
+
+        self.outer_slope = outer_slope
+        self.increased_load_transition_alpha_m: float = None
+        self.increased_load_transition_alpha_s: float = None
+        self.reduced_strength_transition_2p_gamma_b: float = None
+        self.reduced_strength_transition_2p_gamma_f: float = None

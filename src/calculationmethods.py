@@ -28,5 +28,6 @@ class CalculationMethod(Enum):
 
     GrassWaveOvertopping = "grasGolfoverslag"
     GrassWaveImpact = "grasGolfklap"
+    GrassWaveRunup = "grasGolfOploop"
     NaturalStone = "natuursteen"
     AsphaltWaveImpact = "asfaltGolfklap"

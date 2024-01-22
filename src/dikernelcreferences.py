@@ -66,7 +66,7 @@ from DiKErnel.Integration.Data.NaturalStoneRevetment import (
 
 from DiKErnel.Integration.Data.GrassRevetmentWaveRunup import (
     GrassRevetmentWaveRunupRayleighLocationDependentOutput,
-    GrassRevetmentWaveRunupLocationConstructionProperties,
+    GrassRevetmentWaveRunupRayleighLocationConstructionProperties,
 )
 
 from DiKErnel.Integration import CalculationInputBuilder

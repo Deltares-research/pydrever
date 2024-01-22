@@ -47,9 +47,9 @@ class AsphaltTopLayerSettings(TopLayerSettings):
         """The fatigue constant beta of the asphalt top layer - instance variable."""
 
 
-class GrasCoverOvertoppingTopLayerSettings(TopLayerSettings):
+class GrasCoverCumulativeOverloadTopLayerSettings(TopLayerSettings):
     """
-    Specification for a grass cover overtopping calculation.
+    Specification for a grass cover cumulative overload calculations.
     """
 
     def __init__(self, topLayerType: TopLayerType):
@@ -153,7 +153,7 @@ class GrassWaveOvertoppingCalculationSettings(CalculationSettings):
         """Fixed number of waves - instance variable."""
         self.front_velocity_c_wo: float = None
         """The front velocity constant c of the overtopping wave - instance variable."""
-        self.factor_ctm: float = None
+        self.average_number_of_waves_factor_ctm: float = None
         """The ctm factor - instance variable."""
         self.DikeHeight: float = None
         """The height of the dike used in the overtopping calculation - instance variable."""
@@ -178,6 +178,24 @@ class GrassWaveImpactCalculationSettings(CalculationSettings):
         """Wave angle impact constant r - instance variable."""
         self.te_max: float = None
         self.te_min: float = None
+
+
+class GrassWaveRunupCalculationSettings(CalculationSettings):
+    """
+    Class for specification of wave runup calculation settings.
+    """
+
+    def __init__(self, topLayers: list[TopLayerSettings]):
+        super().__init__(CalculationMethod.GrassWaveImpact, topLayers)
+        self.average_number_of_waves_factor_ctm: float = None
+        """The ctm factor - instance variable."""
+        self.representative_wave_runup_2p_aru: float = None
+        self.representative_wave_runup_2p_bru: float = None
+        self.representative_wave_runup_2p_cru: float = None
+        self.wave_angle_impact_a_beta: float = None
+        self.wave_angle_impact_beta_max: float = None
+        self.fixed_number_of_waves: int = None
+        self.front_velocity_cu: float = None
 
 
 class NaturalStoneCalculationSettings(CalculationSettings):

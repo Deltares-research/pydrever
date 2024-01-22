@@ -36,6 +36,7 @@ from dikernelinput import (
 from dikerneloutputspecification import (
     OutputLocationSpecification,
     GrassWaveImpactOutputLocationSpecification,
+    GrassWaveRunupOutputLocationSpecification,
     GrassOvertoppingOutputLocationSpecification,
     AsphaltOutputLocationSpecification,
     NordicStoneOutputLocationSpecification,
@@ -48,7 +49,7 @@ from dikernelcalculationsettings import (
     GrassWaveImpactCalculationSettings,
     GrassWaveOvertoppingCalculationSettings,
     AsphaltTopLayerSettings,
-    GrasCoverOvertoppingTopLayerSettings,
+    GrasCoverCumulativeOverloadTopLayerSettings,
     GrassCoverWaveImpactTopLayerSettings,
 )
 
@@ -651,6 +652,29 @@ def get_output_locations() -> list[OutputLocationSpecification]:
         GrassWaveImpactOutputLocationSpecification(44.0, TopLayerType.GrassOpenSod),
         GrassWaveImpactOutputLocationSpecification(44.5, TopLayerType.GrassOpenSod),
         GrassWaveImpactOutputLocationSpecification(44.99, TopLayerType.GrassClosedSod),
+        GrassWaveRunupOutputLocationSpecification(
+            41.5, 0.3, TopLayerType.GrassClosedSod
+        ),
+        GrassWaveRunupOutputLocationSpecification(
+            42.0, 0.3, TopLayerType.GrassClosedSod
+        ),
+        GrassWaveRunupOutputLocationSpecification(
+            42.5, 0.3, TopLayerType.GrassClosedSod
+        ),
+        GrassWaveRunupOutputLocationSpecification(
+            41.1, 0.3, TopLayerType.GrassClosedSod
+        ),
+        GrassWaveRunupOutputLocationSpecification(
+            43.0, 0.3, TopLayerType.GrassClosedSod
+        ),
+        GrassWaveRunupOutputLocationSpecification(
+            43.5, 0.3, TopLayerType.GrassClosedSod
+        ),
+        GrassWaveRunupOutputLocationSpecification(44.0, 0.3, TopLayerType.GrassOpenSod),
+        GrassWaveRunupOutputLocationSpecification(44.5, 0.3, TopLayerType.GrassOpenSod),
+        GrassWaveRunupOutputLocationSpecification(
+            44.99, 0.3, TopLayerType.GrassClosedSod
+        ),
         create_grass_overtopping_output_location_closed_sod(45.0, 0.02),
         create_grass_overtopping_output_location_closed_sod(45.5, 0.02),
         create_grass_overtopping_output_location_closed_sod(46.0, 0.02),
@@ -841,7 +865,7 @@ def get_grass_wave_impact_calculation_settings() -> GrassWaveImpactCalculationSe
 def get_grass_wave_overtopping_calculation_settings() -> (
     GrassWaveOvertoppingCalculationSettings
 ):
-    top_layer_closed_sod = GrasCoverOvertoppingTopLayerSettings(
+    top_layer_closed_sod = GrasCoverCumulativeOverloadTopLayerSettings(
         TopLayerType.GrassClosedSod
     )
     top_layer_closed_sod.critical_cumulative_overload = 7000.0
@@ -852,7 +876,7 @@ def get_grass_wave_overtopping_calculation_settings() -> (
     settings.acceleration_alpha_a_for_inner_slope = 1.4
     settings.fixed_number_of_waves = 10000
     settings.front_velocity_c_wo = 1.45
-    settings.factor_ctm = 0.92
+    settings.average_number_of_waves_factor_ctm = 0.92
     return settings
 
 

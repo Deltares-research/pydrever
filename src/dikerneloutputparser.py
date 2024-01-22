@@ -23,6 +23,7 @@ from dikerneloutput import (
     AsphaltWaveImpactOutputLocation,
     GrassOvertoppingOutputLocation,
     GrassWaveImpactOutputLocation,
+    GrassWaveRunupOutputLocation,
     NaturalStoneOutputLocation,
 )
 from dikernelcreferences import *
@@ -138,27 +139,14 @@ class DikernelOutputParser:
                     c_output_location.TimeDependentOutputItems,
                 )
             case GrassRevetmentWaveRunupRayleighLocationDependentOutput():
-                return None
-                """
-                    TODO: Implement wave runup calculations
-                    grassRevetmentWaveRunupRayleightime_dependent_output_items = cOutputLocation.time_dependent_output_items
-
-                    return GrassWaveRunupOutputLocation(
-                        grassRevetmentWaveRunupRayleightime_dependent_output_items
-                            .Select(tdo => tdo.IncrementDamage).ToList(),
-                        grassRevetmentWaveRunupRayleighLocationDependentOutput.Z,
-                        grassRevetmentWaveRunupRayleightime_dependent_output_items
-                            .Select(tdo => tdo.VerticalDistanceWaterLevelElevation).ToList(),
-                        grassRevetmentWaveRunupRayleightime_dependent_output_items
-                            .Select(tdo => tdo.WaveAngle).ToList(),
-                        grassRevetmentWaveRunupRayleightime_dependent_output_items
-                            .Select(tdo => tdo.WaveAngleImpact).ToList(),
-                        grassRevetmentWaveRunupRayleightime_dependent_output_items
-                            .Select(tdo => tdo.RepresentativeWaveRunup2P).ToList(),
-                        grassRevetmentWaveRunupRayleightime_dependent_output_items
-                            .Select(tdo => tdo.CumulativeOverload).ToList(),
-                        grassRevetmentWaveRunupRayleightime_dependent_output_items
-                            .Select(tdo => tdo.AverageNumberOfWaves).ToList()) """
+                return DikernelOutputParser.__create_grass_wave_runup_output_location(
+                    x_position,
+                    c_output_location.Z,
+                    moment_of_failure,
+                    damage_development,
+                    damage_increment,
+                    c_output_location.TimeDependentOutputItems,
+                )
             case NaturalStoneRevetmentLocationDependentOutput():
                 return DikernelOutputParser.__create_natural_stone_output_location(
                     x_position,
@@ -216,6 +204,34 @@ class DikernelOutputParser:
                 item.VerticalDistanceWaterLevelElevation
                 for item in time_dependent_output_items
             ),
+            list(
+                item.RepresentativeWaveRunup2P for item in time_dependent_output_items
+            ),
+            list(item.CumulativeOverload for item in time_dependent_output_items),
+            list(item.AverageNumberOfWaves for item in time_dependent_output_items),
+        )
+
+    @staticmethod
+    def __create_grass_wave_runup_output_location(
+        x_position: float,
+        z_position: float,
+        moment_of_failure: float,
+        damage_development: list[float],
+        damage_increment: list[float],
+        time_dependent_output_items,
+    ) -> GrassWaveRunupOutputLocation:
+        return GrassWaveRunupOutputLocation(
+            x_position,
+            z_position,
+            moment_of_failure,
+            damage_development,
+            damage_increment,
+            list(
+                item.VerticalDistanceWaterLevelElevation
+                for item in time_dependent_output_items
+            ),
+            list(item.WaveAngle for item in time_dependent_output_items),
+            list(item.WaveAngleImpact for item in time_dependent_output_items),
             list(
                 item.RepresentativeWaveRunup2P for item in time_dependent_output_items
             ),

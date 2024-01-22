@@ -25,17 +25,23 @@ class TimeDependentOutputQuantity(Enum):
     DamageDevelopment = "damage_development"  # All
     DamageIncrement = "damage_increment"  # All
     MaximumPeakStress = "maximum_peak_stress"  # Asphalt
-    AverageNumberOfWaves = "average_number_of_waves"  # Asphalt, GrassOvertopping
-    VerticalDistanceWaterLevelElevation = (
-        "vertical_distance_water_level_elevation"  # GrassOvertopping
+    AverageNumberOfWaves = (
+        "average_number_of_waves"  # Asphalt, GrassOvertopping, GrassWaveRunup
     )
-    RepresentativeWaveRunup2P = "representative_wave_runup_2p"  # GrassOvertopping
-    CumulativeOverload = "cumulative_overload"  # GrassOvertopping
+    VerticalDistanceWaterLevelElevation = (
+        "vertical_distance_water_level_elevation"  # GrassOvertopping, GrassWaveRunup
+    )
+    RepresentativeWaveRunup2P = (
+        "representative_wave_runup_2p"  # GrassOvertopping, GrassWaveRunup
+    )
+    CumulativeOverload = "cumulative_overload"  # GrassOvertopping, GrassWaveRunup
     LoadingRevetment = "loading_revetment"  # GrassWaveImpact, NaturalStone
     UpperLimitLoading = "upper_limit_loading"  # GrassWaveImpact, NaturalStone
     LowerLimitLoading = "lower_limit_loading"  # GrassWaveImpact, NaturalStone
-    WaveAngle = "wave_angle"  # GrassWaveImpact, NaturalStone
-    WaveAngleImpact = "wave_angle_impact"  # GrassWaveImpact, NaturalStone
+    WaveAngle = "wave_angle"  # GrassWaveImpact, NaturalStone, GrassWaveRunup
+    WaveAngleImpact = (
+        "wave_angle_impact"  # GrassWaveImpact, NaturalStone, GrassWaveRunup
+    )
     WaveHeightImpact = "wave_height_impactt"  # GrassWaveImpact
     OuterSlope = "outer_slope"  # NaturalStone
     SlopeUpperLevel = "slope_upper_level"  # NaturalStone

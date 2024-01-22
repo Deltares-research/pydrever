@@ -23,16 +23,19 @@ from dikerneloutputspecification import (
     AsphaltOutputLocationSpecification,
     NordicStoneOutputLocationSpecification,
     GrassWaveImpactOutputLocationSpecification,
+    GrassWaveRunupOutputLocationSpecification,
     GrassOvertoppingOutputLocationSpecification,
 )
 from dikernelcalculationsettings import (
+    CalculationSettings,
     AsphaltCalculationSettings,
     GrassWaveOvertoppingCalculationSettings,
     GrassWaveImpactCalculationSettings,
+    GrassWaveRunupCalculationSettings,
     NaturalStoneCalculationSettings,
     AsphaltTopLayerSettings,
     NaturalStoneTopLayerSettings,
-    GrasCoverOvertoppingTopLayerSettings,
+    GrasCoverCumulativeOverloadTopLayerSettings,
     GrassCoverWaveImpactTopLayerSettings,
 )
 from dikernelcreferences import *
@@ -173,7 +176,8 @@ class DikernelInputParser:
                                     ci
                                     for ci in settings
                                     if isinstance(ci, AsphaltCalculationSettings)
-                                )
+                                ),
+                                None,
                             )
                             if settings is not None
                             else None,
@@ -188,7 +192,8 @@ class DikernelInputParser:
                                     ci
                                     for ci in settings
                                     if isinstance(ci, NaturalStoneCalculationSettings)
-                                )
+                                ),
+                                None,
                             )
                             if settings is not None
                             else None,
@@ -206,7 +211,8 @@ class DikernelInputParser:
                                     if isinstance(
                                         ci, GrassWaveImpactCalculationSettings
                                     )
-                                )
+                                ),
+                                None,
                             )
                             if settings is not None
                             else None,
@@ -223,25 +229,29 @@ class DikernelInputParser:
                                     if isinstance(
                                         ci, GrassWaveOvertoppingCalculationSettings
                                     )
-                                )
+                                ),
+                                None,
                             )
                             if settings is not None
                             else None,
                         )
                     )
-
-                # TODO: Add runup loations
-                # GrassRevetmentWaveRunupLocationConstructionProperties constructionProperties =
-                #         CreateGrassWaveRunupConstructionProperties(
-                #             grassWaveRunupLocationData,
-                #             GetCalculationDefinition<JsonInputGrassWaveRunupCalculationData>(
-                #                 calculationDataItems, JsonInputCalculationType.GrassWaveRunup));
-
-                #     if (constructionProperties is
-                #         GrassRevetmentWaveRunupRayleighLocationConstructionProperties rayleighConstructionProperties)
-                #     {
-                #         builder.AddGrassWaveRunupRayleighLocation(rayleighConstructionProperties);
-                #     }
+                case GrassWaveRunupOutputLocationSpecification():
+                    builder.AddGrassWaveRunupRayleighLocation(
+                        DikernelInputParser.__create_grass_wave_runup_construction_properties(
+                            location,
+                            next(
+                                (
+                                    ci
+                                    for ci in settings
+                                    if isinstance(ci, GrassWaveRunupCalculationSettings)
+                                ),
+                                None,
+                            )
+                            if settings is not None
+                            else None,
+                        )
+                    )
         return builder
 
     @staticmethod
@@ -462,8 +472,10 @@ class DikernelInputParser:
             location.x_position, topLayerType
         )
 
-        topLayer = DikernelInputParser.__get_first_grass_overtopping_toplayer_of_type(
-            settings, location.top_layer_type
+        topLayer = (
+            DikernelInputParser.__get_first_grass_cumulative_overload_toplayer_of_type(
+                settings, location.top_layer_type
+            )
         )
 
         properties.InitialDamage = location.initial_damage
@@ -483,7 +495,9 @@ class DikernelInputParser:
             location.increased_load_transition_alpha_s
         )
         properties.AverageNumberOfWavesCtm = (
-            settings.factor_ctm if settings is not None else None
+            settings.average_number_of_waves_factor_ctm
+            if settings is not None
+            else None
         )
         properties.FixedNumberOfWaves = (
             settings.fixed_number_of_waves if settings is not None else None
@@ -504,6 +518,83 @@ class DikernelInputParser:
         return properties
 
     @staticmethod
+    def __create_grass_wave_runup_construction_properties(
+        location: GrassWaveRunupOutputLocationSpecification,
+        settings: GrassWaveRunupCalculationSettings,
+    ):
+        topLayerType = None
+        match location.top_layer_type:
+            case TopLayerType.GrassClosedSod:
+                topLayerType = GrassRevetmentTopLayerType.ClosedSod
+            case TopLayerType.GrassOpenSod:
+                topLayerType = GrassRevetmentTopLayerType.OpenSod
+
+        properties = GrassRevetmentWaveRunupRayleighLocationConstructionProperties(
+            location.x_position, location.outer_slope, topLayerType
+        )
+
+        top_layer = (
+            DikernelInputParser.__get_first_grass_cumulative_overload_toplayer_of_type(
+                settings, location.top_layer_type
+            )
+        )
+
+        properties.FixedNumberOfWaves = (
+            settings.fixed_number_of_waves if settings is not None else None
+        )
+        properties.FrontVelocityCu = (
+            settings.front_velocity_cu if settings is not None else None
+        )
+        properties.InitialDamage = location.initial_damage
+        properties.FailureNumber = (
+            settings.failure_number if settings is not None else None
+        )
+        properties.IncreasedLoadTransitionAlphaM = (
+            location.increased_load_transition_alpha_m
+        )
+        properties.ReducedStrengthTransitionAlphaS = (
+            location.increased_load_transition_alpha_s
+        )
+        properties.RepresentativeWaveRunup2PGammab = (
+            location.reduced_strength_transition_2p_gamma_b
+        )
+        properties.RepresentativeWaveRunup2PGammaf = (
+            location.reduced_strength_transition_2p_gamma_f
+        )
+        properties.AverageNumberOfWavesCtm = (
+            settings.average_number_of_waves_factor_ctm
+            if settings is not None
+            else None
+        )
+        properties.RepresentativeWaveRunup2PAru = (
+            (settings.representative_wave_runup_2p_aru)
+            if settings is not None
+            else None
+        )
+        properties.RepresentativeWaveRunup2PBru = (
+            (settings.representative_wave_runup_2p_bru)
+            if settings is not None
+            else None
+        )
+        properties.RepresentativeWaveRunup2PCru = (
+            (settings.representative_wave_runup_2p_cru)
+            if settings is not None
+            else None
+        )
+        properties.WaveAngleImpactAbeta = (
+            settings.wave_angle_impact_a_beta if settings is not None else None
+        )
+        properties.WaveAngleImpactBetamax = (
+            settings.wave_angle_impact_beta_max if settings is not None else None
+        )
+        properties.CriticalCumulativeOverload = (
+            top_layer.critical_cumulative_overload if top_layer is not None else None
+        )
+        properties.CriticalFrontVelocity = (
+            top_layer.critical_front_velocity if top_layer is not None else None
+        )
+
+    @staticmethod
     def __convert_to_cList(lst: list[list[float]]):
         """
         Private method to convert a list of floats (2d) to a C# equivalent.
@@ -522,7 +613,7 @@ class DikernelInputParser:
 
     @staticmethod
     def __get_first_asphalt_toplayer_of_type(
-        settings: AsphaltCalculationSettings, top_layer_type: TopLayerType
+        settings: CalculationSettings, top_layer_type: TopLayerType
     ) -> AsphaltTopLayerSettings:
         return (
             next(
@@ -539,7 +630,7 @@ class DikernelInputParser:
 
     @staticmethod
     def __get_first_natural_stone_toplayer_of_type(
-        settings: NaturalStoneCalculationSettings, top_layer_type: TopLayerType
+        settings: CalculationSettings, top_layer_type: TopLayerType
     ) -> NaturalStoneTopLayerSettings:
         return (
             next(
@@ -556,7 +647,7 @@ class DikernelInputParser:
 
     @staticmethod
     def __get_first_grass_wave_impact_toplayer_of_type(
-        settings: GrassWaveImpactCalculationSettings, top_layer_type: TopLayerType
+        settings: CalculationSettings, top_layer_type: TopLayerType
     ) -> GrassCoverWaveImpactTopLayerSettings:
         return (
             next(
@@ -572,9 +663,9 @@ class DikernelInputParser:
         )
 
     @staticmethod
-    def __get_first_grass_overtopping_toplayer_of_type(
-        settings: GrassWaveOvertoppingCalculationSettings, top_layer_type: TopLayerType
-    ) -> GrasCoverOvertoppingTopLayerSettings:
+    def __get_first_grass_cumulative_overload_toplayer_of_type(
+        settings: CalculationSettings, top_layer_type: TopLayerType
+    ) -> GrasCoverCumulativeOverloadTopLayerSettings:
         return (
             next(
                 (
