@@ -18,9 +18,8 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
+from dikerosion.data import DikernelInput, DikernelOutputLocation
 from dikerosion.dikernel.dikernelcreferences import *
-from dikerosion.data.dikernelinput import DikernelInput
-from dikerosion.data.dikerneloutput import DikernelOutputLocation
 from dikerosion.dikernel.dikernelinputparser import DikernelInputParser
 from dikerosion.dikernel.dikerneloutputparser import DikernelOutputParser
 import numpy as numpy

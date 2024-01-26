@@ -26,17 +26,15 @@ import matplotlib.pyplot as plt
 sys.path.append(os.getcwd())
 
 # region Imports
-from dikerosion.data.dikernelinput import (
+from dikerosion.data import (
     DikernelInput,
     DikeSchematization,
     HydrodynamicConditions,
-)
-from dikerosion.data.dikerneloutputspecification import (
     GrassWaveImpactOutputLocationSpecification,
+    TopLayerType,
+    TimeDependentOutputQuantity,
 )
-from dikerosion.data.toplayertypes import TopLayerType
 from dikerosion.dikernel.dikernel import Dikernel
-from dikerosion.data.quantities import TimeDependentOutputQuantity
 from dikerosion.visualization import (
     plot_damage_levels,
     plot_hydrodynamic_conditions,

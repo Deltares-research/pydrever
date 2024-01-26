@@ -18,19 +18,15 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from dikerosion.data.dikernelinput import (
+from dikerosion.data import (
     DikernelInput,
     HydrodynamicConditions,
     DikeSchematization,
-)
-from dikerosion.data.dikerneloutputspecification import (
     AsphaltOutputLocationSpecification,
     NordicStoneOutputLocationSpecification,
     GrassWaveImpactOutputLocationSpecification,
     GrassWaveRunupOutputLocationSpecification,
     GrassOvertoppingOutputLocationSpecification,
-)
-from dikerosion.data.dikernelcalculationsettings import (
     CalculationSettings,
     AsphaltCalculationSettings,
     GrassWaveOvertoppingCalculationSettings,
@@ -41,10 +37,9 @@ from dikerosion.data.dikernelcalculationsettings import (
     NaturalStoneTopLayerSettings,
     GrasCoverCumulativeOverloadTopLayerSettings,
     GrassCoverWaveImpactTopLayerSettings,
+    TopLayerType,
 )
 from dikerosion.dikernel.dikernelcreferences import *
-from dikerosion.data.toplayertypes import TopLayerType
-
 
 class DikernelInputParser:
     """

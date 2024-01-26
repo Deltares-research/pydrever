@@ -20,15 +20,15 @@
 
 import matplotlib.pyplot as plt
 import numpy as numpy
-from dikerosion.data.dikernelinput import DikernelInput
-from dikerosion.data.dikerneloutput import (
+from dikerosion.data import (
+    DikernelInput,
     DikernelOutputLocation,
     AsphaltWaveImpactOutputLocation,
     GrassOvertoppingOutputLocation,
     GrassWaveImpactOutputLocation,
     NaturalStoneOutputLocation,
+    TimeDependentOutputQuantity,
 )
-from dikerosion.data.quantities import TimeDependentOutputQuantity
 
 
 def plot_hydrodynamic_conditions(input: DikernelInput):

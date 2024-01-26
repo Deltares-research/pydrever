@@ -17,18 +17,14 @@
  All names, logos, and references to "Deltares" are registered trademarks of Stichting
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
-from dikerosion.data.dikernelcalculationsettings import CalculationSettings
-from dikerosion.data.dikernelinput import (
+from dikerosion.data import (
+    CalculationSettings,
     DikeSchematization,
     DikernelInput,
     HydrodynamicConditions,
-)
-from dikerosion.data.dikerneloutputspecification import (
     OutputLocationSpecification,
     GrassWaveImpactOutputLocationSpecification,
     TopLayerType,
-)
-from dikerosion.data.dikernelcalculationsettings import (
     GrassWaveImpactCalculationSettings,
     GrassCoverWaveImpactTopLayerSettings,
 )

@@ -19,9 +19,9 @@
 """
 
 from __future__ import annotations
+import numpy as numpy
 from dikerosion.data.dikerneloutputspecification import OutputLocationSpecification
 from dikerosion.data.dikernelcalculationsettings import CalculationSettings
-import numpy as numpy
 
 
 class DikeSchematization:
