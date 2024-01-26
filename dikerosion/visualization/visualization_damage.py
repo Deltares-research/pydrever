@@ -18,18 +18,17 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from dikernelinput import DikernelInput
-from dikerneloutput import (
+import matplotlib.pyplot as plt
+import numpy as numpy
+from dikerosion.data.dikernelinput import DikernelInput
+from dikerosion.data.dikerneloutput import (
     DikernelOutputLocation,
     AsphaltWaveImpactOutputLocation,
     GrassOvertoppingOutputLocation,
     GrassWaveImpactOutputLocation,
     NaturalStoneOutputLocation,
 )
-from visualization_animated import animate_damage_development
-from quantities import TimeDependentOutputQuantity
-import matplotlib.pyplot as plt
-import numpy as numpy
+from dikerosion.data.quantities import TimeDependentOutputQuantity
 
 
 def plot_hydrodynamic_conditions(input: DikernelInput):

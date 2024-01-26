@@ -21,8 +21,8 @@
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as numpy
-from dikernelinput import DikernelInput
-from dikerneloutput import (
+from dikerosion.data.dikernelinput import DikernelInput
+from dikerosion.data.dikerneloutput import (
     DikernelOutputLocation,
 )
 

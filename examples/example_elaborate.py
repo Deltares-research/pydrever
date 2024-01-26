@@ -22,18 +22,17 @@
 import sys
 import os
 
-sys.path.append(os.getcwd() + "\src")
-sys.path.append(os.getcwd() + "\src\dikerneldll")
+sys.path.append(os.getcwd())
 
-from dikerneloutput import CalculationMethod
-from toplayertypes import TopLayerType
+from dikerosion.data.dikerneloutput import CalculationMethod
+from dikerosion.data.toplayertypes import TopLayerType
 
-from dikernelinput import (
+from dikerosion.data.dikernelinput import (
     DikernelInput,
     DikeSchematization,
     HydrodynamicConditions,
 )
-from dikerneloutputspecification import (
+from dikerosion.data.dikerneloutputspecification import (
     OutputLocationSpecification,
     GrassWaveImpactOutputLocationSpecification,
     GrassWaveRunupOutputLocationSpecification,
@@ -41,7 +40,7 @@ from dikerneloutputspecification import (
     AsphaltOutputLocationSpecification,
     NordicStoneOutputLocationSpecification,
 )
-from dikernelcalculationsettings import (
+from dikerosion.data.dikernelcalculationsettings import (
     CalculationSettings,
     AsphaltCalculationSettings,
     NaturalStoneCalculationSettings,
@@ -53,11 +52,11 @@ from dikernelcalculationsettings import (
     GrassCoverWaveImpactTopLayerSettings,
 )
 
-from dikernel import Dikernel
+from dikerosion.dikernel.dikernel import Dikernel
 
-from quantities import TimeDependentOutputQuantity
+from dikerosion.data.quantities import TimeDependentOutputQuantity
 
-from visualization import (
+from dikerosion.visualization.visualization_damage import (
     plot_damage_levels,
     plot_hydrodynamic_conditions,
     plot_development_per_location,

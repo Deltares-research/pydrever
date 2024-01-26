@@ -18,8 +18,8 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
  """
 
-from toplayertypes import TopLayerType
-from calculationmethods import CalculationMethod
+from dikerosion.data.toplayertypes import TopLayerType
+from dikerosion.data.calculationmethods import CalculationMethod
 
 
 class TopLayerSettings:

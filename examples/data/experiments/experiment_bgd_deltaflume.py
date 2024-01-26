@@ -17,14 +17,18 @@
  All names, logos, and references to "Deltares" are registered trademarks of Stichting
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
-from dikernelcalculationsettings import CalculationSettings
-from dikernelinput import DikeSchematization, DikernelInput, HydrodynamicConditions
-from dikerneloutputspecification import (
+from dikerosion.data.dikernelcalculationsettings import CalculationSettings
+from dikerosion.data.dikernelinput import (
+    DikeSchematization,
+    DikernelInput,
+    HydrodynamicConditions,
+)
+from dikerosion.data.dikerneloutputspecification import (
     OutputLocationSpecification,
     GrassWaveImpactOutputLocationSpecification,
     TopLayerType,
 )
-from dikernelcalculationsettings import (
+from dikerosion.data.dikernelcalculationsettings import (
     GrassWaveImpactCalculationSettings,
     GrassCoverWaveImpactTopLayerSettings,
 )
@@ -108,7 +112,12 @@ class BgdDeltaFlumeExperiment(Experiment):
         closed_sod_top_layer_settings.stance_time_line_a = 1.75
         closed_sod_top_layer_settings.stance_time_line_b = -0.035
         closed_sod_top_layer_settings.stance_time_line_c = 0.25
-        return [GrassWaveImpactCalculationSettings([closed_sod_top_layer_settings])]
+        wave_impact_settings = GrassWaveImpactCalculationSettings(
+            [closed_sod_top_layer_settings]
+        )
+        wave_impact_settings.te_min = 3.6
+        wave_impact_settings.te_max = 3600000
+        return [wave_impact_settings]
 
     def generate_output_locations() -> list[OutputLocationSpecification]:
         return [

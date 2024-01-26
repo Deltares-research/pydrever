@@ -19,8 +19,12 @@
 """
 
 from __future__ import annotations
-from dikernelinput import DikernelInput, DikeSchematization, HydrodynamicConditions
-from dikernelcalculationsettings import CalculationSettings
+from dikerosion.data.dikernelinput import (
+    DikernelInput,
+    DikeSchematization,
+    HydrodynamicConditions,
+)
+from dikerosion.data.dikernelcalculationsettings import CalculationSettings
 from abc import ABC, abstractstaticmethod
 
 

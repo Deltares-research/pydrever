@@ -19,8 +19,8 @@
 """
 
 from __future__ import annotations
-from dikerneloutputspecification import OutputLocationSpecification
-from dikernelcalculationsettings import CalculationSettings
+from dikerosion.data.dikerneloutputspecification import OutputLocationSpecification
+from dikerosion.data.dikernelcalculationsettings import CalculationSettings
 import numpy as numpy
 
 

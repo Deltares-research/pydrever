@@ -18,7 +18,7 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from calculationmethods import CalculationMethod
+from dikerosion.data.calculationmethods import CalculationMethod
 
 
 class DikernelOutputLocation:

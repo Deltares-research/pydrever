@@ -19,8 +19,8 @@
 """
 
 from __future__ import annotations
-from toplayertypes import TopLayerType
-from calculationmethods import CalculationMethod
+from dikerosion.data.toplayertypes import TopLayerType
+from dikerosion.data.calculationmethods import CalculationMethod
 
 
 class OutputLocationSpecification:

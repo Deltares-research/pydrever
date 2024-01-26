@@ -22,17 +22,16 @@ import sys
 import os
 import matplotlib.pyplot as plt
 
-sys.path.append(os.getcwd() + "\src")
-sys.path.append(os.getcwd() + "\src\dikerneldll")
+sys.path.append(os.getcwd())
 
 from experiment_bgd_deltaflume import BgdDeltaFlumeExperiment
-from dikernel import Dikernel
-from visualization import (
+from dikerosion.dikernel.dikernel import Dikernel
+from dikerosion.visualization.visualization_damage import (
     plot_hydrodynamic_conditions,
     plot_damage_levels,
     plot_development_per_location,
-    TimeDependentOutputQuantity,
 )
+from dikerosion.data.quantities import TimeDependentOutputQuantity
 
 input = BgdDeltaFlumeExperiment.get_calculation_input()
 kernel = Dikernel(input)
