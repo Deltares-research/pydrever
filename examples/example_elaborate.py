@@ -24,23 +24,18 @@ import os
 
 sys.path.append(os.getcwd())
 
-from dikerosion.data.dikerneloutput import CalculationMethod
-from dikerosion.data.toplayertypes import TopLayerType
-
-from dikerosion.data.dikernelinput import (
+from dikerosion.data import (
+    CalculationMethod,
+    TopLayerType,
     DikernelInput,
     DikeSchematization,
     HydrodynamicConditions,
-)
-from dikerosion.data.dikerneloutputspecification import (
     OutputLocationSpecification,
     GrassWaveImpactOutputLocationSpecification,
     GrassWaveRunupOutputLocationSpecification,
     GrassOvertoppingOutputLocationSpecification,
     AsphaltOutputLocationSpecification,
     NordicStoneOutputLocationSpecification,
-)
-from dikerosion.data.dikernelcalculationsettings import (
     CalculationSettings,
     AsphaltCalculationSettings,
     NaturalStoneCalculationSettings,
@@ -50,16 +45,15 @@ from dikerosion.data.dikernelcalculationsettings import (
     AsphaltTopLayerSettings,
     GrasCoverCumulativeOverloadTopLayerSettings,
     GrassCoverWaveImpactTopLayerSettings,
+    TimeDependentOutputQuantity,
 )
 
-from dikerosion.dikernel.dikernel import Dikernel
+from dikerosion.dikernel import Dikernel
 
-from dikerosion.data.quantities import TimeDependentOutputQuantity
-
-from dikerosion.visualization.visualization_damage import (
+from dikerosion.visualization import (
     plot_damage_levels,
     plot_hydrodynamic_conditions,
-    plot_development_per_location,
+    #    plot_development_per_location,
     plot_development,
 )
 import matplotlib.pyplot as plt

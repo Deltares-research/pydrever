@@ -4,3 +4,5 @@ from dikerosion.visualization.visualization_damage import (
     plot_development,
     plot_hydrodynamic_conditions,
 )
+
+from dikerosion.visualization.visualization_animated import animate_damage_development

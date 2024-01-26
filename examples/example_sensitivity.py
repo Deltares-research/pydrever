@@ -29,20 +29,16 @@ import copy
 
 sys.path.append(os.getcwd())
 
-from dikerosion.data.dikernelinput import (
+from dikerosion.data import (
     DikernelInput,
     DikeSchematization,
     HydrodynamicConditions,
-)
-from dikerosion.data.dikerneloutputspecification import (
     GrassWaveImpactOutputLocationSpecification,
+    TopLayerType,
 )
-from dikerosion.data.toplayertypes import TopLayerType
-from dikerosion.dikernel.dikernel import Dikernel
-from dikerosion.visualization.visualization_damage import (
+from dikerosion.dikernel import Dikernel
+from dikerosion.visualization import (
     plot_hydrodynamic_conditions,
-)
-from dikerosion.visualization.visualization_animated import (
     animate_damage_development,
 )
 

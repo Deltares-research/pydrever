@@ -34,7 +34,7 @@ from dikerosion.data import (
     TopLayerType,
     TimeDependentOutputQuantity,
 )
-from dikerosion.dikernel.dikernel import Dikernel
+from dikerosion.dikernel import Dikernel
 from dikerosion.visualization import (
     plot_damage_levels,
     plot_hydrodynamic_conditions,
