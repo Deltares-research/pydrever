@@ -39,7 +39,8 @@ from dikerosion.data import (
     GrassCoverWaveImpactTopLayerSettings,
     TopLayerType,
 )
-from dikerosion.dikernel.dikernelcreferences import *
+from dikerosion.calculation.dikernel.dikernelcreferences import *
+
 
 class DikernelInputParser:
     """
@@ -170,32 +171,38 @@ class DikernelInputParser:
                     builder.AddAsphaltWaveImpactLocation(
                         DikernelInputParser.__create_asphalt_wave_impact_construction_properties(
                             location,
-                            next(
-                                (
-                                    ci
-                                    for ci in settings
-                                    if isinstance(ci, AsphaltCalculationSettings)
-                                ),
-                                None,
-                            )
-                            if settings is not None
-                            else None,
+                            (
+                                next(
+                                    (
+                                        ci
+                                        for ci in settings
+                                        if isinstance(ci, AsphaltCalculationSettings)
+                                    ),
+                                    None,
+                                )
+                                if settings is not None
+                                else None
+                            ),
                         )
                     )
                 case NordicStoneOutputLocationSpecification():
                     builder.AddNaturalStoneLocation(
                         DikernelInputParser.__create_natural_stone_construction_properties(
                             location,
-                            next(
-                                (
-                                    ci
-                                    for ci in settings
-                                    if isinstance(ci, NaturalStoneCalculationSettings)
-                                ),
-                                None,
-                            )
-                            if settings is not None
-                            else None,
+                            (
+                                next(
+                                    (
+                                        ci
+                                        for ci in settings
+                                        if isinstance(
+                                            ci, NaturalStoneCalculationSettings
+                                        )
+                                    ),
+                                    None,
+                                )
+                                if settings is not None
+                                else None
+                            ),
                         )
                     )
 
@@ -203,52 +210,60 @@ class DikernelInputParser:
                     builder.AddGrassWaveImpactLocation(
                         DikernelInputParser.__create_grass_wave_impact_construction_properties(
                             location,
-                            next(
-                                (
-                                    ci
-                                    for ci in settings
-                                    if isinstance(
-                                        ci, GrassWaveImpactCalculationSettings
-                                    )
-                                ),
-                                None,
-                            )
-                            if settings is not None
-                            else None,
+                            (
+                                next(
+                                    (
+                                        ci
+                                        for ci in settings
+                                        if isinstance(
+                                            ci, GrassWaveImpactCalculationSettings
+                                        )
+                                    ),
+                                    None,
+                                )
+                                if settings is not None
+                                else None
+                            ),
                         )
                     )
                 case GrassOvertoppingOutputLocationSpecification():
                     builder.AddGrassOvertoppingLocation(
                         DikernelInputParser.__create_grass_overtopping_construction_properties(
                             location,
-                            next(
-                                (
-                                    ci
-                                    for ci in settings
-                                    if isinstance(
-                                        ci, GrassWaveOvertoppingCalculationSettings
-                                    )
-                                ),
-                                None,
-                            )
-                            if settings is not None
-                            else None,
+                            (
+                                next(
+                                    (
+                                        ci
+                                        for ci in settings
+                                        if isinstance(
+                                            ci, GrassWaveOvertoppingCalculationSettings
+                                        )
+                                    ),
+                                    None,
+                                )
+                                if settings is not None
+                                else None
+                            ),
                         )
                     )
                 case GrassWaveRunupOutputLocationSpecification():
                     builder.AddGrassWaveRunupRayleighLocation(
                         DikernelInputParser.__create_grass_wave_runup_construction_properties(
                             location,
-                            next(
-                                (
-                                    ci
-                                    for ci in settings
-                                    if isinstance(ci, GrassWaveRunupCalculationSettings)
-                                ),
-                                None,
-                            )
-                            if settings is not None
-                            else None,
+                            (
+                                next(
+                                    (
+                                        ci
+                                        for ci in settings
+                                        if isinstance(
+                                            ci, GrassWaveRunupCalculationSettings
+                                        )
+                                    ),
+                                    None,
+                                )
+                                if settings is not None
+                                else None
+                            ),
                         )
                     )
         return builder
@@ -261,7 +276,7 @@ class DikernelInputParser:
         properties = AsphaltRevetmentWaveImpactLocationConstructionProperties(
             location.x_position,
             AsphaltRevetmentTopLayerType.HydraulicAsphaltConcrete,
-            location.flexural_strent,
+            location.flexural_strength,
             location.soil_elasticity,
             location.upper_layer_thickness,
             location.upper_layer_elastic_modulus,

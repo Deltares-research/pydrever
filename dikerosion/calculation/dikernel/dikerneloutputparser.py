@@ -26,7 +26,7 @@ from dikerosion.data import (
     GrassWaveRunupOutputLocation,
     NaturalStoneOutputLocation,
 )
-from dikerosion.dikernel.dikernelcreferences import *
+from dikerosion.calculation.dikernel.dikernelcreferences import *
 
 
 class DikernelOutputParser:

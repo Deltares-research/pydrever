@@ -19,9 +19,9 @@
 """
 
 from dikerosion.data import DikernelInput, DikernelOutputLocation
-from dikerosion.dikernel.dikernelcreferences import *
-from dikerosion.dikernel.dikernelinputparser import DikernelInputParser
-from dikerosion.dikernel.dikerneloutputparser import DikernelOutputParser
+from dikerosion.calculation.dikernel.dikernelcreferences import *
+from dikerosion.calculation.dikernel.dikernelinputparser import DikernelInputParser
+from dikerosion.calculation.dikernel.dikerneloutputparser import DikernelOutputParser
 import numpy as numpy
 
 
