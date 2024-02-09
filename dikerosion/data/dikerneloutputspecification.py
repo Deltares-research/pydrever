@@ -48,8 +48,8 @@ class AsphaltOutputLocationSpecification(OutputLocationSpecification):
     def __init__(
         self,
         x_position: float,
-        break_strent_asphalt: float,
-        spring_constant_soil: float,
+        flexural_strength: float,
+        soil_elasticity: float,
         upper_layer_thickness: float,
         upper_layer_stiffness_modulus: float,
     ) -> AsphaltOutputLocationSpecification:
@@ -58,8 +58,8 @@ class AsphaltOutputLocationSpecification(OutputLocationSpecification):
 
         Args:
             x_position (float): Cross-shore position of the location.
-            break_strent_asphalt (float): Break strength of the asphalt.
-            spring_constant_soil (float): Spring constant of the soil.
+            flexural_strength (float): Break strength of the asphalt.
+            soil_elasticity (float): Spring constant of the soil.
             upper_layer_thickness (float): Thickness of the asphalt upper layer.
             upper_layer_stiffness_modulus (float): Stiffness modulus of the upper layer.
 
@@ -71,8 +71,8 @@ class AsphaltOutputLocationSpecification(OutputLocationSpecification):
             CalculationMethod.AsphaltWaveImpact,
             TopLayerType.WAB,
         )
-        self.flexural_strent: float = break_strent_asphalt
-        self.soil_elasticity: float = spring_constant_soil
+        self.flexural_strength: float = flexural_strength
+        self.soil_elasticity: float = soil_elasticity
         self.upper_layer_thickness: float = upper_layer_thickness
         self.upper_layer_elastic_modulus: float = upper_layer_stiffness_modulus
         self.sub_layer_thickness: float = None

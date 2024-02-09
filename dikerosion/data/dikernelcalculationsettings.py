@@ -16,8 +16,9 @@
  
  All names, logos, and references to "Deltares" are registered trademarks of Stichting
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
- """
+"""
 
+from __future__ import annotations
 from dikerosion.data.toplayertypes import TopLayerType
 from dikerosion.data.calculationmethods import CalculationMethod
 
@@ -37,7 +38,7 @@ class AsphaltTopLayerSettings(TopLayerSettings):
     Specification for an asphalt toplayer calculation.
     """
 
-    def __init__(self):
+    def __init__(self) -> AsphaltTopLayerSettings:
         super().__init__(TopLayerType.WAB)
         self.stiffness_ratio_nu: float = None
         """The stiffness ratio nu of the asphalt top layer - instance variable."""
@@ -52,7 +53,9 @@ class GrasCoverCumulativeOverloadTopLayerSettings(TopLayerSettings):
     Specification for a grass cover cumulative overload calculations.
     """
 
-    def __init__(self, topLayerType: TopLayerType):
+    def __init__(
+        self, topLayerType: TopLayerType
+    ) -> GrasCoverCumulativeOverloadTopLayerSettings:
         super().__init__(topLayerType)
         self.critical_cumulative_overload: float = None
         """The critical cumulative overload - instance variable."""
