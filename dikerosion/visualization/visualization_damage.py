@@ -29,6 +29,7 @@ from dikerosion.data import (
     NaturalStoneOutputLocation,
     TimeDependentOutputQuantity,
 )
+import dikerosion.calculation.dikernel.inputservices as service
 
 
 def plot_hydrodynamic_conditions(input: DikernelInput):
@@ -42,7 +43,7 @@ def plot_hydrodynamic_conditions(input: DikernelInput):
     Returns:
         figure handle: The handle of the produced figure
     """
-    run_input = input.get_run_input()
+    run_input = service.get_run_input(input)
 
     fig, axs = plt.subplots(ncols=2, nrows=2)
     fig.suptitle("Hydrodynamic conditions", fontsize=16)
@@ -160,7 +161,7 @@ def plot_damage_levels(
     ax1.set(xlabel="Cross-shore position [x]", ylabel="Damage (end of storm)")
 
     if plot_development:
-        run_times = input.get_run_time_steps()
+        run_times = service.get_run_time_steps(input)
         x_positions = [loc.x_position for loc in output]
 
         values = [[None for x in range(len(run_times) - 1)] for y in range(len(output))]
@@ -241,7 +242,7 @@ def plot_development_per_location(
     """
     fig = plt.figure()
 
-    run_times = input.get_run_time_steps()
+    run_times = service.get_run_time_steps(input)
     try:
         values: list[float] = getattr(location, quantity.value)
     except:
@@ -291,7 +292,7 @@ def plot_development(
     """
     fig = plt.figure()
 
-    run_times = input.get_run_time_steps()
+    run_times = service.get_run_time_steps(input)
     x_positions = [loc.x_position for loc in locations]
 
     values = [[None for x in range(len(run_times) - 1)] for y in range(len(locations))]

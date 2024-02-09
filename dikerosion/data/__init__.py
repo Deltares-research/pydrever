@@ -56,3 +56,7 @@ from dikerosion.data.dikerneloutputspecification import (
     NordicStoneOutputLocationSpecification,
     OutputLocationSpecification,
 )
+from dikerosion.data.dikernelrevetmentzonespecification import (
+    RevetmentZoneSpecification,
+    AsphaltRevetmentZoneSpecification,
+)

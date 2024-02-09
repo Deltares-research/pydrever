@@ -22,6 +22,7 @@ from dikerosion.data import DikernelInput, DikernelOutputLocation
 from dikerosion.calculation.dikernel.dikernelcreferences import *
 from dikerosion.calculation.dikernel.dikernelinputparser import DikernelInputParser
 from dikerosion.calculation.dikernel.dikerneloutputparser import DikernelOutputParser
+import dikerosion.calculation.dikernel.inputservices as service
 import numpy as numpy
 
 
@@ -57,7 +58,7 @@ class Dikernel:
             return False
 
         self.__c_input, messages = DikernelInputParser.parse_dikernel_input(
-            self.input.get_run_input()
+            service.get_run_input(self.input)
         )
         if self.__c_input is None:
             self.validation_messages.append("Could not parse input.")

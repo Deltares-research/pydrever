@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 sys.path.append(os.getcwd())
 
 from experiment_bgd_deltaflume import BgdDeltaFlumeExperiment
-from dikerosion.dikernel import Dikernel
+from dikerosion.calculation import Dikernel
 from dikerosion.visualization import (
     plot_hydrodynamic_conditions,
     plot_damage_levels,
