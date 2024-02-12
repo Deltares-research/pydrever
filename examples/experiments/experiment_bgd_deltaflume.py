@@ -17,13 +17,14 @@
  All names, logos, and references to "Deltares" are registered trademarks of Stichting
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
+
 from dikerosion.data import (
     CalculationSettings,
     DikeSchematization,
     DikernelInput,
     HydrodynamicConditions,
     OutputLocationSpecification,
-    GrassWaveImpactOutputLocationSpecification,
+    GrassWaveImpactLayerSpecification,
     TopLayerType,
     GrassWaveImpactCalculationSettings,
     GrassCoverWaveImpactTopLayerSettings,
@@ -116,65 +117,11 @@ class BgdDeltaFlumeExperiment(Experiment):
         return [wave_impact_settings]
 
     def generate_output_locations() -> list[OutputLocationSpecification]:
+        x_positions = numpy.linspace(171.0, 190.0, 20)
         return [
-            GrassWaveImpactOutputLocationSpecification(
-                171.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                172.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                173.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                174.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                175.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                176.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                177.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                178.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                179.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                180.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                181.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                182.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                183.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                184.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                185.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                186.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                187.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                188.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                189.0, TopLayerType.GrassClosedSod
-            ),
-            GrassWaveImpactOutputLocationSpecification(
-                190.0, TopLayerType.GrassClosedSod
-            ),
+            OutputLocationSpecification(
+                x_position,
+                GrassWaveImpactLayerSpecification(TopLayerType.GrassClosedSod),
+            )
+            for x_position in x_positions
         ]

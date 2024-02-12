@@ -60,10 +60,16 @@ def test_asphalt_zone_creates_locations():
     )
     locations = zone.get_output_locations(None)
     assert len(locations) == 6
-    assert locations[0].flexural_strength == flexural_strength
-    assert locations[0].soil_elasticity == soil_elasticity
-    assert locations[0].upper_layer_thickness == upper_layer_thickness
-    assert locations[0].upper_layer_elastic_modulus == elastic_modulus
+    assert locations[0].top_layer_specification.flexural_strength == flexural_strength
+    assert locations[0].top_layer_specification.soil_elasticity == soil_elasticity
+    assert (
+        locations[0].top_layer_specification.upper_layer_thickness
+        == upper_layer_thickness
+    )
+    assert (
+        locations[0].top_layer_specification.upper_layer_elastic_modulus
+        == elastic_modulus
+    )
 
 
 def test_horizontal_zone_definition_creates_coordinates_with_dx():

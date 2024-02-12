@@ -22,11 +22,11 @@ from dikerosion.data import (
     DikernelInput,
     HydrodynamicConditions,
     DikeSchematization,
-    AsphaltOutputLocationSpecification,
-    NordicStoneOutputLocationSpecification,
-    GrassWaveImpactOutputLocationSpecification,
-    GrassWaveRunupOutputLocationSpecification,
-    GrassOvertoppingOutputLocationSpecification,
+    AsphaltLayerSpecification,
+    NordicStoneLayerSpecification,
+    GrassWaveImpactLayerSpecification,
+    GrassWaveRunupLayerSpecification,
+    GrassOvertoppingLayerSpecification,
     CalculationSettings,
     AsphaltCalculationSettings,
     GrassWaveOvertoppingCalculationSettings,
@@ -166,11 +166,12 @@ class DikernelInputParser:
         settings = input.settings
 
         for location in locations:
-            match location:
-                case AsphaltOutputLocationSpecification():
+            match location.top_layer_specification:
+                case AsphaltLayerSpecification():
                     builder.AddAsphaltWaveImpactLocation(
                         DikernelInputParser.__create_asphalt_wave_impact_construction_properties(
-                            location,
+                            location.x_position,
+                            location.top_layer_specification,
                             (
                                 next(
                                     (
@@ -185,10 +186,11 @@ class DikernelInputParser:
                             ),
                         )
                     )
-                case NordicStoneOutputLocationSpecification():
+                case NordicStoneLayerSpecification():
                     builder.AddNaturalStoneLocation(
                         DikernelInputParser.__create_natural_stone_construction_properties(
-                            location,
+                            location.x_position,
+                            location.top_layer_specification,
                             (
                                 next(
                                     (
@@ -206,10 +208,11 @@ class DikernelInputParser:
                         )
                     )
 
-                case GrassWaveImpactOutputLocationSpecification():
+                case GrassWaveImpactLayerSpecification():
                     builder.AddGrassWaveImpactLocation(
                         DikernelInputParser.__create_grass_wave_impact_construction_properties(
-                            location,
+                            location.x_position,
+                            location.top_layer_specification,
                             (
                                 next(
                                     (
@@ -226,10 +229,11 @@ class DikernelInputParser:
                             ),
                         )
                     )
-                case GrassOvertoppingOutputLocationSpecification():
+                case GrassOvertoppingLayerSpecification():
                     builder.AddGrassOvertoppingLocation(
                         DikernelInputParser.__create_grass_overtopping_construction_properties(
-                            location,
+                            location.x_position,
+                            location.top_layer_specification,
                             (
                                 next(
                                     (
@@ -246,10 +250,11 @@ class DikernelInputParser:
                             ),
                         )
                     )
-                case GrassWaveRunupOutputLocationSpecification():
+                case GrassWaveRunupLayerSpecification():
                     builder.AddGrassWaveRunupRayleighLocation(
                         DikernelInputParser.__create_grass_wave_runup_construction_properties(
-                            location,
+                            location.x_position,
+                            location.top_layer_specification,
                             (
                                 next(
                                     (
@@ -270,31 +275,32 @@ class DikernelInputParser:
 
     @staticmethod
     def __create_asphalt_wave_impact_construction_properties(
-        location: AsphaltOutputLocationSpecification,
+        x_position: float,
+        layer: AsphaltLayerSpecification,
         settings: AsphaltCalculationSettings,
     ):
         properties = AsphaltRevetmentWaveImpactLocationConstructionProperties(
-            location.x_position,
+            x_position,
             AsphaltRevetmentTopLayerType.HydraulicAsphaltConcrete,
-            location.flexural_strength,
-            location.soil_elasticity,
-            location.upper_layer_thickness,
-            location.upper_layer_elastic_modulus,
+            layer.flexural_strength,
+            layer.soil_elasticity,
+            layer.upper_layer_thickness,
+            layer.upper_layer_elastic_modulus,
         )
 
         top_layer = DikernelInputParser.__get_first_asphalt_toplayer_of_type(
-            settings, location.top_layer_type
+            settings, layer.top_layer_type
         )
 
-        properties.InitialDamage = location.initial_damage
+        properties.InitialDamage = layer.initial_damage
         properties.FailureNumber = (
             settings.failure_number if settings is not None else None
         )
         properties.DensityOfWater = (
             settings.density_of_water if settings is not None else None
         )
-        properties.ThicknessSubLayer = location.sub_layer_thickness
-        properties.ElasticModulusSubLayer = location.sub_layer_elastic_modulus
+        properties.ThicknessSubLayer = layer.sub_layer_thickness
+        properties.ElasticModulusSubLayer = layer.sub_layer_elastic_modulus
         properties.AverageNumberOfWavesCtm = (
             settings.factor_ctm if settings is not None else None
         )
@@ -330,21 +336,22 @@ class DikernelInputParser:
 
     @staticmethod
     def __create_natural_stone_construction_properties(
-        location: NordicStoneOutputLocationSpecification,
+        x_position: float,
+        layer: NordicStoneLayerSpecification,
         settings: NaturalStoneCalculationSettings,
     ):
         properties = NaturalStoneRevetmentLocationConstructionProperties(
-            location.x_position,
+            x_position,
             NaturalStoneRevetmentTopLayerType.NordicStone,
-            location.top_layer_thickness,
-            location.relative_density,
+            layer.top_layer_thickness,
+            layer.relative_density,
         )
 
         top_layer = DikernelInputParser.__get_first_natural_stone_toplayer_of_type(
-            settings, location.top_layer_type
+            settings, layer.top_layer_type
         )
 
-        properties.InitialDamage = location.initial_damage
+        properties.InitialDamage = layer.initial_damage
         properties.FailureNumber = (
             settings.failure_number if settings is not None else None
         )
@@ -417,23 +424,24 @@ class DikernelInputParser:
 
     @staticmethod
     def __create_grass_wave_impact_construction_properties(
-        location: GrassWaveImpactOutputLocationSpecification,
+        x_position: float,
+        layer: GrassWaveImpactLayerSpecification,
         settings: GrassWaveImpactCalculationSettings,
     ):
         top_layer_type = (
             GrassRevetmentTopLayerType.ClosedSod
-            if location.top_layer_type == TopLayerType.GrassClosedSod
+            if layer.top_layer_type == TopLayerType.GrassClosedSod
             else GrassRevetmentTopLayerType.OpenSod
         )
         properties = GrassRevetmentWaveImpactLocationConstructionProperties(
-            location.x_position, top_layer_type
+            x_position, top_layer_type
         )
 
         topLayer = DikernelInputParser.__get_first_grass_wave_impact_toplayer_of_type(
-            settings, location.top_layer_type
+            settings, layer.top_layer_type
         )
 
-        properties.InitialDamage = location.initial_damage
+        properties.InitialDamage = layer.initial_damage
         properties.FailureNumber = (
             settings.failure_number if settings is not None else None
         )
@@ -472,27 +480,28 @@ class DikernelInputParser:
 
     @staticmethod
     def __create_grass_overtopping_construction_properties(
-        location: GrassOvertoppingOutputLocationSpecification,
+        x_position: float,
+        layer: GrassOvertoppingLayerSpecification,
         settings: GrassWaveOvertoppingCalculationSettings,
     ):
         topLayerType = None
-        match location.top_layer_type:
+        match layer.top_layer_type:
             case TopLayerType.GrassClosedSod:
                 topLayerType = GrassRevetmentTopLayerType.ClosedSod
             case TopLayerType.GrassOpenSod:
                 topLayerType = GrassRevetmentTopLayerType.OpenSod
 
         properties = GrassRevetmentOvertoppingLocationConstructionProperties(
-            location.x_position, topLayerType
+            x_position, topLayerType
         )
 
         topLayer = (
             DikernelInputParser.__get_first_grass_cumulative_overload_toplayer_of_type(
-                settings, location.top_layer_type
+                settings, layer.top_layer_type
             )
         )
 
-        properties.InitialDamage = location.initial_damage
+        properties.InitialDamage = layer.initial_damage
         properties.FailureNumber = (
             settings.failure_number if settings is not None else None
         )
@@ -503,10 +512,10 @@ class DikernelInputParser:
             topLayer.critical_front_velocity if topLayer is not None else None
         )
         properties.IncreasedLoadTransitionAlphaM = (
-            location.increased_load_transition_alpha_m
+            layer.increased_load_transition_alpha_m
         )
         properties.ReducedStrengthTransitionAlphaS = (
-            location.increased_load_transition_alpha_s
+            layer.increased_load_transition_alpha_s
         )
         properties.AverageNumberOfWavesCtm = (
             settings.average_number_of_waves_factor_ctm
@@ -533,23 +542,24 @@ class DikernelInputParser:
 
     @staticmethod
     def __create_grass_wave_runup_construction_properties(
-        location: GrassWaveRunupOutputLocationSpecification,
+        x_position: float,
+        layer: GrassWaveRunupLayerSpecification,
         settings: GrassWaveRunupCalculationSettings,
     ):
         topLayerType = None
-        match location.top_layer_type:
+        match layer.top_layer_type:
             case TopLayerType.GrassClosedSod:
                 topLayerType = GrassRevetmentTopLayerType.ClosedSod
             case TopLayerType.GrassOpenSod:
                 topLayerType = GrassRevetmentTopLayerType.OpenSod
 
         properties = GrassRevetmentWaveRunupRayleighLocationConstructionProperties(
-            location.x_position, location.outer_slope, topLayerType
+            x_position, layer.outer_slope, topLayerType
         )
 
         top_layer = (
             DikernelInputParser.__get_first_grass_cumulative_overload_toplayer_of_type(
-                settings, location.top_layer_type
+                settings, layer.top_layer_type
             )
         )
 
@@ -559,21 +569,21 @@ class DikernelInputParser:
         properties.FrontVelocityCu = (
             settings.front_velocity_cu if settings is not None else None
         )
-        properties.InitialDamage = location.initial_damage
+        properties.InitialDamage = layer.initial_damage
         properties.FailureNumber = (
             settings.failure_number if settings is not None else None
         )
         properties.IncreasedLoadTransitionAlphaM = (
-            location.increased_load_transition_alpha_m
+            layer.increased_load_transition_alpha_m
         )
         properties.ReducedStrengthTransitionAlphaS = (
-            location.increased_load_transition_alpha_s
+            layer.increased_load_transition_alpha_s
         )
         properties.RepresentativeWaveRunup2PGammab = (
-            location.reduced_strength_transition_2p_gamma_b
+            layer.reduced_strength_transition_2p_gamma_b
         )
         properties.RepresentativeWaveRunup2PGammaf = (
-            location.reduced_strength_transition_2p_gamma_f
+            layer.reduced_strength_transition_2p_gamma_f
         )
         properties.AverageNumberOfWavesCtm = (
             settings.average_number_of_waves_factor_ctm

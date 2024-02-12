@@ -49,12 +49,13 @@ from dikerosion.data.dikerneloutput import (
     NaturalStoneOutputLocation,
 )
 from dikerosion.data.dikerneloutputspecification import (
-    AsphaltOutputLocationSpecification,
-    GrassOvertoppingOutputLocationSpecification,
-    GrassWaveImpactOutputLocationSpecification,
-    GrassWaveRunupOutputLocationSpecification,
-    NordicStoneOutputLocationSpecification,
     OutputLocationSpecification,
+    TopLayerSpecification,
+    AsphaltLayerSpecification,
+    GrassOvertoppingLayerSpecification,
+    GrassWaveImpactLayerSpecification,
+    GrassWaveRunupLayerSpecification,
+    NordicStoneLayerSpecification,
 )
 from dikerosion.data.dikernelrevetmentzonespecification import (
     RevetmentZoneSpecification,

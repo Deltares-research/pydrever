@@ -24,7 +24,7 @@ from dikerosion.data.calculationmethods import CalculationMethod
 from dikerosion.data.dikernelinput import DikeSchematization
 from dikerosion.data.dikerneloutputspecification import (
     OutputLocationSpecification,
-    AsphaltOutputLocationSpecification,
+    AsphaltLayerSpecification,
 )
 from abc import ABC, abstractmethod
 import numpy as numpy
@@ -157,18 +157,17 @@ class AsphaltRevetmentZoneSpecification(RevetmentZoneSpecification):
 
     def get_output_locations(
         self, dike_schematization: DikeSchematization
-    ) -> list[AsphaltOutputLocationSpecification]:
-        locations = []
+    ) -> list[OutputLocationSpecification]:
         x_output_locations = self.zone_definition.get_x_coordinates(dike_schematization)
-        for x_output_location in x_output_locations:
-            locations.append(
-                AsphaltOutputLocationSpecification(
-                    x_output_location,
+        return [
+            OutputLocationSpecification(
+                x_location,
+                AsphaltLayerSpecification(
                     self.flexural_strength,
                     self.soil_elasticity,
                     self.upper_layer_thickness,
                     self.upper_layer_elastic_modulus,
-                )
+                ),
             )
-
-        return locations
+            for x_location in x_output_locations
+        ]

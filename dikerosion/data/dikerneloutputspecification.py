@@ -23,6 +23,24 @@ from dikerosion.data.toplayertypes import TopLayerType
 from dikerosion.data.calculationmethods import CalculationMethod
 
 
+class TopLayerSpecification:
+    """
+    Base class to specify the toplayer characteristics and desired calculations.
+    """
+
+    def __init__(
+        self,
+        calculation_method: CalculationMethod,
+        type: TopLayerType,
+    ) -> TopLayerSpecification:
+        self.calculation_method: CalculationMethod = calculation_method
+        """[CalculationMethod] The calculation method - instance variable"""
+        self.top_layer_type: TopLayerType = type
+        """[TopLayerType] The type of toplayer at this location - instance variable"""
+        self.initial_damage: float = None
+        """[float] The type of toplayer at this location - instance variable"""
+
+
 class OutputLocationSpecification:
     """
     Base class to specify the desired calculations and output.
@@ -31,43 +49,35 @@ class OutputLocationSpecification:
     def __init__(
         self,
         x_position: float,
-        calculation_method: CalculationMethod,
-        top_layer_type: TopLayerType,
+        top_layer_specification: TopLayerSpecification,
     ) -> OutputLocationSpecification:
         self.x_position: float = x_position
         """[float] The cross-shore position of the required calculation and output - instance variable"""
-        self.calculation_method: CalculationMethod = calculation_method
-        """[CalculationMethod] The calculation method - instance variable"""
-        self.top_layer_type: TopLayerType = top_layer_type
-        """[TopLayerType] The type of toplayer at this location - instance variable"""
-        self.initial_damage: float = None
-        """[float] The type of toplayer at this location - instance variable"""
+        self.top_layer_specification = top_layer_specification
+        """[TopLayerSpecification] The specification of the toplayer and desired calculation"""
 
 
-class AsphaltOutputLocationSpecification(OutputLocationSpecification):
+class AsphaltLayerSpecification(TopLayerSpecification):
     def __init__(
         self,
-        x_position: float,
         flexural_strength: float,
         soil_elasticity: float,
         upper_layer_thickness: float,
         upper_layer_stiffness_modulus: float,
-    ) -> AsphaltOutputLocationSpecification:
+    ) -> AsphaltLayerSpecification:
         """
         Creates an instance of the class to specify a calculation for an asphalt revetment.
 
         Args:
-            x_position (float): Cross-shore position of the location.
             flexural_strength (float): Break strength of the asphalt.
             soil_elasticity (float): Spring constant of the soil.
             upper_layer_thickness (float): Thickness of the asphalt upper layer.
             upper_layer_stiffness_modulus (float): Stiffness modulus of the upper layer.
 
         Returns:
-            AsphaltOutputLocationSpecification: An instance of the output specification class for asphalt revetments.
+            AsphaltLayerSpecification: An instance of the output specification class for asphalt revetments.
         """
         super().__init__(
-            x_position,
             CalculationMethod.AsphaltWaveImpact,
             TopLayerType.WAB,
         )
@@ -82,26 +92,23 @@ class AsphaltOutputLocationSpecification(OutputLocationSpecification):
         self.top_layer_stiffness_relation_nu: float = None
 
 
-class NordicStoneOutputLocationSpecification(OutputLocationSpecification):
+class NordicStoneLayerSpecification(TopLayerSpecification):
     def __init__(
         self,
-        x_position: float,
         top_layer_thickness: float,
         relative_density: float,
-    ) -> NordicStoneOutputLocationSpecification:
+    ) -> NordicStoneLayerSpecification:
         """
         Creates an instance of the class to specify a calculation for revetment made of nordic stones.
 
         Args:
-            x_position (float): Cross-shore position of the location.
             top_layer_thickness (float): Thickness of the stone top layer.
             relative_density (float): Relative density of the stones.
 
         Returns:
-            NordicStoneOutputLocationSpecification: An instance of the output specification class for nordic stones.
+            NordicStoneLayerSpecification: An instance of the output specification class for nordic stones.
         """
         super().__init__(
-            x_position,
             CalculationMethod.NaturalStone,
             TopLayerType.NordicStone,
         )
@@ -109,41 +116,38 @@ class NordicStoneOutputLocationSpecification(OutputLocationSpecification):
         self.relative_density: float = relative_density
 
 
-class GrassWaveImpactOutputLocationSpecification(OutputLocationSpecification):
+class GrassWaveImpactLayerSpecification(TopLayerSpecification):
     def __init__(
-        self, x_position: float, top_layer_type: TopLayerType
-    ) -> GrassWaveImpactOutputLocationSpecification:
+        self,
+        top_layer_type: TopLayerType,
+    ) -> GrassWaveImpactLayerSpecification:
         """
         Creates an instance of the class to specify a calculation for a grass cover revetment wave impact calculation.
 
         Args:
-            x_position (float): Cross-shore position of the location.
             top_layer_type (TopLayerType): Type of the toplayer.
 
         Returns:
-            GrassWaveImpactOutputLocationSpecification: An instance of the output specification class for a grass cover wave impact calculation.
+            GrassWaveImpactLayerSpecification: An instance of the output specification class for a grass cover wave impact calculation.
         """
-        super().__init__(x_position, CalculationMethod.GrassWaveImpact, top_layer_type)
+        super().__init__(CalculationMethod.GrassWaveImpact, top_layer_type)
 
 
-class GrassOvertoppingOutputLocationSpecification(OutputLocationSpecification):
+class GrassOvertoppingLayerSpecification(TopLayerSpecification):
     def __init__(
         self,
-        x_position: float,
         top_layer_type: TopLayerType,
-    ) -> GrassOvertoppingOutputLocationSpecification:
+    ) -> GrassOvertoppingLayerSpecification:
         """
         Creates an instance of the class to specify a calculation for a grass overtopping calculation.
 
         Args:
-            x_position (float): Cross-shore position of the location.
             top_layer_type (TopLayerType): Type of the toplayer.
 
         Returns:
-            GrassOvertoppingOutputLocationSpecification: An instance of the output specification class for a grass overtopping calculation.
+            GrassOvertoppingLayerSpecification: An instance of the output specification class for a grass overtopping calculation.
         """
         super().__init__(
-            x_position,
             CalculationMethod.GrassWaveOvertopping,
             top_layer_type,
         )
@@ -151,11 +155,21 @@ class GrassOvertoppingOutputLocationSpecification(OutputLocationSpecification):
         self.increased_load_transition_alpha_s: float = None
 
 
-class GrassWaveRunupOutputLocationSpecification(OutputLocationSpecification):
+class GrassWaveRunupLayerSpecification(TopLayerSpecification):
     def __init__(
-        self, x_position: float, outer_slope: float, top_layer_type: TopLayerType
-    ) -> OutputLocationSpecification:
-        super().__init__(x_position, CalculationMethod.GrassWaveRunup, top_layer_type)
+        self, outer_slope: float, top_layer_type: TopLayerType
+    ) -> GrassWaveRunupLayerSpecification:
+        """
+        Creates an instance of the class to specify a calculation for a grass runup calculation.
+
+        Args:
+            outer_slope (float): Outer slope.
+            top_layer_type (TopLayerType): Type of the toplayer
+
+        Returns:
+            GrassWaveRunupLayerSpecification: An instance of the output specification class for a grass runup calculation.
+        """
+        super().__init__(CalculationMethod.GrassWaveRunup, top_layer_type)
 
         self.outer_slope = outer_slope
         self.increased_load_transition_alpha_m: float = None
