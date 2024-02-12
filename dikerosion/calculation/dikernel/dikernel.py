@@ -88,9 +88,10 @@ class Dikernel:
 
             self.__c_output = calculator.Result
 
-            x_positions = list(
-                location.x_position for location in self.input.output_locations
-            )
+            x_positions = [
+                l.x_position
+                for l in service.get_output_locations_from_input(self.input)
+            ]
             self.output = DikernelOutputParser.parse_dikernel_output(
                 self.__c_output.Data, x_positions
             )
@@ -140,7 +141,12 @@ class Dikernel:
                 "Dike orientation must be specified as a number between 0 and 360 degrees."
             )
             result = False
-        if self.input.output_locations is None or len(self.input.output_locations) < 1:
+        if (
+            self.input.output_locations is None or len(self.input.output_locations) < 1
+        ) and (
+            self.input.output_revetment_zones is None
+            or len(self.input.output_revetment_zones) < 1
+        ):
             self.validation_messages.append(
                 "At least one outputlocation needs to be specified."
             )

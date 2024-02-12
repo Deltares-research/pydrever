@@ -58,6 +58,7 @@ def get_run_input(input: DikernelInput) -> DikernelInput:
     )
     run_input = DikernelInput(run_hydrodynamics, input.dike_schematization)
     run_input.output_locations = copy.deepcopy(input.output_locations)
+    run_input.output_revetment_zones = copy.deepcopy(input.output_revetment_zones)
     run_input.settings = copy.deepcopy(input.settings)
     return run_input
 
@@ -114,4 +115,4 @@ def get_output_locations_from_input(
         for zone in input.output_revetment_zones:
             locations = locations + zone.get_output_locations(input.dike_schematization)
 
-    return locations
+    return sorted(locations, key=lambda l: l.x_position)
