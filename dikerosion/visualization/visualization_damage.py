@@ -227,7 +227,7 @@ def plot_damage_levels(
 
 def plot_development_per_location(
     location: DikernelOutputLocation,
-    quantity: TimeDependentOutputQuantity,  # TODO: Maybe plot multiple quantities?
+    quantity: TimeDependentOutputQuantity,
     input: DikernelInput,
 ):
     """
