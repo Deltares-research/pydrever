@@ -18,8 +18,9 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from dikerosion.data import AsphaltRevetmentZoneSpecification, DikeSchematization
+from dikerosion.data import AsphaltLayerSpecification, DikeSchematization
 from dikerosion.data.dikernelrevetmentzonespecification import (
+    RevetmentZoneSpecification,
     HorizontalRevetmentZoneDefinition,
     VerticalRevetmentZoneDefinition,
 )
@@ -31,18 +32,24 @@ def test_asphalt_zone():
     soil_elasticity = 2.0
     upper_layer_thickness = 33.0
     elastic_modulus = 4.0
-    zone_definition = HorizontalRevetmentZoneDefinition(1.0, 6.0, 2.0)
-    zone = AsphaltRevetmentZoneSpecification(
-        zone_definition,
+    x_min = 1.0
+    x_max = 6.0
+    dx_max = 2.0
+    zone_definition = HorizontalRevetmentZoneDefinition(x_min, x_max, dx_max)
+    top_layer = AsphaltLayerSpecification(
         flexural_strength,
         soil_elasticity,
         upper_layer_thickness,
         elastic_modulus,
     )
-    assert zone.flexural_strength == flexural_strength
-    assert zone.soil_elasticity == soil_elasticity
-    assert zone.upper_layer_thickness == upper_layer_thickness
-    assert zone.upper_layer_elastic_modulus == elastic_modulus
+    zone = RevetmentZoneSpecification(zone_definition, top_layer)
+    assert zone.top_layer_specification.flexural_strength == flexural_strength
+    assert zone.top_layer_specification.soil_elasticity == soil_elasticity
+    assert zone.top_layer_specification.upper_layer_thickness == upper_layer_thickness
+    assert zone.top_layer_specification.upper_layer_elastic_modulus == elastic_modulus
+    assert zone.zone_definition.x_min == x_min
+    assert zone.zone_definition.x_max == x_max
+    assert zone.zone_definition.dx_max == dx_max
 
 
 def test_asphalt_zone_creates_locations():
@@ -50,14 +57,17 @@ def test_asphalt_zone_creates_locations():
     soil_elasticity = 2.0
     upper_layer_thickness = 33.0
     elastic_modulus = 4.0
-    zone_definition = HorizontalRevetmentZoneDefinition(1.0, 6.0, nx=6)
-    zone = AsphaltRevetmentZoneSpecification(
-        zone_definition,
+    x_min = 1.0
+    x_max = 6.0
+    nx = 6
+    zone_definition = HorizontalRevetmentZoneDefinition(x_min, x_max, nx=nx)
+    top_layer = AsphaltLayerSpecification(
         flexural_strength,
         soil_elasticity,
         upper_layer_thickness,
         elastic_modulus,
     )
+    zone = RevetmentZoneSpecification(zone_definition, top_layer)
     locations = zone.get_output_locations(None)
     assert len(locations) == 6
     assert locations[0].top_layer_specification.flexural_strength == flexural_strength

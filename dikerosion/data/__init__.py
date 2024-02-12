@@ -59,5 +59,5 @@ from dikerosion.data.dikerneloutputspecification import (
 )
 from dikerosion.data.dikernelrevetmentzonespecification import (
     RevetmentZoneSpecification,
-    AsphaltRevetmentZoneSpecification,
+    RevetmentZoneSpecification,
 )

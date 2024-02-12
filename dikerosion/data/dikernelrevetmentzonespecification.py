@@ -19,12 +19,10 @@
 """
 
 from __future__ import annotations
-from dikerosion.data.toplayertypes import TopLayerType
-from dikerosion.data.calculationmethods import CalculationMethod
 from dikerosion.data.dikernelinput import DikeSchematization
 from dikerosion.data.dikerneloutputspecification import (
     OutputLocationSpecification,
-    AsphaltLayerSpecification,
+    TopLayerSpecification,
 )
 from abc import ABC, abstractmethod
 import numpy as numpy
@@ -113,47 +111,14 @@ class VerticalRevetmentZoneDefinition(RevetmentZoneDefinition):
         return x_output_coordinates
 
 
-class RevetmentZoneSpecification(ABC):
+class RevetmentZoneSpecification:
     def __init__(
         self,
         zone_definition: RevetmentZoneDefinition,
-        calculation_method: CalculationMethod,
-        top_layer_type: TopLayerType,
+        top_layer_specification: TopLayerSpecification,
     ) -> RevetmentZoneSpecification:
-        self.calculation_method = calculation_method
-        self.top_layer_type = top_layer_type
+        self.top_layer_specification = top_layer_specification
         self.zone_definition = zone_definition
-
-    @abstractmethod
-    def get_output_locations(
-        self, dike_schematization: DikeSchematization
-    ) -> list[OutputLocationSpecification]:
-        return None
-
-
-class AsphaltRevetmentZoneSpecification(RevetmentZoneSpecification):
-    def __init__(
-        self,
-        zone_definition: RevetmentZoneDefinition,
-        flexural_strength_asphalt: float,
-        spring_constant_soil: float,
-        upper_layer_thickness: float,
-        upper_layer_stiffness_modulus: float,
-    ) -> AsphaltRevetmentZoneSpecification:
-        super().__init__(
-            zone_definition,
-            CalculationMethod.AsphaltWaveImpact,
-            TopLayerType.WAB,
-        )
-        self.flexural_strength: float = flexural_strength_asphalt
-        self.soil_elasticity: float = spring_constant_soil
-        self.upper_layer_thickness: float = upper_layer_thickness
-        self.upper_layer_elastic_modulus: float = upper_layer_stiffness_modulus
-        self.sub_layer_thickness: float = None
-        self.sub_layer_elastic_modulus: float = None
-        self.fatigue_alpha: float = None
-        self.fatigue_beta: float = None
-        self.top_layer_stiffness_relation_nu: float = None
 
     def get_output_locations(
         self, dike_schematization: DikeSchematization
@@ -162,12 +127,7 @@ class AsphaltRevetmentZoneSpecification(RevetmentZoneSpecification):
         return [
             OutputLocationSpecification(
                 x_location,
-                AsphaltLayerSpecification(
-                    self.flexural_strength,
-                    self.soil_elasticity,
-                    self.upper_layer_thickness,
-                    self.upper_layer_elastic_modulus,
-                ),
+                self.top_layer_specification,
             )
             for x_location in x_output_locations
         ]
