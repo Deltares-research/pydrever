@@ -20,7 +20,10 @@
 
 from __future__ import annotations
 import numpy as numpy
-from dikerosion.data.dikerneloutputspecification import OutputLocationSpecification
+from dikerosion.data.dikerneloutputspecification import (
+    OutputLocationSpecification,
+    TopLayerSpecification,
+)
 from dikerosion.data.dikernelcalculationsettings import CalculationSettings
 
 
@@ -126,3 +129,21 @@ class DikernelInput:
         self.output_time_steps: list[float] = None
         """Optional list of desired output time steps. This will add output times to the calculation - instance variable."""
         # Results are not filtered based on this list (cumulative values such as the damage increment in the results would not make sense anymore).
+
+    def add_output_location(
+        self, x_location: float, top_layer_specification: TopLayerSpecification
+    ):
+        """
+        Adds the specified output location to the list of output locations.
+
+        Args:
+            x_location (float): Cross-shore coordinate of the desired output location.
+            top_layer_specification (TopLayerSpecification): Specification of the top layer.
+        """
+        new_output_location = OutputLocationSpecification(
+            x_location, top_layer_specification
+        )
+        if self.output_locations is None:
+            self.output_locations = [new_output_location]
+        else:
+            self.output_locations.append(new_output_location)
