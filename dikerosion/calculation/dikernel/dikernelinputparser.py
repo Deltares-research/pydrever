@@ -39,6 +39,7 @@ from dikerosion.data import (
     GrassCoverWaveImpactTopLayerSettings,
     TopLayerType,
 )
+from dikerosion.calculation.dikernel import inputservices as service
 from dikerosion.calculation.dikernel.dikernelcreferences import *
 
 
@@ -162,7 +163,7 @@ class DikernelInputParser:
     def __add_output_location_specifications_to_builder(
         builder: CalculationInputBuilder, input: DikernelInput
     ) -> CalculationInputBuilder:
-        locations = input.output_locations
+        locations = service.get_output_locations_from_input(input)
         settings = input.settings
 
         for location in locations:

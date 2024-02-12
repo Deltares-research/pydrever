@@ -59,5 +59,7 @@ from dikerosion.data.dikerneloutputspecification import (
 )
 from dikerosion.data.dikernelrevetmentzonespecification import (
     RevetmentZoneSpecification,
-    RevetmentZoneSpecification,
+    HorizontalRevetmentZoneDefinition,
+    VerticalRevetmentZoneDefinition,
+    TopLayerSpecification,
 )

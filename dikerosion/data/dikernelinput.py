@@ -24,41 +24,11 @@ from dikerosion.data.dikerneloutputspecification import (
     OutputLocationSpecification,
     TopLayerSpecification,
 )
+from dikerosion.data.dikeschematization import DikeSchematization
+from dikerosion.data.dikernelrevetmentzonespecification import (
+    RevetmentZoneSpecification,
+)
 from dikerosion.data.dikernelcalculationsettings import CalculationSettings
-
-
-class DikeSchematization:
-    def __init__(
-        self,
-        dike_orientation: float,
-        x_positions: list[float],
-        z_positions: list[float],
-        roughnesses: list[float],
-        x_outer_toe: float,
-        x_outer_crest: float,
-    ):
-        """
-        Contructor for a schematization of a dike profile.
-
-        Args:
-            dikeOrientation (float): orientation of the dike normal
-            x_positions (list[float]): list of cross-shore positions
-            z_positions (list[float]): list of dike heights in meter correspoinding to the cross-shore positions. zPositions needs to be of the samen length as xPositions
-            roughnesses (list[float]): a list of roughness coefficients per dike segment. By definition the length of this list is equal to the length of xPositions - 1
-            x_outer_toe (float): The cross-shore location of the toe of the dike at the outer slope
-            x_outer_crest (float): The cross-shore location of the (outer) crest of the dike
-        """
-        self.dike_orientation: float = dike_orientation
-        """Orientation of the dike normal relative to North - instance variable."""
-        self.x_positions: list[float] = x_positions
-        self.z_positions: list[float] = z_positions
-        self.roughnesses: list[float] = roughnesses
-        self.outer_toe: float = x_outer_toe
-        self.outer_crest: float = x_outer_crest
-        self.crest_outer_berm: float = None
-        self.notch_outer_berm: float = None
-        self.inner_crest: float = None
-        self.inner_toe: float = None
 
 
 class HydrodynamicConditions:
@@ -120,6 +90,8 @@ class DikernelInput:
         """Schematization of the dike cross-shore profile and characteristic points - instance variable."""
         self.output_locations: list[OutputLocationSpecification] = None
         """Specification of the desired calculation and output locations - instance variable."""
+        self.output_revetment_zones: list[RevetmentZoneSpecification] = None
+        """Specification of the desired calculation and output locations by zone - instance variable."""
         self.settings: list[CalculationSettings] = None
         """List of calculation settings that are used for the various types of revetments - instance variable."""
         self.start_time: float = None
