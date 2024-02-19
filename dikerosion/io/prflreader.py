@@ -54,6 +54,8 @@ class PrflFileReaderException(Exception):
 def read(file_name: str) -> DikeSchematization:
     """
     This method reads the content of a *.prfl file into a dike schematization object.
+    The reader automatically assigns the highest profile point as the outer crest and the
+    most seaward point (point with the smallest local x-coordinate) as te outer toe.
 
     Args:
         file_name (str): The full path to the prfl file.
