@@ -148,7 +148,6 @@ def __add_hydrodynamics_to_builder(
     return builder
 
 
-@staticmethod
 def __add_output_location_specifications_to_builder(
     builder: CalculationInputBuilder, input: DikernelInput
 ) -> CalculationInputBuilder:
@@ -205,7 +204,6 @@ def __add_output_location_specifications_to_builder(
     return builder
 
 
-@staticmethod
 def __create_asphalt_wave_impact_construction_properties(
     x_position: float,
     layer: AsphaltLayerSpecification,
@@ -257,7 +255,6 @@ def __create_asphalt_wave_impact_construction_properties(
     return properties
 
 
-@staticmethod
 def __create_natural_stone_construction_properties(
     x_position: float,
     layer: NordicStoneLayerSpecification,
@@ -344,7 +341,6 @@ def __create_natural_stone_construction_properties(
     return properties
 
 
-@staticmethod
 def __create_grass_wave_impact_construction_properties(
     x_position: float,
     layer: GrassWaveImpactLayerSpecification,
@@ -399,7 +395,6 @@ def __create_grass_wave_impact_construction_properties(
     return properties
 
 
-@staticmethod
 def __create_grass_overtopping_construction_properties(
     x_position: float,
     layer: GrassOvertoppingLayerSpecification,
@@ -450,7 +445,6 @@ def __create_grass_overtopping_construction_properties(
     return properties
 
 
-@staticmethod
 def __create_grass_wave_runup_construction_properties(
     x_position: float,
     layer: GrassWaveRunupLayerSpecification,
