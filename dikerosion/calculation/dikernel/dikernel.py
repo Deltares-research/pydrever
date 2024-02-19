@@ -21,7 +21,7 @@
 from dikerosion.data import DikernelInput, DikernelOutputLocation
 from dikerosion.calculation.dikernel.dikernelcreferences import *
 import dikerosion.calculation.dikernel.dikernelinputparser as input_parser
-from dikerosion.calculation.dikernel.dikerneloutputparser import DikernelOutputParser
+import dikerosion.calculation.dikernel.dikerneloutputparser as output_parser
 import dikerosion.calculation.dikernel.inputservices as service
 import numpy as numpy
 
@@ -90,9 +90,7 @@ class Dikernel:
                 l.x_position
                 for l in service.get_output_locations_from_input(self.input)
             ]
-            self.output = DikernelOutputParser.parse_dikernel_output(
-                self.__c_output.Data, x_positions
-            )
+            self.output = output_parser.parse(self.__c_output.Data, x_positions)
 
             return (
                 self.__c_output is not None
