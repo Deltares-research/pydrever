@@ -24,6 +24,7 @@ from dikerosion.data.dikerneloutputspecification import (
     OutputLocationSpecification,
     TopLayerSpecification,
 )
+from dikerosion.data.dikernelcalculationsettings import CalculationSettings
 from abc import ABC, abstractmethod
 import numpy as numpy
 
@@ -116,9 +117,11 @@ class RevetmentZoneSpecification:
         self,
         zone_definition: RevetmentZoneDefinition,
         top_layer_specification: TopLayerSpecification,
+        calculation_settings: CalculationSettings = None,
     ) -> RevetmentZoneSpecification:
         self.top_layer_specification = top_layer_specification
         self.zone_definition = zone_definition
+        self.calculation_settings = calculation_settings
 
     def get_output_locations(
         self, dike_schematization: DikeSchematization
@@ -126,8 +129,7 @@ class RevetmentZoneSpecification:
         x_output_locations = self.zone_definition.get_x_coordinates(dike_schematization)
         return [
             OutputLocationSpecification(
-                x_location,
-                self.top_layer_specification,
+                x_location, self.top_layer_specification, self.calculation_settings
             )
             for x_location in x_output_locations
         ]

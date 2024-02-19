@@ -21,6 +21,7 @@
 from __future__ import annotations
 from dikerosion.data.toplayertypes import TopLayerType
 from dikerosion.data.calculationmethods import CalculationMethod
+from dikerosion.data.dikernelcalculationsettings import CalculationSettings
 
 
 class TopLayerSpecification:
@@ -50,11 +51,14 @@ class OutputLocationSpecification:
         self,
         x_position: float,
         top_layer_specification: TopLayerSpecification,
+        calculation_settings: CalculationSettings = None,
     ) -> OutputLocationSpecification:
         self.x_position: float = x_position
         """[float] The cross-shore position of the required calculation and output - instance variable"""
         self.top_layer_specification = top_layer_specification
         """[TopLayerSpecification] The specification of the toplayer and desired calculation"""
+        self.calculation_settings = calculation_settings
+        """[CalculationSettings] The calculation settings that need to be used for this calculation"""
 
 
 class AsphaltLayerSpecification(TopLayerSpecification):
