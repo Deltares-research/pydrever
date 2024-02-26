@@ -1,7 +1,3 @@
-# Example Package
+# DREVER
 
-This is a simple example package. You can use
-[GitHub-flavored Markdown](https://guides.github.com/features/mastering-markdown/)
-to write your content.
-
-TODO: Change the content of this file to something meaningful.
+This is a python toolbox that allows scientists and engineers to work with data that is associated to the failure of reventments on dikes or levees and erosion of the core of these dikes as a consequence of that failure. The toolbox exposes the DiKErnel to its users.
