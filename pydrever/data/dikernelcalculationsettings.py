@@ -19,8 +19,8 @@
 """
 
 from __future__ import annotations
-from dikerosion.data.toplayertypes import TopLayerType
-from dikerosion.data.calculationmethods import CalculationMethod
+from pydrever.data.toplayertypes import TopLayerType
+from pydrever.data.calculationmethods import CalculationMethod
 
 
 class TopLayerSettings:

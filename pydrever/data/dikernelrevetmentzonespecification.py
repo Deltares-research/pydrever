@@ -19,12 +19,12 @@
 """
 
 from __future__ import annotations
-from dikerosion.data.dikernelinput import DikeSchematization
-from dikerosion.data.dikerneloutputspecification import (
+from pydrever.data.dikernelinput import DikeSchematization
+from pydrever.data.dikerneloutputspecification import (
     OutputLocationSpecification,
     TopLayerSpecification,
 )
-from dikerosion.data.dikernelcalculationsettings import CalculationSettings
+from pydrever.data.dikernelcalculationsettings import CalculationSettings
 from abc import ABC, abstractmethod
 import numpy as numpy
 

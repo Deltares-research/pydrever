@@ -25,13 +25,13 @@ import matplotlib.pyplot as plt
 sys.path.append(os.getcwd())
 
 from experiment_bgd_deltaflume import BgdDeltaFlumeExperiment
-from dikerosion.calculation import Dikernel
-from dikerosion.visualization import (
+from pydrever.calculation import Dikernel
+from pydrever.visualization import (
     plot_hydrodynamic_conditions,
     plot_damage_levels,
     plot_development_per_location,
 )
-from dikerosion.data import TimeDependentOutputQuantity
+from pydrever.data import TimeDependentOutputQuantity
 
 input = BgdDeltaFlumeExperiment.get_calculation_input()
 kernel = Dikernel(input)

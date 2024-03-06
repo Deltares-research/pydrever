@@ -18,7 +18,7 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from dikerosion.data import (
+from pydrever.data import (
     DikernelOutputLocation,
     AsphaltWaveImpactOutputLocation,
     GrassOvertoppingOutputLocation,
@@ -26,7 +26,7 @@ from dikerosion.data import (
     GrassWaveRunupOutputLocation,
     NaturalStoneOutputLocation,
 )
-from dikerosion.calculation.dikernel.dikernelcreferences import *
+from pydrever.calculation.dikernel.dikernelcreferences import *
 
 
 def parse(

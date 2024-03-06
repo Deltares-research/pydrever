@@ -18,11 +18,11 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from dikerosion.data import DikernelInput, DikernelOutputLocation
-from dikerosion.calculation.dikernel.dikernelcreferences import *
-import dikerosion.calculation.dikernel.dikernelinputparser as input_parser
-import dikerosion.calculation.dikernel.dikerneloutputparser as output_parser
-import dikerosion.calculation.dikernel.inputservices as service
+from pydrever.data import DikernelInput, DikernelOutputLocation
+from pydrever.calculation.dikernel.dikernelcreferences import *
+import pydrever.calculation.dikernel.dikernelinputparser as input_parser
+import pydrever.calculation.dikernel.dikerneloutputparser as output_parser
+import pydrever.calculation.dikernel.inputservices as service
 import numpy as numpy
 
 

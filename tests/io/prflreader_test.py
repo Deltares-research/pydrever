@@ -19,7 +19,7 @@
 """
 
 import os
-from dikerosion.io import prflreader
+from pydrever.io import prflreader
 from pathlib import Path
 import pytest
 

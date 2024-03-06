@@ -18,7 +18,7 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from dikerosion.data import (
+from pydrever.data import (
     CalculationSettings,
     DikeSchematization,
     DikernelInput,

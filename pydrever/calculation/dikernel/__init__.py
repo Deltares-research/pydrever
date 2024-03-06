@@ -18,4 +18,5 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from dikerosion.calculation.dikernel.dikernel import Dikernel
+from pydrever.calculation.dikernel.dikernelcreferences import *
+from pydrever.calculation.dikernel.dikernel import Dikernel

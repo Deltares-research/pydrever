@@ -20,7 +20,7 @@
 
 import matplotlib.pyplot as plt
 import numpy as numpy
-from dikerosion.data import (
+from pydrever.data import (
     DikernelInput,
     DikernelOutputLocation,
     AsphaltWaveImpactOutputLocation,
@@ -29,7 +29,7 @@ from dikerosion.data import (
     NaturalStoneOutputLocation,
     TimeDependentOutputQuantity,
 )
-import dikerosion.calculation.dikernel.inputservices as service
+import pydrever.calculation.dikernel.inputservices as service
 
 
 def plot_hydrodynamic_conditions(input: DikernelInput):

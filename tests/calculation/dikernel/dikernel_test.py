@@ -18,8 +18,8 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from dikerosion.calculation import Dikernel
-import dikerosion.data as data
+from pydrever.calculation import Dikernel
+import pydrever.data as data
 
 
 def test_perform_basic_calculation():

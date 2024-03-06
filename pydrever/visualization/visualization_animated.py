@@ -21,7 +21,7 @@
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as numpy
-from dikerosion.data import DikernelInput, DikernelOutputLocation
+from pydrever.data import DikernelInput, DikernelOutputLocation
 
 
 def animate_damage_development(

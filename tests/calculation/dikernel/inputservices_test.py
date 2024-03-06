@@ -18,8 +18,8 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from dikerosion.calculation.dikernel import inputservices as service
-from dikerosion.data import (
+from pydrever.calculation.dikernel import inputservices as service
+from pydrever.data import (
     DikernelInput,
     RevetmentZoneSpecification,
     HorizontalRevetmentZoneDefinition,

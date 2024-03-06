@@ -18,7 +18,7 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from dikerosion.data import DikeSchematization
+from pydrever.data import DikeSchematization
 import os.path
 from enum import Enum
 

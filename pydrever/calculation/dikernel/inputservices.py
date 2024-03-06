@@ -19,12 +19,12 @@
 """
 
 import copy, numpy
-from dikerosion.data import (
+from pydrever.data import (
     DikernelInput,
     HydrodynamicConditions,
     OutputLocationSpecification,
 )
-import dikerosion.calculation.hydrodynamicsinterpolation as interpolation
+import pydrever.calculation.hydrodynamicsinterpolation as interpolation
 
 
 def get_run_input(input: DikernelInput) -> DikernelInput:

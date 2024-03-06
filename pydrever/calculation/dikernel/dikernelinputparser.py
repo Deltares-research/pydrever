@@ -18,7 +18,7 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from dikerosion.data import (
+from pydrever.data import (
     DikernelInput,
     HydrodynamicConditions,
     DikeSchematization,
@@ -40,8 +40,8 @@ from dikerosion.data import (
     GrassCoverWaveImpactTopLayerSettings,
     TopLayerType,
 )
-from dikerosion.calculation.dikernel import inputservices as service
-from dikerosion.calculation.dikernel.dikernelcreferences import *
+from pydrever.calculation.dikernel import inputservices as service
+from pydrever.calculation.dikernel.dikernelcreferences import *
 
 
 def parse(input: DikernelInput) -> ICalculationInput:

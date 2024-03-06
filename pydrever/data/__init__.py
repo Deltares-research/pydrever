@@ -18,11 +18,11 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from dikerosion.data.calculationmethods import CalculationMethod
-from dikerosion.data.toplayertypes import TopLayerType
-from dikerosion.data.quantities import TimeDependentOutputQuantity
+from pydrever.data.calculationmethods import CalculationMethod
+from pydrever.data.toplayertypes import TopLayerType
+from pydrever.data.quantities import TimeDependentOutputQuantity
 
-from dikerosion.data.dikernelcalculationsettings import (
+from pydrever.data.dikernelcalculationsettings import (
     AsphaltCalculationSettings,
     AsphaltTopLayerSettings,
     CalculationSettings,
@@ -35,12 +35,12 @@ from dikerosion.data.dikernelcalculationsettings import (
     NaturalStoneTopLayerSettings,
     TopLayerSettings,
 )
-from dikerosion.data.dikernelinput import (
+from pydrever.data.dikernelinput import (
     DikernelInput,
     DikeSchematization,
     HydrodynamicConditions,
 )
-from dikerosion.data.dikerneloutput import (
+from pydrever.data.dikerneloutput import (
     DikernelOutputLocation,
     AsphaltWaveImpactOutputLocation,
     GrassOvertoppingOutputLocation,
@@ -48,7 +48,7 @@ from dikerosion.data.dikerneloutput import (
     GrassWaveRunupOutputLocation,
     NaturalStoneOutputLocation,
 )
-from dikerosion.data.dikerneloutputspecification import (
+from pydrever.data.dikerneloutputspecification import (
     OutputLocationSpecification,
     TopLayerSpecification,
     AsphaltLayerSpecification,
@@ -57,7 +57,7 @@ from dikerosion.data.dikerneloutputspecification import (
     GrassWaveRunupLayerSpecification,
     NordicStoneLayerSpecification,
 )
-from dikerosion.data.dikernelrevetmentzonespecification import (
+from pydrever.data.dikernelrevetmentzonespecification import (
     RevetmentZoneSpecification,
     HorizontalRevetmentZoneDefinition,
     VerticalRevetmentZoneDefinition,

@@ -19,7 +19,7 @@
 """
 
 from __future__ import annotations
-from dikerosion.data import (
+from pydrever.data import (
     DikernelInput,
     DikeSchematization,
     HydrodynamicConditions,
