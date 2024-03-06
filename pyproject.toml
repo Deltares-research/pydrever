@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "dikerosion"
+name = "pydrever"
 version = "24.1.1"
 authors = [
   { name="Pieter van Geer", email="pieter.vangeer@deltares.com" },
@@ -29,5 +29,3 @@ Issues = "https://github.com/pvangeer/dikerosion-python/issues"
 
 [tool.setuptools.package-data]
 "*" = ["*.dll"]
-#[tool.setuptools]
-#packages = [".\src\dikernel", ".\src\visualization", ".\src\data"]
