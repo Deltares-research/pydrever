@@ -110,9 +110,9 @@ class CalculationSettings:
     """
 
     def __init__(
-        self, calculationMethod: CalculationMethod, topLayers: list[TopLayerSettings]
+        self, calculation_method: CalculationMethod, topLayers: list[TopLayerSettings]
     ):
-        self.CalculationMethod: CalculationMethod = calculationMethod
+        self.calculation_method: CalculationMethod = calculation_method
         """The calculation method this setting is for - instance variable."""
         self.failure_number: float = None
         """The damage number that is considered to indicate failure of the revetment - instance variable."""
@@ -158,7 +158,7 @@ class GrassWaveOvertoppingCalculationSettings(CalculationSettings):
         """The front velocity constant c of the overtopping wave - instance variable."""
         self.average_number_of_waves_factor_ctm: float = None
         """The ctm factor - instance variable."""
-        self.DikeHeight: float = None
+        self.dike_height: float = None
         """The height of the dike used in the overtopping calculation - instance variable."""
 
 

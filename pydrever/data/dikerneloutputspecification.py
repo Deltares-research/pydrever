@@ -55,9 +55,9 @@ class OutputLocationSpecification:
     ) -> OutputLocationSpecification:
         self.x_position: float = x_position
         """[float] The cross-shore position of the required calculation and output - instance variable"""
-        self.top_layer_specification = top_layer_specification
+        self.top_layer_specification: TopLayerSpecification = top_layer_specification
         """[TopLayerSpecification] The specification of the toplayer and desired calculation"""
-        self.calculation_settings = calculation_settings
+        self.calculation_settings: CalculationSettings = calculation_settings
         """[CalculationSettings] The calculation settings that need to be used for this calculation"""
 
 

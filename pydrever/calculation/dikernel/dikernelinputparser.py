@@ -440,7 +440,7 @@ def __create_grass_overtopping_construction_properties(
     properties.AccelerationAlphaAForInnerSlope = (
         settings.acceleration_alpha_a_for_inner_slope if settings is not None else None
     )
-    properties.DikeHeight = settings.DikeHeight if settings is not None else None
+    properties.DikeHeight = settings.dike_height if settings is not None else None
 
     return properties
 
