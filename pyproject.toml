@@ -9,7 +9,7 @@ authors = [
   { name="Pieter van Geer", email="pieter.vangeer@deltares.com" },
 ]
 description = "Tools that facilitate analysis of dike safety against flooding."
-# readme = "README.md"
+readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -24,8 +24,12 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/pvangeer/dikerosion-python"
-Issues = "https://github.com/pvangeer/dikerosion-python/issues"
+Homepage = "https://github.com/Deltares-research/dike-revetment-erosion-pytools.git"
+Issues = "https://github.com/Deltares-research/dike-revetment-erosion-pytools/issues"
 
 [tool.setuptools.package-data]
 "*" = ["*.dll"]
+
+[tools.setuptools]
+packages = ["pydrever"]
+package-dir = {"" = "pydrever"}
