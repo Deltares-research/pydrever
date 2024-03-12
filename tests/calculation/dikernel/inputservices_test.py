@@ -18,7 +18,7 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from pydrever.calculation.dikernel import inputservices as input_service
+from pydrever.calculation._dikernel import _inputservices as _input_service
 from pydrever.data import (
     DikernelInput,
     RevetmentZoneSpecification,
@@ -36,7 +36,7 @@ def test_get_output_locations_returns_output_locations():
         OutputLocationSpecification(1.0, "test"),
     ]
 
-    locations = input_service.get_output_locations_from_input(input)
+    locations = _input_service.get_output_locations_from_input(input)
     assert len(locations) == 2
     assert locations[0].x_position == 0.0
     assert locations[1].x_position == 1.0
@@ -52,7 +52,7 @@ def test_get_output_locations_returns_output_locations_from_zone():
         )
     ]
 
-    locations = input_service.get_output_locations_from_input(input)
+    locations = _input_service.get_output_locations_from_input(input)
     assert len(locations) == 6
     assert locations[0].x_position == 0.0
     assert locations[1].x_position == 1.0
@@ -73,7 +73,7 @@ def test_get_output_locations_returns_output_locations_from_zones():
         ),
     ]
 
-    locations = input_service.get_output_locations_from_input(input)
+    locations = _input_service.get_output_locations_from_input(input)
     assert len(locations) == 6
     assert locations[0].x_position == 0.0
     assert locations[1].x_position == 1.0
@@ -101,7 +101,7 @@ def test_get_output_locations_returns_combined_output_locations():
         ),
     ]
 
-    locations = input_service.get_output_locations_from_input(input)
+    locations = _input_service.get_output_locations_from_input(input)
 
     assert len(locations) == 8
     assert locations[0].x_position == 0.0

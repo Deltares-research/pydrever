@@ -18,5 +18,5 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from .dikernelcreferences import *
-from .dikernel import Dikernel
+from ._dikernelcreferences import *
+from ._dikernel import Dikernel

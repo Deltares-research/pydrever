@@ -37,7 +37,7 @@ from pydrever.data import (
     GrassWaveRunupLayerSpecification,
 )
 
-import pydrever.calculation.dikernel.dikernelinputparser as input_parser
+import pydrever.calculation._dikernel._dikernelinputparser as _input_parser
 
 import pytest
 
@@ -175,7 +175,7 @@ def test_get_natural_stone_calculation_settings_from_location(
     natural_stone_settings,
     natural_stone_location_with_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_natural_stone_calculation_settings(
+    return_settings = _input_parser.__get_natural_stone_calculation_settings(
         natural_stone_location_with_settings, [asphalt_settings, natural_stone_settings]
     )
     assert (
@@ -189,7 +189,7 @@ def test_get_natural_stone_calculation_settings_from_general_settings(
     natural_stone_settings,
     natural_stone_location_without_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_natural_stone_calculation_settings(
+    return_settings = _input_parser.__get_natural_stone_calculation_settings(
         natural_stone_location_without_settings,
         [asphalt_settings, natural_stone_settings],
     )
@@ -202,7 +202,7 @@ def test_get_natural_stone_calculation_settings_no_settings_in_general_list(
     asphalt_settings,
     natural_stone_location_without_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_natural_stone_calculation_settings(
+    return_settings = _input_parser.__get_natural_stone_calculation_settings(
         natural_stone_location_without_settings, [asphalt_settings]
     )
     assert return_settings is None
@@ -211,7 +211,7 @@ def test_get_natural_stone_calculation_settings_no_settings_in_general_list(
 def test_get_natural_stone_calculation_settings_nop_general_settings(
     natural_stone_location_without_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_natural_stone_calculation_settings(
+    return_settings = _input_parser.__get_natural_stone_calculation_settings(
         natural_stone_location_without_settings, None
     )
     assert return_settings is None
@@ -226,7 +226,7 @@ def test_get_asphalt_calculation_settings_from_location(
     natural_stone_settings,
     asphalt_location_with_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_asphalt_calculation_settings(
+    return_settings = _input_parser.__get_asphalt_calculation_settings(
         asphalt_location_with_settings, [asphalt_settings, natural_stone_settings]
     )
     assert (
@@ -240,7 +240,7 @@ def test_get_asphalt_calculation_settings_from_general_settings(
     natural_stone_settings,
     asphalt_location_without_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_asphalt_calculation_settings(
+    return_settings = _input_parser.__get_asphalt_calculation_settings(
         asphalt_location_without_settings,
         [asphalt_settings, natural_stone_settings],
     )
@@ -251,7 +251,7 @@ def test_get_asphalt_calculation_settings_no_settings_in_general_list(
     natural_stone_settings,
     asphalt_location_without_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_asphalt_calculation_settings(
+    return_settings = _input_parser.__get_asphalt_calculation_settings(
         asphalt_location_without_settings, [natural_stone_settings]
     )
     assert return_settings is None
@@ -260,7 +260,7 @@ def test_get_asphalt_calculation_settings_no_settings_in_general_list(
 def test_get_asphalt_calculation_settings_no_general_settings(
     asphalt_location_without_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_asphalt_calculation_settings(
+    return_settings = _input_parser.__get_asphalt_calculation_settings(
         asphalt_location_without_settings, None
     )
     assert return_settings is None
@@ -275,7 +275,7 @@ def test_get_grass_wave_impact_calculation_settings_from_location(
     natural_stone_settings,
     grass_wave_impact_location_with_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_grass_wave_impact_calculation_settings(
+    return_settings = _input_parser.__get_grass_wave_impact_calculation_settings(
         grass_wave_impact_location_with_settings,
         [asphalt_settings, natural_stone_settings],
     )
@@ -290,7 +290,7 @@ def test_get_grass_wave_impact_calculation_settings_from_general_settings(
     grass_wave_impact_settings,
     grass_wave_impact_location_without_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_grass_wave_impact_calculation_settings(
+    return_settings = _input_parser.__get_grass_wave_impact_calculation_settings(
         grass_wave_impact_location_without_settings,
         [asphalt_settings, grass_wave_impact_settings],
     )
@@ -304,7 +304,7 @@ def test_get_grass_wave_impact_calculation_settings_no_settings_in_general_list(
     natural_stone_settings,
     grass_wave_impact_location_without_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_grass_wave_impact_calculation_settings(
+    return_settings = _input_parser.__get_grass_wave_impact_calculation_settings(
         grass_wave_impact_location_without_settings, [natural_stone_settings]
     )
     assert return_settings is None
@@ -313,7 +313,7 @@ def test_get_grass_wave_impact_calculation_settings_no_settings_in_general_list(
 def test_get_grass_wave_impact_calculation_settings_no_general_settings(
     grass_wave_impact_location_without_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_grass_wave_impact_calculation_settings(
+    return_settings = _input_parser.__get_grass_wave_impact_calculation_settings(
         grass_wave_impact_location_without_settings, None
     )
     assert return_settings is None
@@ -328,7 +328,7 @@ def test_get_grass_wave_overtopping_calculation_settings_from_location(
     natural_stone_settings,
     grass_wave_overtopping_location_with_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_grass_wave_overtopping_calculation_settings(
+    return_settings = _input_parser.__get_grass_wave_overtopping_calculation_settings(
         grass_wave_overtopping_location_with_settings,
         [asphalt_settings, natural_stone_settings],
     )
@@ -343,7 +343,7 @@ def test_get_grass_wave_overtopping_calculation_settings_from_general_settings(
     grass_wave_overtopping_settings,
     grass_wave_overtopping_location_without_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_grass_wave_overtopping_calculation_settings(
+    return_settings = _input_parser.__get_grass_wave_overtopping_calculation_settings(
         grass_wave_overtopping_location_without_settings,
         [asphalt_settings, grass_wave_overtopping_settings],
     )
@@ -357,7 +357,7 @@ def test_get_grass_wave_overtopping_calculation_settings_no_settings_in_general_
     natural_stone_settings,
     grass_wave_overtopping_location_without_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_grass_wave_overtopping_calculation_settings(
+    return_settings = _input_parser.__get_grass_wave_overtopping_calculation_settings(
         grass_wave_overtopping_location_without_settings, [natural_stone_settings]
     )
     assert return_settings is None
@@ -366,7 +366,7 @@ def test_get_grass_wave_overtopping_calculation_settings_no_settings_in_general_
 def test_get_grass_wave_overtopping_calculation_settings_no_general_settings(
     grass_wave_overtopping_location_without_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_grass_wave_overtopping_calculation_settings(
+    return_settings = _input_parser.__get_grass_wave_overtopping_calculation_settings(
         grass_wave_overtopping_location_without_settings, None
     )
     assert return_settings is None
@@ -381,7 +381,7 @@ def test_get_grass_wave_runup_calculation_settings_from_location(
     natural_stone_settings,
     grass_wave_runup_location_with_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_grass_wave_runup_calculation_settings(
+    return_settings = _input_parser.__get_grass_wave_runup_calculation_settings(
         grass_wave_runup_location_with_settings,
         [asphalt_settings, natural_stone_settings],
     )
@@ -396,7 +396,7 @@ def test_get_grass_wave_runup_calculation_settings_from_general_settings(
     grass_wave_runup_settings,
     grass_wave_runup_location_without_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_grass_wave_runup_calculation_settings(
+    return_settings = _input_parser.__get_grass_wave_runup_calculation_settings(
         grass_wave_runup_location_without_settings,
         [asphalt_settings, grass_wave_runup_settings],
     )
@@ -410,7 +410,7 @@ def test_get_grass_wave_runup_calculation_settings_no_settings_in_general_list(
     natural_stone_settings,
     grass_wave_runup_location_without_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_grass_wave_runup_calculation_settings(
+    return_settings = _input_parser.__get_grass_wave_runup_calculation_settings(
         grass_wave_runup_location_without_settings, [natural_stone_settings]
     )
     assert return_settings is None
@@ -419,7 +419,7 @@ def test_get_grass_wave_runup_calculation_settings_no_settings_in_general_list(
 def test_get_grass_wave_runup_calculation_settings_no_general_settings(
     grass_wave_runup_location_without_settings: OutputLocationSpecification,
 ):
-    return_settings = input_parser.__get_grass_wave_runup_calculation_settings(
+    return_settings = _input_parser.__get_grass_wave_runup_calculation_settings(
         grass_wave_runup_location_without_settings, None
     )
     assert return_settings is None

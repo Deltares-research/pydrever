@@ -18,5 +18,4 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from pydrever.calculation.dikernel.dikernel import Dikernel
-import hydrodynamicsinterpolation as hydrodynamicsinterpolation
+import pydrever.calculation._hydrodynamicsinterpolation as hydrodynamicsinterpolation

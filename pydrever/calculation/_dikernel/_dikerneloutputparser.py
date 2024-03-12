@@ -26,7 +26,7 @@ from pydrever.data import (
     GrassWaveRunupOutputLocation,
     NaturalStoneOutputLocation,
 )
-from pydrever.calculation.dikernel.dikernelcreferences import *
+from pydrever.calculation._dikernel._dikernelcreferences import *
 
 
 def parse(

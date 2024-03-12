@@ -24,7 +24,7 @@ from pydrever.data import (
     HydrodynamicConditions,
     OutputLocationSpecification,
 )
-import pydrever.calculation.hydrodynamicsinterpolation as interpolation
+import pydrever.calculation._hydrodynamicsinterpolation as interpolation
 
 
 def get_run_input(input: DikernelInput) -> DikernelInput:

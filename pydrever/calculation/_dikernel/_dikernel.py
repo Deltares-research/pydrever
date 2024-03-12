@@ -19,10 +19,10 @@
 """
 
 from pydrever.data import DikernelInput, DikernelOutputLocation
-from pydrever.calculation.dikernel.dikernelcreferences import *
-import pydrever.calculation.dikernel.dikernelinputparser as input_parser
-import pydrever.calculation.dikernel.dikerneloutputparser as output_parser
-import pydrever.calculation.dikernel.inputservices as service
+from pydrever.calculation._dikernel._dikernelcreferences import *
+import pydrever.calculation._dikernel._dikernelinputparser as _input_parser
+import pydrever.calculation._dikernel._dikerneloutputparser as _output_parser
+import pydrever.calculation._dikernel._inputservices as _input_services
 import numpy as numpy
 
 
@@ -57,7 +57,9 @@ class Dikernel:
         if not self.__validate_input_data():
             return False
 
-        self.__c_input, messages = input_parser.parse(service.get_run_input(self.input))
+        self.__c_input, messages = _input_parser.parse(
+            _input_services.get_run_input(self.input)
+        )
         if self.__c_input is None:
             self.validation_messages.append("Could not parse input.")
             for m in messages:
@@ -88,9 +90,9 @@ class Dikernel:
 
             x_positions = [
                 l.x_position
-                for l in service.get_output_locations_from_input(self.input)
+                for l in _input_services.get_output_locations_from_input(self.input)
             ]
-            self.output = output_parser.parse(self.__c_output.Data, x_positions)
+            self.output = _output_parser.parse(self.__c_output.Data, x_positions)
 
             return (
                 self.__c_output is not None
