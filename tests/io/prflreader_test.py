@@ -19,7 +19,7 @@
 """
 
 import os
-from pydrever.io import _prflreader
+from pydrever.io import prflreader
 import pytest
 
 
@@ -35,7 +35,7 @@ import pytest
 )
 def test_read_correct_file(test_data_dir, file_name):
     filename = os.path.join(test_data_dir, file_name)
-    schematization = _prflreader.read(filename)
+    schematization = prflreader.read(filename)
     assert schematization is not None
     if file_name == "profiel001.prfl":
         assert len(schematization.x_positions) == 2
