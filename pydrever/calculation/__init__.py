@@ -19,3 +19,4 @@
 """
 
 from pydrever.calculation.dikernel.dikernel import Dikernel
+import hydrodynamicsinterpolation as hydrodynamicsinterpolation

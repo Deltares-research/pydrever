@@ -40,7 +40,7 @@ from pydrever.data import (
     GrassCoverWaveImpactTopLayerSettings,
     TopLayerType,
 )
-from pydrever.calculation.dikernel import inputservices as service
+from pydrever.calculation.dikernel import inputservices as input_service
 from pydrever.calculation.dikernel.dikernelcreferences import *
 
 
@@ -151,7 +151,7 @@ def __add_hydrodynamics_to_builder(
 def __add_output_location_specifications_to_builder(
     builder: CalculationInputBuilder, input: DikernelInput
 ) -> CalculationInputBuilder:
-    locations = service.get_output_locations_from_input(input)
+    locations = input_service.get_output_locations_from_input(input)
     settings = input.settings
 
     for location in locations:

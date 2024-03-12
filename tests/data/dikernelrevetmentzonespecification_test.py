@@ -18,9 +18,10 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from pydrever.data import AsphaltLayerSpecification, DikeSchematization
-from pydrever.data.dikernelrevetmentzonespecification import (
+from pydrever.data import (
     RevetmentZoneSpecification,
+    AsphaltLayerSpecification,
+    DikeSchematization,
     HorizontalRevetmentZoneDefinition,
     VerticalRevetmentZoneDefinition,
 )

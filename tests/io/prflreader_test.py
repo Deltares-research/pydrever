@@ -20,7 +20,6 @@
 
 import os
 from pydrever.io import prflreader
-from pathlib import Path
 import pytest
 
 

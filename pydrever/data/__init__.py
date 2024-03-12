@@ -18,11 +18,11 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from pydrever.data.calculationmethods import CalculationMethod
-from pydrever.data.toplayertypes import TopLayerType
-from pydrever.data.quantities import TimeDependentOutputQuantity
+from .calculationmethods import CalculationMethod
+from .toplayertypes import TopLayerType
+from .quantities import TimeDependentOutputQuantity
 
-from pydrever.data.dikernelcalculationsettings import (
+from .dikernelcalculationsettings import (
     AsphaltCalculationSettings,
     AsphaltTopLayerSettings,
     CalculationSettings,
@@ -35,12 +35,12 @@ from pydrever.data.dikernelcalculationsettings import (
     NaturalStoneTopLayerSettings,
     TopLayerSettings,
 )
-from pydrever.data.dikernelinput import (
+from .dikernelinput import (
     DikernelInput,
     DikeSchematization,
     HydrodynamicConditions,
 )
-from pydrever.data.dikerneloutput import (
+from .dikerneloutput import (
     DikernelOutputLocation,
     AsphaltWaveImpactOutputLocation,
     GrassOvertoppingOutputLocation,
@@ -48,7 +48,7 @@ from pydrever.data.dikerneloutput import (
     GrassWaveRunupOutputLocation,
     NaturalStoneOutputLocation,
 )
-from pydrever.data.dikerneloutputspecification import (
+from .dikerneloutputspecification import (
     OutputLocationSpecification,
     TopLayerSpecification,
     AsphaltLayerSpecification,
@@ -57,7 +57,7 @@ from pydrever.data.dikerneloutputspecification import (
     GrassWaveRunupLayerSpecification,
     NordicStoneLayerSpecification,
 )
-from pydrever.data.dikernelrevetmentzonespecification import (
+from .dikernelrevetmentzonespecification import (
     RevetmentZoneSpecification,
     HorizontalRevetmentZoneDefinition,
     VerticalRevetmentZoneDefinition,
