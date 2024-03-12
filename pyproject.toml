@@ -12,10 +12,11 @@ description = "Tools that facilitate analysis of dike safety against flooding."
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: GNU GENERAL PUBLIC LICENSE Version 3",
-    "Operating System :: Windows",
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
+    "Operating System :: Microsoft :: Windows",
 ]
+license = {file = "LICENSE"}
 
 dependencies = [
 "numpy",
