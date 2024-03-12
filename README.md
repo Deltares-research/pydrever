@@ -17,8 +17,10 @@ The package is available at pip. To install the package, run:
 'pip install pydrever'
 
 ## Where to find information about pydrever?
-Full documentation of the toolbox still needs to be created. However, [the repository](https://github.com/Deltares-research/dike-revetment-erosion-pytools/) already contains several tests and examples (in the form of Jupyter notebooks) that show how to use the toolbox.
-
+Full documentation of the toolbox still needs to be created. However, [the repository](https://github.com/Deltares-research/dike-revetment-erosion-pytools/) already contains several tests and examples (in the form of Jupyter notebooks) that show how to use the toolbox:
+* [Basic example](https://github.com/Deltares-research/dike-revetment-erosion-pytools/blob/main/examples/example_basic.ipynb)
+* [Elaborate example](https://github.com/Deltares-research/dike-revetment-erosion-pytools/blob/main/examples/example_elaborate.ipynb)
+* [Sensitivity example]((https://github.com/Deltares-research/dike-revetment-erosion-pytools/blob/main/examples/example_sensitivity.ipynb))
 
 Credits
 -------
