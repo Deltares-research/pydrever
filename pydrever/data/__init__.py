@@ -18,11 +18,11 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from .calculationmethods import CalculationMethod
-from .toplayertypes import TopLayerType
-from .quantities import TimeDependentOutputQuantity
+from ._calculationmethods import CalculationMethod
+from ._toplayertypes import TopLayerType
+from ._quantities import TimeDependentOutputQuantity
 
-from .dikernelcalculationsettings import (
+from ._dikernelcalculationsettings import (
     AsphaltCalculationSettings,
     AsphaltTopLayerSettings,
     CalculationSettings,
@@ -35,12 +35,12 @@ from .dikernelcalculationsettings import (
     NaturalStoneTopLayerSettings,
     TopLayerSettings,
 )
-from .dikernelinput import (
+from ._dikernelinput import (
     DikernelInput,
     DikeSchematization,
     HydrodynamicConditions,
 )
-from .dikerneloutput import (
+from ._dikerneloutput import (
     DikernelOutputLocation,
     AsphaltWaveImpactOutputLocation,
     GrassOvertoppingOutputLocation,
@@ -48,7 +48,7 @@ from .dikerneloutput import (
     GrassWaveRunupOutputLocation,
     NaturalStoneOutputLocation,
 )
-from .dikerneloutputspecification import (
+from ._dikerneloutputspecification import (
     OutputLocationSpecification,
     TopLayerSpecification,
     AsphaltLayerSpecification,
@@ -57,7 +57,7 @@ from .dikerneloutputspecification import (
     GrassWaveRunupLayerSpecification,
     NordicStoneLayerSpecification,
 )
-from .dikernelrevetmentzonespecification import (
+from ._dikernelrevetmentzonespecification import (
     RevetmentZoneSpecification,
     HorizontalRevetmentZoneDefinition,
     VerticalRevetmentZoneDefinition,

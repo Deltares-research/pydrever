@@ -20,15 +20,15 @@
 
 from __future__ import annotations
 import numpy as numpy
-from pydrever.data.dikerneloutputspecification import (
+from pydrever.data._dikerneloutputspecification import (
     OutputLocationSpecification,
     TopLayerSpecification,
 )
-from pydrever.data.dikeschematization import DikeSchematization
-from pydrever.data.dikernelrevetmentzonespecification import (
+from pydrever.data._dikeschematization import DikeSchematization
+from pydrever.data._dikernelrevetmentzonespecification import (
     RevetmentZoneSpecification,
 )
-from pydrever.data.dikernelcalculationsettings import CalculationSettings
+from pydrever.data._dikernelcalculationsettings import CalculationSettings
 
 
 class HydrodynamicConditions:

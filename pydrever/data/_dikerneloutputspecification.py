@@ -19,9 +19,9 @@
 """
 
 from __future__ import annotations
-from pydrever.data.toplayertypes import TopLayerType
-from pydrever.data.calculationmethods import CalculationMethod
-from pydrever.data.dikernelcalculationsettings import CalculationSettings
+from pydrever.data._toplayertypes import TopLayerType
+from pydrever.data._calculationmethods import CalculationMethod
+from pydrever.data._dikernelcalculationsettings import CalculationSettings
 
 
 class TopLayerSpecification:

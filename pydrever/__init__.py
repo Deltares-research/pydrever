@@ -18,7 +18,7 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from .data import *
-from .io import *
-from .visualization import *
-from .calculation import *
+import pydrever.data as data
+import pydrever.io as io
+import pydrever.visualization as visualization
+import pydrever.calculation as calculation

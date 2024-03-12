@@ -19,12 +19,12 @@
 """
 
 from __future__ import annotations
-from pydrever.data.dikernelinput import DikeSchematization
-from pydrever.data.dikerneloutputspecification import (
+from pydrever.data._dikernelinput import DikeSchematization
+from pydrever.data._dikerneloutputspecification import (
     OutputLocationSpecification,
     TopLayerSpecification,
 )
-from pydrever.data.dikernelcalculationsettings import CalculationSettings
+from pydrever.data._dikernelcalculationsettings import CalculationSettings
 from abc import ABC, abstractmethod
 import numpy as numpy
 

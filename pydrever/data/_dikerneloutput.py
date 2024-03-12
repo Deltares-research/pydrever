@@ -18,7 +18,7 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from pydrever.data.calculationmethods import CalculationMethod
+from pydrever.data._calculationmethods import CalculationMethod
 
 
 class DikernelOutputLocation:
