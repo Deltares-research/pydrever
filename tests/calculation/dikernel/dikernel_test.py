@@ -45,8 +45,6 @@ def test_perform_basic_calculation():
     )
 
     kernel = Dikernel(input)
-    validation_result = kernel.validate()
-    assert validation_result
     runresult = kernel.run()
     assert runresult
     assert kernel.output is not None

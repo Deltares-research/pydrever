@@ -37,15 +37,9 @@ input = BgdDeltaFlumeExperiment.get_calculation_input()
 kernel = Dikernel(input)
 plot_hydrodynamic_conditions(input)
 
-validationResult = kernel.validate()
-if not validationResult:
-    for message in kernel.validation_messages:
-        print(message)
-    quit()
-
 runResult = kernel.run()
 if not runResult:
-    for message in kernel.validation_messages:
+    for message in kernel.messages:
         print(message)
     quit()
 

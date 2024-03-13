@@ -40,40 +40,10 @@ class Dikernel:
         """
         self.input: DikernelInput = input
         self.output: list[DikernelOutputLocation] = None
-        self.validation_messages: list[str] = list[str]()
+        self.messages: list[str] = list[str]()
         self.__c_input = None
         self.__c_output = None
         self.__c_validation_result = None
-
-    def validate(self) -> bool:
-        """
-        Calls the validation method of Dikernel to validate the specified input. First this
-        method validates part of the specified input in order to convert the input to
-        C#-typed input. The C#-typed input is then used to validate with Dikernel.
-
-        Returns:
-            bool: The result of validation. In case it is false, validation messages are added to the instance variable "validation_messages" of this class.
-        """
-        if not self.__validate_input_data():
-            return False
-
-        self.__c_input, messages = _input_parser.parse(
-            _input_services.get_run_input(self.input)
-        )
-        if self.__c_input is None:
-            self.validation_messages.append("Could not parse input.")
-            for m in messages:
-                self.validation_messages.append(m)
-            return False
-
-        self.__c_validation_result = Validator.Validate(self.__c_input)
-        self.validation_messages.extend(
-            list(i.Message for i in self.__c_validation_result.Events)
-        )
-
-        return self.__c_validation_result.Successful and int(
-            self.__c_validation_result.Data
-        ) == int(ValidationResultType.Successful)
 
     def run(self) -> bool:
         """
@@ -82,6 +52,9 @@ class Dikernel:
         Returns:
             bool: Indicating whether the calculation was seccessfull or not.
         """
+        if not self.__validate():
+            return False
+
         try:
             calculator = Calculator(self.__c_input)
             calculator.WaitForCompletion()
@@ -103,6 +76,43 @@ class Dikernel:
         except:
             return False
 
+    def __validate(self) -> bool:
+        """
+        Calls the validation method of Dikernel to validate the specified input. First this
+        method validates part of the specified input in order to convert the input to
+        C#-typed input. The C#-typed input is then used to validate with Dikernel.
+
+        Returns:
+            bool: The result of validation. In case it is false, validation messages are added to the instance variable "validation_messages" of this class.
+        """
+        if not self.__validate_input_data():
+            return False
+
+        if not self.__convert_input_to_c():
+            return False
+
+        return self.__run_kernel_validation()
+
+    def __convert_input_to_c(self) -> bool:
+        self.__c_input, messages = _input_parser.parse(
+            _input_services.get_run_input(self.input)
+        )
+        if self.__c_input is None:
+            self.messages.append("Could not parse input.")
+            for m in messages:
+                self.messages.append(m)
+            return False
+
+        return True
+
+    def __run_kernel_validation(self) -> bool:
+        self.__c_validation_result = Validator.Validate(self.__c_input)
+        self.messages.extend(list(i.Message for i in self.__c_validation_result.Events))
+
+        return self.__c_validation_result.Successful and int(
+            self.__c_validation_result.Data
+        ) == int(ValidationResultType.Successful)
+
     def __validate_input_data(self) -> bool:
         """
         Internal method to validate the specified input to avoid problems when converting it to C#.
@@ -111,31 +121,31 @@ class Dikernel:
             bool: True if the specified input meets criteria to be able to convert to C#. In case it is false, the instanve variable "validation_messages" contains information on why validation was not successfull.
         """
         if self.input is None:
-            self.validation_messages.append("Specify input first")
+            self.messages.append("Specify input first")
             return False
 
         result = True
         if self.input.hydrodynamic_input is None:
-            self.validation_messages.append("Hydrodynamic input must be specified.")
+            self.messages.append("Hydrodynamic input must be specified.")
             result = False
         elif (
             self.input.hydrodynamic_input.time_steps is None
             or len(self.input.hydrodynamic_input.time_steps) < 2
         ):
-            self.validation_messages.append(
+            self.messages.append(
                 "At least two time steps need to be specified in the hydrodynamic input."
             )
             result = False
 
         if self.input.dike_schematization is None:
-            self.validation_messages.append("Dike schematization must be specified")
+            self.messages.append("Dike schematization must be specified")
             result = False
         if (
             self.input.dike_schematization.dike_orientation is None
             or self.input.dike_schematization.dike_orientation < 0
             or self.input.dike_schematization.dike_orientation > 360
         ):
-            self.validation_messages.append(
+            self.messages.append(
                 "Dike orientation must be specified as a number between 0 and 360 degrees."
             )
             result = False
@@ -145,14 +155,12 @@ class Dikernel:
             self.input.output_revetment_zones is None
             or len(self.input.output_revetment_zones) < 1
         ):
-            self.validation_messages.append(
-                "At least one outputlocation needs to be specified."
-            )
+            self.messages.append("At least one outputlocation needs to be specified.")
             result = False
         if self.input.start_time is not None and self.input.start_time > numpy.max(
             self.input.hydrodynamic_input.time_steps
         ):
-            self.validation_messages.append(
+            self.messages.append(
                 "Start time should not exceed the specified hydrodynamic boundary conditions."
             )
             result = False
@@ -165,7 +173,7 @@ class Dikernel:
                 self.input.start_time is not None
                 and minimumOutputTime < self.input.start_time
             ):
-                self.validation_messages.append(
+                self.messages.append(
                     "Specified output time steps should all be greater than the specified start time."
                 )
                 result = False
@@ -174,7 +182,7 @@ class Dikernel:
                 and minimumOutputTime
                 < numpy.min(self.input.hydrodynamic_input.time_steps)
             ):
-                self.validation_messages.append(
+                self.messages.append(
                     "Specified output time steps should all be greater than the minimum specified time step of the hydrodynamic conditions."
                 )
                 result = False
@@ -184,7 +192,7 @@ class Dikernel:
                 and maximumOutputTime
                 > numpy.max(self.input.hydrodynamic_input.time_steps)
             ):
-                self.validation_messages.append(
+                self.messages.append(
                     "Specified output time steps should not be greater than the maximum specified time step of the hydrodynamic conditions."
                 )
                 result = False
