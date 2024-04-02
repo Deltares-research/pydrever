@@ -34,7 +34,6 @@ from pydrever.data import (
     GrassWaveImpactCalculationSettings,
     GrassWaveRunupCalculationSettings,
     NaturalStoneCalculationSettings,
-    AsphaltTopLayerSettings,
     NaturalStoneTopLayerSettings,
     GrasCoverCumulativeOverloadTopLayerSettings,
     GrassCoverWaveImpactTopLayerSettings,
@@ -218,8 +217,6 @@ def __create_asphalt_wave_impact_construction_properties(
         layer.upper_layer_elastic_modulus,
     )
 
-    top_layer = __get_first_asphalt_toplayer_of_type(settings, layer.top_layer_type)
-
     properties.InitialDamage = layer.initial_damage
     properties.FailureNumber = settings.failure_number if settings is not None else None
     properties.DensityOfWater = (
@@ -230,18 +227,12 @@ def __create_asphalt_wave_impact_construction_properties(
     properties.AverageNumberOfWavesCtm = (
         settings.factor_ctm if settings is not None else None
     )
-    properties.FatigueAlpha = (
-        top_layer.fatigue_asphalt_alpha if top_layer is not None else None
-    )
-    properties.FatigueBeta = (
-        top_layer.fatigue_asphalt_beta if top_layer is not None else None
-    )
+    properties.FatigueAlpha = layer.fatigue_asphalt_alpha
+    properties.FatigueBeta = layer.fatigue_asphalt_beta
     properties.ImpactNumberC = (
         settings.impact_number_c if settings is not None else None
     )
-    properties.StiffnessRelationNu = (
-        top_layer.stiffness_ratio_nu if top_layer is not None else None
-    )
+    properties.StiffnessRelationNu = layer.stiffness_ratio_nu
     properties.WidthFactors = (
         __convert_to_cList(settings.width_factors) if settings is not None else None
     )
@@ -522,23 +513,6 @@ def __convert_to_cList(lst: list[list[float]]):
         for l in lst:
             cList.Add(ValueTuple[Double, Double](l[0], l[1]))
     return cList
-
-
-def __get_first_asphalt_toplayer_of_type(
-    settings: CalculationSettings, top_layer_type: TopLayerType
-) -> AsphaltTopLayerSettings:
-    return (
-        next(
-            (
-                l
-                for l in settings.top_layers_settings
-                if l.top_layer_type == top_layer_type
-            ),
-            None,
-        )
-        if settings is not None
-        else None
-    )
 
 
 def __get_first_natural_stone_toplayer_of_type(

@@ -33,21 +33,6 @@ class TopLayerSettings:
         """The type of the top layer - instance variable."""
 
 
-class AsphaltTopLayerSettings(TopLayerSettings):
-    """
-    Specification for an asphalt toplayer calculation.
-    """
-
-    def __init__(self) -> AsphaltTopLayerSettings:
-        super().__init__(TopLayerType.WAB)
-        self.stiffness_ratio_nu: float = None
-        """The stiffness ratio nu of the asphalt top layer - instance variable."""
-        self.fatigue_asphalt_alpha: float = None
-        """The fatigue constant alpha of the asphalt top layer - instance variable."""
-        self.fatigue_asphalt_beta: float = None
-        """The fatigue constant beta of the asphalt top layer - instance variable."""
-
-
 class GrasCoverCumulativeOverloadTopLayerSettings(TopLayerSettings):
     """
     Specification for a grass cover cumulative overload calculations.
@@ -125,8 +110,8 @@ class AsphaltCalculationSettings(CalculationSettings):
     Class for specification of asphalt calculation settings.
     """
 
-    def __init__(self, topLayers: list[TopLayerSettings]):
-        super().__init__(CalculationMethod.AsphaltWaveImpact, topLayers)
+    def __init__(self):
+        super().__init__(CalculationMethod.AsphaltWaveImpact, None)
         self.density_of_water: float = None
         """The density of the water - instance variable."""
         self.factor_ctm: float = None

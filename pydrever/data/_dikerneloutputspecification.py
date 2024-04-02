@@ -83,7 +83,7 @@ class AsphaltLayerSpecification(TopLayerSpecification):
         """
         super().__init__(
             CalculationMethod.AsphaltWaveImpact,
-            TopLayerType.WAB,
+            TopLayerType.Asphalt,
         )
         self.flexural_strength: float = flexural_strength
         self.soil_elasticity: float = soil_elasticity
@@ -94,6 +94,12 @@ class AsphaltLayerSpecification(TopLayerSpecification):
         self.fatigue_alpha: float = None
         self.fatigue_beta: float = None
         self.top_layer_stiffness_relation_nu: float = None
+        self.fatigue_asphalt_alpha: float = None
+        """The fatigue constant alpha of the asphalt top layer - instance variable."""
+        self.fatigue_asphalt_beta: float = None
+        """The fatigue constant beta of the asphalt top layer - instance variable."""
+        self.stiffness_ratio_nu: float = None
+        """The stiffness ratio nu of the asphalt top layer - instance variable."""
 
 
 class NordicStoneLayerSpecification(TopLayerSpecification):

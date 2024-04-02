@@ -25,4 +25,4 @@ class TopLayerType(Enum):
     GrassOpenSod = "grasOpenZode"
     GrassClosedSod = "grasGeslotenZode"
     NordicStone = "noorseSteen"
-    WAB = "waterbouwAsfaltBeton"
+    Asphalt = "asphalt"
