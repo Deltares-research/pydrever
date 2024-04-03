@@ -12,9 +12,12 @@ description = "Tools that facilitate analysis of dike safety against flooding."
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
+    "Development Status :: 3 - Alpha",
     "Programming Language :: Python :: 3.10",
     "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
     "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux"
 ]
 license = {file = "LICENSE"}
 
@@ -27,6 +30,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/Deltares-research/dike-revetment-erosion-pytools.git"
 Issues = "https://github.com/Deltares-research/dike-revetment-erosion-pytools/issues"
+Source = "https://github.com/Deltares-research/pydrever.git"
 
 [tool.setuptools.package-data]
 "*" = ["*.dll"]
