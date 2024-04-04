@@ -27,10 +27,10 @@ from pydrever.data import (
     AsphaltLayerSpecification,
     GrassWaveImpactCalculationSettings,
     GrassWaveImpactLayerSpecification,
-    GrassCoverWaveImpactTopLayerSettings,
+    GrassWaveImpactTopLayerSettings,
     TopLayerType,
     GrassOvertoppingLayerSpecification,
-    GrasCoverCumulativeOverloadTopLayerSettings,
+    GrassCumulativeOverloadTopLayerSettings,
     GrassWaveOvertoppingCalculationSettings,
     GrassWaveRunupCalculationSettings,
     GrassWaveRunupLayerSpecification,
@@ -67,7 +67,7 @@ def grass_wave_impact_settings() -> GrassWaveImpactCalculationSettings:
 @pytest.fixture
 def grass_wave_overtopping_settings() -> GrassWaveOvertoppingCalculationSettings:
     settings = GrassWaveOvertoppingCalculationSettings(
-        [GrasCoverCumulativeOverloadTopLayerSettings(TopLayerType.GrassClosedSod)]
+        [GrassCumulativeOverloadTopLayerSettings(TopLayerType.GrassClosedSod)]
     )
     settings.calculation_method = "grass_wave_overtopping_settings"
     return settings
@@ -76,7 +76,7 @@ def grass_wave_overtopping_settings() -> GrassWaveOvertoppingCalculationSettings
 @pytest.fixture
 def grass_wave_runup_settings() -> GrassWaveOvertoppingCalculationSettings:
     settings = GrassWaveRunupCalculationSettings(
-        [GrasCoverCumulativeOverloadTopLayerSettings(TopLayerType.GrassClosedSod)]
+        [GrassCumulativeOverloadTopLayerSettings(TopLayerType.GrassClosedSod)]
     )
     settings.calculation_method = "grass_wave_runup_settings"
     return settings
@@ -122,7 +122,7 @@ def grass_wave_impact_location_without_settings() -> OutputLocationSpecification
 @pytest.fixture
 def grass_wave_impact_location_with_settings() -> OutputLocationSpecification:
     settings = GrassWaveImpactCalculationSettings(
-        [GrassCoverWaveImpactTopLayerSettings(TopLayerType.GrassClosedSod)]
+        [GrassWaveImpactTopLayerSettings(TopLayerType.GrassClosedSod)]
     )
     settings.calculation_method = "location_specific_settings"
     return OutputLocationSpecification(
@@ -140,7 +140,7 @@ def grass_wave_overtopping_location_without_settings() -> OutputLocationSpecific
 @pytest.fixture
 def grass_wave_overtopping_location_with_settings() -> OutputLocationSpecification:
     settings = GrassWaveOvertoppingCalculationSettings(
-        [GrasCoverCumulativeOverloadTopLayerSettings(TopLayerType.GrassClosedSod)]
+        [GrassCumulativeOverloadTopLayerSettings(TopLayerType.GrassClosedSod)]
     )
     settings.calculation_method = "location_specific_settings"
     return OutputLocationSpecification(
@@ -151,14 +151,14 @@ def grass_wave_overtopping_location_with_settings() -> OutputLocationSpecificati
 @pytest.fixture
 def grass_wave_runup_location_without_settings() -> OutputLocationSpecification:
     return OutputLocationSpecification(
-        0.0, GrasCoverCumulativeOverloadTopLayerSettings(TopLayerType.GrassClosedSod)
+        0.0, GrassCumulativeOverloadTopLayerSettings(TopLayerType.GrassClosedSod)
     )
 
 
 @pytest.fixture
 def grass_wave_runup_location_with_settings() -> OutputLocationSpecification:
     settings = GrassWaveRunupCalculationSettings(
-        [GrasCoverCumulativeOverloadTopLayerSettings(TopLayerType.GrassClosedSod)]
+        [GrassCumulativeOverloadTopLayerSettings(TopLayerType.GrassClosedSod)]
     )
     settings.calculation_method = "location_specific_settings"
     return OutputLocationSpecification(

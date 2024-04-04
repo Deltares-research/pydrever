@@ -33,14 +33,14 @@ class TopLayerSettings:
         """The type of the top layer - instance variable."""
 
 
-class GrasCoverCumulativeOverloadTopLayerSettings(TopLayerSettings):
+class GrassCumulativeOverloadTopLayerSettings(TopLayerSettings):
     """
     Specification for a grass cover cumulative overload calculations.
     """
 
     def __init__(
         self, topLayerType: TopLayerType
-    ) -> GrasCoverCumulativeOverloadTopLayerSettings:
+    ) -> GrassCumulativeOverloadTopLayerSettings:
         super().__init__(topLayerType)
         self.critical_cumulative_overload: float = None
         """The critical cumulative overload - instance variable."""
@@ -48,7 +48,7 @@ class GrasCoverCumulativeOverloadTopLayerSettings(TopLayerSettings):
         """The critical front velocity - instance variable."""
 
 
-class GrassCoverWaveImpactTopLayerSettings(TopLayerSettings):
+class GrassWaveImpactTopLayerSettings(TopLayerSettings):
     """
     Specification for a grass cover wave impact calculation.
     """

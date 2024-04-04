@@ -27,7 +27,7 @@ from pydrever.data import (
     GrassWaveImpactLayerSpecification,
     TopLayerType,
     GrassWaveImpactCalculationSettings,
-    GrassCoverWaveImpactTopLayerSettings,
+    GrassWaveImpactTopLayerSettings,
 )
 from experiment import Experiment
 import numpy as numpy
@@ -103,7 +103,7 @@ class BgdDeltaFlumeExperiment(Experiment):
         )
 
     def generate_settings() -> list[CalculationSettings]:
-        closed_sod_top_layer_settings = GrassCoverWaveImpactTopLayerSettings(
+        closed_sod_top_layer_settings = GrassWaveImpactTopLayerSettings(
             TopLayerType.GrassClosedSod
         )
         closed_sod_top_layer_settings.stance_time_line_a = 1.75

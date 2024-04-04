@@ -25,8 +25,8 @@ from ._quantities import TimeDependentOutputQuantity
 from ._dikernelcalculationsettings import (
     AsphaltCalculationSettings,
     CalculationSettings,
-    GrasCoverCumulativeOverloadTopLayerSettings,
-    GrassCoverWaveImpactTopLayerSettings,
+    GrassCumulativeOverloadTopLayerSettings,
+    GrassWaveImpactTopLayerSettings,
     GrassWaveImpactCalculationSettings,
     GrassWaveOvertoppingCalculationSettings,
     GrassWaveRunupCalculationSettings,

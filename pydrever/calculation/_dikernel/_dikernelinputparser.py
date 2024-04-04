@@ -35,8 +35,8 @@ from pydrever.data import (
     GrassWaveRunupCalculationSettings,
     NaturalStoneCalculationSettings,
     NaturalStoneTopLayerSettings,
-    GrasCoverCumulativeOverloadTopLayerSettings,
-    GrassCoverWaveImpactTopLayerSettings,
+    GrassCumulativeOverloadTopLayerSettings,
+    GrassWaveImpactTopLayerSettings,
     TopLayerType,
 )
 from pydrever.calculation._dikernel import _inputservices as _input_service
@@ -534,7 +534,7 @@ def __get_first_natural_stone_toplayer_of_type(
 
 def __get_first_grass_wave_impact_toplayer_of_type(
     settings: CalculationSettings, top_layer_type: TopLayerType
-) -> GrassCoverWaveImpactTopLayerSettings:
+) -> GrassWaveImpactTopLayerSettings:
     return (
         next(
             (
@@ -551,7 +551,7 @@ def __get_first_grass_wave_impact_toplayer_of_type(
 
 def __get_first_grass_cumulative_overload_toplayer_of_type(
     settings: CalculationSettings, top_layer_type: TopLayerType
-) -> GrasCoverCumulativeOverloadTopLayerSettings:
+) -> GrassCumulativeOverloadTopLayerSettings:
     return (
         next(
             (
