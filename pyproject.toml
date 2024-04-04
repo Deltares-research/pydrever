@@ -28,8 +28,8 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Deltares-research/dike-revetment-erosion-pytools.git"
-Issues = "https://github.com/Deltares-research/dike-revetment-erosion-pytools/issues"
+Homepage = "https://github.com/Deltares-research/pydrever.git"
+Issues = "https://github.com/Deltares-research/pydrever/issues"
 Source = "https://github.com/Deltares-research/pydrever.git"
 
 [tool.setuptools.package-data]
