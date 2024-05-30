@@ -91,9 +91,6 @@ class AsphaltLayerSpecification(TopLayerSpecification):
         self.upper_layer_elastic_modulus: float = upper_layer_stiffness_modulus
         self.sub_layer_thickness: float = None
         self.sub_layer_elastic_modulus: float = None
-        self.fatigue_alpha: float = None
-        self.fatigue_beta: float = None
-        self.top_layer_stiffness_relation_nu: float = None
         self.fatigue_asphalt_alpha: float = None
         """The fatigue constant alpha of the asphalt top layer - instance variable."""
         self.fatigue_asphalt_beta: float = None
