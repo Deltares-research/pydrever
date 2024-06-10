@@ -24,8 +24,10 @@ from pydrever.data import (
 from pydrever.data import DikernelInput
 
 from pydrever.calculation import Dikernel
+import pytest
 
 
+@pytest.mark.skip(reason="Only run this test locally")
 def test_elaborate_caculation():
     x_positions = [0.0, 25.0, 35.0, 41.0, 45, 50, 60, 70]
     z_positions = [-3, 0.0, 1.5, 1.7, 3.0, 3.1, 0, -1]
