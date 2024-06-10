@@ -71,7 +71,7 @@ def __create_output_location(
     """
     Calculate commonly used output variables
     """
-    moment_of_failure = (
+    time_of_failure = (
         next(
             (
                 item.TimeOfFailure
@@ -98,7 +98,7 @@ def __create_output_location(
             return __create_asphalt_wave_impact_output_location(
                 x_position,
                 c_output_location.Z,
-                moment_of_failure,
+                time_of_failure,
                 c_output_location.OuterSlope,
                 c_output_location.LogFlexuralStrength,
                 c_output_location.StiffnessRelation,
@@ -111,7 +111,7 @@ def __create_output_location(
         case GrassRevetmentOvertoppingLocationDependentOutput():
             return __create_grass_overtopping_output_location(
                 x_position,
-                moment_of_failure,
+                time_of_failure,
                 damage_development,
                 damage_increment,
                 c_output_location.TimeDependentOutputItems,
@@ -120,7 +120,7 @@ def __create_output_location(
             return __create_grass_wave_impact_output_location(
                 x_position,
                 c_output_location.Z,
-                moment_of_failure,
+                time_of_failure,
                 c_output_location.MinimumWaveHeight,
                 c_output_location.MaximumWaveHeight,
                 damage_development,
@@ -131,7 +131,7 @@ def __create_output_location(
             return __create_grass_wave_runup_output_location(
                 x_position,
                 c_output_location.Z,
-                moment_of_failure,
+                time_of_failure,
                 damage_development,
                 damage_increment,
                 c_output_location.TimeDependentOutputItems,
@@ -140,7 +140,7 @@ def __create_output_location(
             return __create_natural_stone_output_location(
                 x_position,
                 c_output_location.Z,
-                moment_of_failure,
+                time_of_failure,
                 c_output_location.Resistance,
                 damage_development,
                 damage_increment,
@@ -151,7 +151,7 @@ def __create_output_location(
 def __create_asphalt_wave_impact_output_location(
     x_position: float,
     z_position: float,
-    moment_of_failure: float,
+    time_of_failure: float,
     outer_slope: float,
     log_flexural_strength: float,
     stiffness_relation: float,
@@ -162,73 +162,91 @@ def __create_asphalt_wave_impact_output_location(
     time_dependent_output_items,
 ) -> AsphaltWaveImpactOutputLocation:
     return AsphaltWaveImpactOutputLocation(
-        x_position,
-        moment_of_failure,
-        damage_development,
-        damage_increment,
-        z_position,
-        outer_slope,
-        log_flexural_strength,
-        stiffness_relation,
-        computational_thickness,
-        equivalent_elastic_modulus,
-        list(item.MaximumPeakStress for item in time_dependent_output_items),
-        list(item.AverageNumberOfWaves for item in time_dependent_output_items),
+        x_position=x_position,
+        time_of_failure=time_of_failure,
+        damage_development=damage_development,
+        damage_increment=damage_increment,
+        zPosition=z_position,
+        outer_slope=outer_slope,
+        log_flexural_strength=log_flexural_strength,
+        stiffness_relation=stiffness_relation,
+        computational_thickness=computational_thickness,
+        equivalent_elastic_modulus=equivalent_elastic_modulus,
+        maximum_peak_stress=list(
+            item.MaximumPeakStress for item in time_dependent_output_items
+        ),
+        average_number_of_waves=list(
+            item.AverageNumberOfWaves for item in time_dependent_output_items
+        ),
     )
 
 
 def __create_grass_overtopping_output_location(
     x_position: float,
-    moment_of_failure: float,
+    time_of_failure: float,
     damage_development: list[float],
     damage_increment: list[float],
     time_dependent_output_items,
 ) -> GrassOvertoppingOutputLocation:
     return GrassOvertoppingOutputLocation(
-        x_position,
-        moment_of_failure,
-        damage_development,
-        damage_increment,
-        list(
+        x_position=x_position,
+        time_of_failure=time_of_failure,
+        damage_development=damage_development,
+        damage_increment=damage_increment,
+        vertical_distance_water_level_elevation=list(
             item.VerticalDistanceWaterLevelElevation
             for item in time_dependent_output_items
         ),
-        list(item.RepresentativeWaveRunup2P for item in time_dependent_output_items),
-        list(item.CumulativeOverload for item in time_dependent_output_items),
-        list(item.AverageNumberOfWaves for item in time_dependent_output_items),
+        representative_wave_runup_2p=list(
+            item.RepresentativeWaveRunup2P for item in time_dependent_output_items
+        ),
+        cumulative_overload=list(
+            item.CumulativeOverload for item in time_dependent_output_items
+        ),
+        average_number_of_waves=list(
+            item.AverageNumberOfWaves for item in time_dependent_output_items
+        ),
     )
 
 
 def __create_grass_wave_runup_output_location(
     x_position: float,
     z_position: float,
-    moment_of_failure: float,
+    time_of_failure: float,
     damage_development: list[float],
     damage_increment: list[float],
     time_dependent_output_items,
 ) -> GrassWaveRunupOutputLocation:
     return GrassWaveRunupOutputLocation(
-        x_position,
-        z_position,
-        moment_of_failure,
-        damage_development,
-        damage_increment,
-        list(
+        x_position=x_position,
+        z_position=z_position,
+        time_of_failure=time_of_failure,
+        damage_development=damage_development,
+        damage_increment=damage_increment,
+        vertical_distance_water_level_elevation=list(
             item.VerticalDistanceWaterLevelElevation
             for item in time_dependent_output_items
         ),
-        list(item.WaveAngle for item in time_dependent_output_items),
-        list(item.WaveAngleImpact for item in time_dependent_output_items),
-        list(item.RepresentativeWaveRunup2P for item in time_dependent_output_items),
-        list(item.CumulativeOverload for item in time_dependent_output_items),
-        list(item.AverageNumberOfWaves for item in time_dependent_output_items),
+        wave_angle=list(item.WaveAngle for item in time_dependent_output_items),
+        wave_angle_impact=list(
+            item.WaveAngleImpact for item in time_dependent_output_items
+        ),
+        representative_wave_runup_2p=list(
+            item.RepresentativeWaveRunup2P for item in time_dependent_output_items
+        ),
+        cumulative_overload=list(
+            item.CumulativeOverload for item in time_dependent_output_items
+        ),
+        average_number_of_waves=list(
+            item.AverageNumberOfWaves for item in time_dependent_output_items
+        ),
     )
 
 
 def __create_grass_wave_impact_output_location(
     x_position: float,
     z_position: float,
-    moment_of_failure: float,
+    time_of_failure: float,
     minimum_wave_height: float,
     maximum_wave_height: float,
     damage_development: list[float],
@@ -236,54 +254,96 @@ def __create_grass_wave_impact_output_location(
     time_dependent_output_items,
 ) -> GrassWaveImpactOutputLocation:
     return GrassWaveImpactOutputLocation(
-        x_position,
-        moment_of_failure,
-        damage_development,
-        damage_increment,
-        z_position,
-        minimum_wave_height,
-        maximum_wave_height,
-        list(item.LoadingRevetment for item in time_dependent_output_items),
-        list(item.UpperLimitLoading for item in time_dependent_output_items),
-        list(item.LowerLimitLoading for item in time_dependent_output_items),
-        list(item.WaveAngle for item in time_dependent_output_items),
-        list(item.WaveAngleImpact for item in time_dependent_output_items),
-        list(item.WaveHeightImpact for item in time_dependent_output_items),
+        x_position=x_position,
+        time_of_failure=time_of_failure,
+        damage_development=damage_development,
+        damage_increment=damage_increment,
+        z_position=z_position,
+        minimum_wave_height=minimum_wave_height,
+        maximum_wave_height=maximum_wave_height,
+        loading_revetment=list(
+            item.LoadingRevetment for item in time_dependent_output_items
+        ),
+        upper_limit_loading=list(
+            item.UpperLimitLoading for item in time_dependent_output_items
+        ),
+        lower_limit_loading=list(
+            item.LowerLimitLoading for item in time_dependent_output_items
+        ),
+        wave_angle=list(item.WaveAngle for item in time_dependent_output_items),
+        wave_angle_impact=list(
+            item.WaveAngleImpact for item in time_dependent_output_items
+        ),
+        wave_height_impact=list(
+            item.WaveHeightImpact for item in time_dependent_output_items
+        ),
     )
 
 
 def __create_natural_stone_output_location(
     x_position: float,
     z_position: float,
-    moment_of_failure: float,
+    time_of_failure: float,
     resistance: float,
     damage_development: list[float],
     damage_increment: list[float],
     time_dependent_output_items,
 ) -> NaturalStoneOutputLocation:
     return NaturalStoneOutputLocation(
-        x_position,
-        moment_of_failure,
-        damage_development,
-        damage_increment,
-        z_position,
-        resistance,
-        list(item.OuterSlope for item in time_dependent_output_items),
-        list(item.SlopeUpperLevel for item in time_dependent_output_items),
-        list(item.SlopeUpperPosition for item in time_dependent_output_items),
-        list(item.SlopeLowerLevel for item in time_dependent_output_items),
-        list(item.SlopeLowerPosition for item in time_dependent_output_items),
-        list(item.LoadingRevetment for item in time_dependent_output_items),
-        list(item.SurfSimilarityParameter for item in time_dependent_output_items),
-        list(item.WaveSteepnessDeepWater for item in time_dependent_output_items),
-        list(item.UpperLimitLoading for item in time_dependent_output_items),
-        list(item.LowerLimitLoading for item in time_dependent_output_items),
-        list(item.DepthMaximumWaveLoad for item in time_dependent_output_items),
-        list(item.DistanceMaximumWaveElevation for item in time_dependent_output_items),
-        list(item.NormativeWidthOfWaveImpact for item in time_dependent_output_items),
-        list(item.HydraulicLoad for item in time_dependent_output_items),
-        list(item.WaveAngle for item in time_dependent_output_items),
-        list(item.WaveAngleImpact for item in time_dependent_output_items),
-        list(item.ReferenceTimeDegradation for item in time_dependent_output_items),
-        list(item.ReferenceDegradation for item in time_dependent_output_items),
+        x_position=x_position,
+        time_of_failure=time_of_failure,
+        damage_development=damage_development,
+        damage_increment=damage_increment,
+        z_position=z_position,
+        resistance=resistance,
+        outer_slope=list(item.OuterSlope for item in time_dependent_output_items),
+        slope_upper_level=list(
+            item.SlopeUpperLevel for item in time_dependent_output_items
+        ),
+        slope_upper_position=list(
+            item.SlopeUpperPosition for item in time_dependent_output_items
+        ),
+        slope_lower_level=list(
+            item.SlopeLowerLevel for item in time_dependent_output_items
+        ),
+        slope_lower_position=list(
+            item.SlopeLowerPosition for item in time_dependent_output_items
+        ),
+        loading_revetment=list(
+            item.LoadingRevetment for item in time_dependent_output_items
+        ),
+        surf_similarity_parameter=list(
+            item.SurfSimilarityParameter for item in time_dependent_output_items
+        ),
+        wave_steepness_deep_water=list(
+            item.WaveSteepnessDeepWater for item in time_dependent_output_items
+        ),
+        upper_limit_loading=list(
+            item.UpperLimitLoading for item in time_dependent_output_items
+        ),
+        lower_limit_loading=list(
+            item.LowerLimitLoading for item in time_dependent_output_items
+        ),
+        depth_maximum_wave_load=list(
+            item.DepthMaximumWaveLoad for item in time_dependent_output_items
+        ),
+        distance_maximum_wave_elevation=list(
+            item.DistanceMaximumWaveElevation for item in time_dependent_output_items
+        ),
+        normative_width_of_wave_impact=list(
+            item.NormativeWidthOfWaveImpact for item in time_dependent_output_items
+        ),
+        hydrodynamic_load=list(
+            item.HydraulicLoad for item in time_dependent_output_items
+        ),
+        wave_angle=list(item.WaveAngle for item in time_dependent_output_items),
+        wave_angle_impact=list(
+            item.WaveAngleImpact for item in time_dependent_output_items
+        ),
+        reference_time_degradation=list(
+            item.ReferenceTimeDegradation for item in time_dependent_output_items
+        ),
+        reference_degradation=list(
+            item.ReferenceDegradation for item in time_dependent_output_items
+        ),
     )

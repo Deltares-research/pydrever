@@ -24,7 +24,8 @@ license = {file = "LICENSE"}
 dependencies = [
 "numpy",
 "matplotlib",
-"pythonnet"
+"pythonnet",
+"pydantic"
 ]
 
 [project.urls]
