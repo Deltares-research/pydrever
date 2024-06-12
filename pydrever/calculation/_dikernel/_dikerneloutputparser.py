@@ -166,7 +166,7 @@ def __create_asphalt_wave_impact_output_location(
         time_of_failure=time_of_failure,
         damage_development=damage_development,
         damage_increment=damage_increment,
-        zPosition=z_position,
+        z_position=z_position,
         outer_slope=outer_slope,
         log_flexural_strength=log_flexural_strength,
         stiffness_relation=stiffness_relation,

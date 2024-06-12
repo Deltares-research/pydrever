@@ -16,7 +16,6 @@ from pydrever.data import (
     NaturalStoneCalculationSettings,
     GrassWaveImpactCalculationSettings,
     GrassWaveOvertoppingCalculationSettings,
-    CalculationMethod,
     NaturalStoneTopLayerSettings,
     GrassCumulativeOverloadTopLayerSettings,
     GrassWaveImpactTopLayerSettings,

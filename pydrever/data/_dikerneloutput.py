@@ -49,7 +49,7 @@ class DikernelOutputLocation(BaseModel):
 
 
 class AsphaltWaveImpactOutputLocation(DikernelOutputLocation):
-    zPosition: float
+    z_position: float
     outer_slope: float
     log_flexural_strength: float
     stiffness_relation: float
