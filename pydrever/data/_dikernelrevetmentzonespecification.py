@@ -28,10 +28,13 @@ from pydrever.data._dikernelcalculationsettings import CalculationSettings
 from abc import ABC, abstractmethod
 import numpy as numpy
 
+from pydantic import BaseModel, ConfigDict, root_validator
 
-class RevetmentZoneDefinition(ABC):
-    def __init__(self):
-        self.include_schematization_coordinates = False
+
+class RevetmentZoneDefinition(BaseModel, ABC):
+    model_config = ConfigDict(validate_assignment=True)
+
+    include_schematization_coordinates: bool = False
 
     @abstractmethod
     def get_x_coordinates(self, dike_schematization: DikeSchematization) -> list[float]:
@@ -39,14 +42,21 @@ class RevetmentZoneDefinition(ABC):
 
 
 class HorizontalRevetmentZoneDefinition(RevetmentZoneDefinition):
-    def __init__(
-        self, x_min: float, x_max: float, dx_max: float = None, nx: int = None
-    ) -> None:
-        super().__init__()
-        self.x_min: float = x_min
-        self.x_max: float = x_max
-        self.nx: int = nx
-        self.dx_max: float = dx_max
+    x_min: float
+    x_max: float
+    nx: int | None = None
+    dx_max: float | None = None
+
+    @root_validator(pre=True)
+    def validate_nr_or_dx_max(cls, values):
+        nx_value = values["nx"] if "nx" in values else None
+        dx_max_value = values["dx_max"] if "dx_max" in values else None
+        if nx_value is not None and dx_max_value is not None:
+            raise ValueError("Either nx or dx_max should be specified.")
+        if nx_value is None and dx_max_value is None:
+            raise ValueError("One of nx or dx_max should be specified.")
+
+        return values
 
     def get_x_coordinates(self, dike_schematizaion: DikeSchematization):
         if self.nx is not None:
@@ -69,14 +79,21 @@ class HorizontalRevetmentZoneDefinition(RevetmentZoneDefinition):
 
 
 class VerticalRevetmentZoneDefinition(RevetmentZoneDefinition):
-    def __init__(
-        self, z_min: float, z_max: float, dz_max: float = None, nz: int = None
-    ) -> None:
-        super().__init__()
-        self.z_min: float = z_min
-        self.z_max: float = z_max
-        self.nz: int = nz
-        self.dz_max: float = dz_max
+    z_min: float
+    z_max: float
+    nz: int | None = None
+    dz_max: float | None = None
+
+    @root_validator(pre=True)
+    def validate_nr_or_dx_max(cls, values):
+        nz_value = values["nz"] if "nz" in values else None
+        dz_max_value = values["dz_max"] if "dz_max" in values else None
+        if nz_value is not None and dz_max_value is not None:
+            raise ValueError("Either nz or dz_max should be specified.")
+        if nz_value is None and dz_max_value is None:
+            raise ValueError("One of nz or dz_max should be specified.")
+
+        return values
 
     def get_x_coordinates(
         self, dike_schematizaion: DikeSchematization, inner_slope: bool = False
@@ -112,16 +129,10 @@ class VerticalRevetmentZoneDefinition(RevetmentZoneDefinition):
         return x_output_coordinates
 
 
-class RevetmentZoneSpecification:
-    def __init__(
-        self,
-        zone_definition: RevetmentZoneDefinition,
-        top_layer_specification: TopLayerSpecification,
-        calculation_settings: CalculationSettings = None,
-    ) -> RevetmentZoneSpecification:
-        self.top_layer_specification = top_layer_specification
-        self.zone_definition = zone_definition
-        self.calculation_settings = calculation_settings
+class RevetmentZoneSpecification(BaseModel):
+    top_layer_specification: TopLayerSpecification
+    zone_definition: RevetmentZoneDefinition
+    calculation_settings: CalculationSettings | None = None
 
     def get_output_locations(
         self, dike_schematization: DikeSchematization

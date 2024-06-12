@@ -77,8 +77,10 @@ def test_get_output_locations_returns_output_locations_from_zone(
     input = DikernelInput(None, None)
     input.output_revetment_zones = [
         RevetmentZoneSpecification(
-            HorizontalRevetmentZoneDefinition(x_min=0.0, x_max=5.0, dx_max=1.0),
-            top_layer_specification,
+            zone_definition=HorizontalRevetmentZoneDefinition(
+                x_min=0.0, x_max=5.0, dx_max=1.0
+            ),
+            top_layer_specification=top_layer_specification,
         )
     ]
 
@@ -98,12 +100,16 @@ def test_get_output_locations_returns_output_locations_from_zones(
     input = DikernelInput(None, None)
     input.output_revetment_zones = [
         RevetmentZoneSpecification(
-            HorizontalRevetmentZoneDefinition(0.0, 2.0, dx_max=1.0),
-            top_layer_specification,
+            zone_definition=HorizontalRevetmentZoneDefinition(
+                x_min=0.0, x_max=2.0, dx_max=1.0
+            ),
+            top_layer_specification=top_layer_specification,
         ),
         RevetmentZoneSpecification(
-            HorizontalRevetmentZoneDefinition(3.0, 5.0, dx_max=1.0),
-            top_layer_specification,
+            zone_definition=HorizontalRevetmentZoneDefinition(
+                x_min=3.0, x_max=5.0, dx_max=1.0
+            ),
+            top_layer_specification=top_layer_specification,
         ),
     ]
 
@@ -136,11 +142,15 @@ def test_get_output_locations_returns_combined_output_locations(
     spec_vertical.test_field = "vertical"
     input.output_revetment_zones = [
         RevetmentZoneSpecification(
-            HorizontalRevetmentZoneDefinition(4.0, 6.0, dx_max=1.0),
+            zone_definition=HorizontalRevetmentZoneDefinition(
+                x_min=4.0, x_max=6.0, dx_max=1.0
+            ),
             top_layer_specification=spec_horizontal,
         ),
         RevetmentZoneSpecification(
-            VerticalRevetmentZoneDefinition(4.0, 5.0, dz_max=0.5),
+            zone_definition=VerticalRevetmentZoneDefinition(
+                z_min=4.0, z_max=5.0, dz_max=0.5
+            ),
             top_layer_specification=spec_vertical,
         ),
     ]

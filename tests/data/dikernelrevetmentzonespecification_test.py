@@ -37,7 +37,9 @@ def test_asphalt_zone():
     x_min = 1.0
     x_max = 6.0
     dx_max = 2.0
-    zone_definition = HorizontalRevetmentZoneDefinition(x_min, x_max, dx_max)
+    zone_definition = HorizontalRevetmentZoneDefinition(
+        x_min=x_min, x_max=x_max, dx_max=dx_max
+    )
     top_layer = AsphaltLayerSpecification(
         top_layer_type=TopLayerType.Asphalt,
         flexural_strength=flexural_strength,
@@ -45,7 +47,9 @@ def test_asphalt_zone():
         upper_layer_thickness=upper_layer_thickness,
         upper_layer_elasticity_modulus=elastic_modulus,
     )
-    zone = RevetmentZoneSpecification(zone_definition, top_layer)
+    zone = RevetmentZoneSpecification(
+        zone_definition=zone_definition, top_layer_specification=top_layer
+    )
     assert zone.top_layer_specification.flexural_strength == flexural_strength
     assert zone.top_layer_specification.soil_elasticity == soil_elasticity
     assert zone.top_layer_specification.upper_layer_thickness == upper_layer_thickness
@@ -65,7 +69,7 @@ def test_asphalt_zone_creates_locations():
     x_min = 1.0
     x_max = 6.0
     nx = 6
-    zone_definition = HorizontalRevetmentZoneDefinition(x_min, x_max, nx=nx)
+    zone_definition = HorizontalRevetmentZoneDefinition(x_min=x_min, x_max=x_max, nx=nx)
     top_layer = AsphaltLayerSpecification(
         top_layer_type=TopLayerType.Asphalt,
         flexural_strength=flexural_strength,
@@ -73,7 +77,9 @@ def test_asphalt_zone_creates_locations():
         upper_layer_thickness=upper_layer_thickness,
         upper_layer_elasticity_modulus=elastic_modulus,
     )
-    zone = RevetmentZoneSpecification(zone_definition, top_layer)
+    zone = RevetmentZoneSpecification(
+        zone_definition=zone_definition, top_layer_specification=top_layer
+    )
     locations = zone.get_output_locations(None)
     assert len(locations) == 6
     assert locations[0].top_layer_specification.flexural_strength == flexural_strength
@@ -89,7 +95,7 @@ def test_asphalt_zone_creates_locations():
 
 
 def test_horizontal_zone_definition_creates_coordinates_with_dx():
-    zone = HorizontalRevetmentZoneDefinition(4.0, 10.0, dx_max=2.0)
+    zone = HorizontalRevetmentZoneDefinition(x_min=4.0, x_max=10.0, dx_max=2.0)
     x_coordinates = zone.get_x_coordinates(None)
     assert len(x_coordinates) == 4
     assert x_coordinates[0] == 4.0
@@ -100,13 +106,13 @@ def test_horizontal_zone_definition_creates_coordinates_with_dx():
 
 @pytest.mark.parametrize(("nx"), ((2, 3, 4, 5, 6, 7, 8, 9, 10)))
 def test_horizontal_zone_definition_creates_correct_number_of_coordinates_with_nx(nx):
-    zone = HorizontalRevetmentZoneDefinition(4.0, 10.0, nx=nx)
+    zone = HorizontalRevetmentZoneDefinition(x_min=4.0, x_max=10.0, nx=nx)
     x_coordinates = zone.get_x_coordinates(None)
     assert len(x_coordinates) == nx
 
 
 def test_horizontal_zone_definition_creates_coordinates_with_nx():
-    zone = HorizontalRevetmentZoneDefinition(4.0, 10.0, nx=7)
+    zone = HorizontalRevetmentZoneDefinition(x_min=4.0, x_max=10.0, nx=7)
     x_coordinates = zone.get_x_coordinates(None)
     assert len(x_coordinates) == 7
     assert x_coordinates[0] == 4.0
@@ -119,7 +125,7 @@ def test_horizontal_zone_definition_creates_coordinates_with_nx():
 
 
 def test_horizontal_zone_includes_profile_points():
-    zone = HorizontalRevetmentZoneDefinition(4.0, 7.0, nx=4)
+    zone = HorizontalRevetmentZoneDefinition(x_min=4.0, x_max=7.0, nx=4)
     zone.include_schematization_coordinates = True
     dike_schem = DikeSchematization(
         0.0, [0.0, 5.5, 10.0], [-5.0, 0.0, 5.0], [1.0, 1.0], 0.0, 10.0
@@ -134,7 +140,7 @@ def test_horizontal_zone_includes_profile_points():
 
 
 def test_horizontal_zone_excludes_profile_points():
-    zone = HorizontalRevetmentZoneDefinition(4.0, 7.0, nx=4)
+    zone = HorizontalRevetmentZoneDefinition(x_min=4.0, x_max=7.0, nx=4)
     zone.include_schematization_coordinates = False
     dike_schem = DikeSchematization(
         0.0, [0.0, 5.5, 10.0], [-5.0, 0.0, 5.0], [1.0, 1.0], 0.0, 10.0
@@ -148,7 +154,7 @@ def test_horizontal_zone_excludes_profile_points():
 
 
 def test_vertical_zone_definition_creates_coordinates_with_dz():
-    zone = VerticalRevetmentZoneDefinition(-2.0, 2.0, dz_max=2.0)
+    zone = VerticalRevetmentZoneDefinition(z_min=-2.0, z_max=2.0, dz_max=2.0)
     dike_schem = DikeSchematization(0.0, [0.0, 10.0], [-5.0, 5.0], [1.0], 0.0, 10.0)
     x_coordinates = zone.get_x_coordinates(dike_schem)
     assert len(x_coordinates) == 3
@@ -158,7 +164,7 @@ def test_vertical_zone_definition_creates_coordinates_with_dz():
 
 
 def test_vertical_zone_definition_creates_coordinates_with_nz():
-    zone = VerticalRevetmentZoneDefinition(-2.0, 2.0, nz=3)
+    zone = VerticalRevetmentZoneDefinition(z_min=-2.0, z_max=2.0, nz=3)
     dike_schem = DikeSchematization(0.0, [0.0, 10.0], [-5.0, 5.0], [1.0], 0.0, 10.0)
     x_coordinates = zone.get_x_coordinates(dike_schem)
     assert len(x_coordinates) == 3
@@ -169,14 +175,14 @@ def test_vertical_zone_definition_creates_coordinates_with_nz():
 
 @pytest.mark.parametrize(("nz"), ((2, 3, 4, 5, 6, 7, 8, 9, 10)))
 def test_vertical_zone_definition_creates_correct_number_of_coordinates_with_nz(nz):
-    zone = VerticalRevetmentZoneDefinition(-2.0, 2.0, nz=nz)
+    zone = VerticalRevetmentZoneDefinition(z_min=-2.0, z_max=2.0, nz=nz)
     dike_schem = DikeSchematization(0.0, [0.0, 10.0], [-5.0, 5.0], [1.0], 0.0, 10.0)
     x_coordinates = zone.get_x_coordinates(dike_schem)
     assert len(x_coordinates) == nz
 
 
 def test_vertical_zone_definition_creates_coordinates_with_dz_inner_slope():
-    zone = VerticalRevetmentZoneDefinition(-2.0, 2.0, dz_max=2.0)
+    zone = VerticalRevetmentZoneDefinition(z_min=-2.0, z_max=2.0, dz_max=2.0)
     dike_schem = DikeSchematization(
         0.0, [0.0, 10.0, 15.0], [-5.0, 5.0, -3.0], [1.0, 1.0], 0.0, 10.0
     )
@@ -188,7 +194,7 @@ def test_vertical_zone_definition_creates_coordinates_with_dz_inner_slope():
 
 
 def test_vertical_zone_includes_profile_points():
-    zone = VerticalRevetmentZoneDefinition(4.0, 7.0, nz=4)
+    zone = VerticalRevetmentZoneDefinition(z_min=4.0, z_max=7.0, nz=4)
     zone.include_schematization_coordinates = True
     dike_schem = DikeSchematization(
         0.0,
@@ -208,7 +214,7 @@ def test_vertical_zone_includes_profile_points():
 
 
 def test_vertical_zone_excludes_profile_points():
-    zone = VerticalRevetmentZoneDefinition(4.0, 7.0, nz=4)
+    zone = VerticalRevetmentZoneDefinition(z_min=4.0, z_max=7.0, nz=4)
     zone.include_schematization_coordinates = False
     dike_schem = DikeSchematization(
         0.0,
