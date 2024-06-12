@@ -109,9 +109,11 @@ def natural_stone_location_with_settings() -> OutputLocationSpecification:
         ]
     )
     return OutputLocationSpecification(
-        0.0,
-        NordicStoneLayerSpecification(top_layer_thickness=1.0, relative_density=1.0),
-        settings,
+        x_position=0.0,
+        top_layer_specification=NordicStoneLayerSpecification(
+            top_layer_thickness=1.0, relative_density=1.0
+        ),
+        calculation_settings=settings,
     )
 
 
@@ -120,10 +122,11 @@ def asphalt_location_without_settings() -> OutputLocationSpecification:
     return OutputLocationSpecification(
         x_position=0.0,
         top_layer_specification=AsphaltLayerSpecification(
+            top_layer_type=TopLayerType.Asphalt,
             flexural_strength=1.0,
             soil_elasticity=1.0,
             upper_layer_thickness=1.0,
-            upper_layer_stiffness_modulus=1.0,
+            upper_layer_elasticity_modulus=1.0,
         ),
     )
 
@@ -134,10 +137,11 @@ def asphalt_location_with_settings() -> OutputLocationSpecification:
     return OutputLocationSpecification(
         x_position=0.0,
         top_layer_specification=AsphaltLayerSpecification(
+            top_layer_type=TopLayerType.Asphalt,
             flexural_strength=1.0,
             soil_elasticity=1.0,
             upper_layer_thickness=1.0,
-            upper_layer_stiffness_modulus=1.0,
+            upper_layer_elasticity_modulus=1.0,
         ),
         calculation_settings=settings,
     )
@@ -201,7 +205,7 @@ def grass_wave_overtopping_location_with_settings() -> OutputLocationSpecificati
 def grass_wave_runup_location_without_settings() -> OutputLocationSpecification:
     return OutputLocationSpecification(
         x_position=0.0,
-        top_layer_specification=GrassCumulativeOverloadTopLayerSettings(
+        top_layer_specification=GrassOvertoppingLayerSpecification(
             top_layer_type=TopLayerType.GrassClosedSod
         ),
     )

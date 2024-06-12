@@ -24,6 +24,7 @@ from pydrever.data import (
     DikeSchematization,
     HorizontalRevetmentZoneDefinition,
     VerticalRevetmentZoneDefinition,
+    TopLayerType,
 )
 import pytest
 
@@ -38,16 +39,19 @@ def test_asphalt_zone():
     dx_max = 2.0
     zone_definition = HorizontalRevetmentZoneDefinition(x_min, x_max, dx_max)
     top_layer = AsphaltLayerSpecification(
-        flexural_strength,
-        soil_elasticity,
-        upper_layer_thickness,
-        elastic_modulus,
+        top_layer_type=TopLayerType.Asphalt,
+        flexural_strength=flexural_strength,
+        soil_elasticity=soil_elasticity,
+        upper_layer_thickness=upper_layer_thickness,
+        upper_layer_elasticity_modulus=elastic_modulus,
     )
     zone = RevetmentZoneSpecification(zone_definition, top_layer)
     assert zone.top_layer_specification.flexural_strength == flexural_strength
     assert zone.top_layer_specification.soil_elasticity == soil_elasticity
     assert zone.top_layer_specification.upper_layer_thickness == upper_layer_thickness
-    assert zone.top_layer_specification.upper_layer_elastic_modulus == elastic_modulus
+    assert (
+        zone.top_layer_specification.upper_layer_elasticity_modulus == elastic_modulus
+    )
     assert zone.zone_definition.x_min == x_min
     assert zone.zone_definition.x_max == x_max
     assert zone.zone_definition.dx_max == dx_max
@@ -63,10 +67,11 @@ def test_asphalt_zone_creates_locations():
     nx = 6
     zone_definition = HorizontalRevetmentZoneDefinition(x_min, x_max, nx=nx)
     top_layer = AsphaltLayerSpecification(
-        flexural_strength,
-        soil_elasticity,
-        upper_layer_thickness,
-        elastic_modulus,
+        top_layer_type=TopLayerType.Asphalt,
+        flexural_strength=flexural_strength,
+        soil_elasticity=soil_elasticity,
+        upper_layer_thickness=upper_layer_thickness,
+        upper_layer_elasticity_modulus=elastic_modulus,
     )
     zone = RevetmentZoneSpecification(zone_definition, top_layer)
     locations = zone.get_output_locations(None)
@@ -78,7 +83,7 @@ def test_asphalt_zone_creates_locations():
         == upper_layer_thickness
     )
     assert (
-        locations[0].top_layer_specification.upper_layer_elastic_modulus
+        locations[0].top_layer_specification.upper_layer_elasticity_modulus
         == elastic_modulus
     )
 

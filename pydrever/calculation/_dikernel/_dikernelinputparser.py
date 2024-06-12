@@ -214,7 +214,7 @@ def __create_asphalt_wave_impact_construction_properties(
         layer.flexural_strength,
         layer.soil_elasticity,
         layer.upper_layer_thickness,
-        layer.upper_layer_elastic_modulus,
+        layer.upper_layer_elasticity_modulus,
     )
 
     properties.InitialDamage = layer.initial_damage

@@ -129,7 +129,9 @@ class RevetmentZoneSpecification:
         x_output_locations = self.zone_definition.get_x_coordinates(dike_schematization)
         return [
             OutputLocationSpecification(
-                x_location, self.top_layer_specification, self.calculation_settings
+                x_position=x_location,
+                top_layer_specification=self.top_layer_specification,
+                calculation_settings=self.calculation_settings,
             )
             for x_location in x_output_locations
         ]

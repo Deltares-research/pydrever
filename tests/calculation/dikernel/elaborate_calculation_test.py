@@ -83,7 +83,7 @@ def test_elaborate_caculation():
         flexural_strength=0.9,
         soil_elasticity=64.0,
         upper_layer_thickness=0.146,
-        upper_layer_stiffness_modulus=5712.0,
+        upper_layer_elasticity_modulus=5712.0,
     )
     # TODO: Move after implementing BaseModel
     asphalt_layer.stiffness_ratio_nu = 0.35

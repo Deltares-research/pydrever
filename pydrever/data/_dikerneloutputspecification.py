@@ -22,164 +22,67 @@ from __future__ import annotations
 from pydrever.data._toplayertypes import TopLayerType
 from pydrever.data._calculationmethods import CalculationMethod
 from pydrever.data._dikernelcalculationsettings import CalculationSettings
+from pydantic import BaseModel, ConfigDict
 
 
-class TopLayerSpecification:
+class TopLayerSpecification(BaseModel):
     """
     Base class to specify the toplayer characteristics and desired calculations.
     """
 
-    def __init__(
-        self,
-        calculation_method: CalculationMethod,
-        type: TopLayerType,
-    ) -> TopLayerSpecification:
-        self.calculation_method: CalculationMethod = calculation_method
-        """[CalculationMethod] The calculation method - instance variable"""
-        self.top_layer_type: TopLayerType = type
-        """[TopLayerType] The type of toplayer at this location - instance variable"""
-        self.initial_damage: float = None
-        """[float] The type of toplayer at this location - instance variable"""
+    model_config = ConfigDict(validate_assignment=True)
+
+    top_layer_type: TopLayerType = type
+    """[TopLayerType] The type of toplayer at this location - instance variable"""
+    initial_damage: float | None = None
+    """[float] The type of toplayer at this location - instance variable"""
 
 
-class OutputLocationSpecification:
+class OutputLocationSpecification(BaseModel):
     """
-    Base class to specify the desired calculations and output.
+    class to specify the desired calculations and output.
     """
 
-    def __init__(
-        self,
-        x_position: float,
-        top_layer_specification: TopLayerSpecification,
-        calculation_settings: CalculationSettings = None,
-    ) -> OutputLocationSpecification:
-        self.x_position: float = x_position
-        """[float] The cross-shore position of the required calculation and output - instance variable"""
-        self.top_layer_specification: TopLayerSpecification = top_layer_specification
-        """[TopLayerSpecification] The specification of the toplayer and desired calculation"""
-        self.calculation_settings: CalculationSettings = calculation_settings
-        """[CalculationSettings] The calculation settings that need to be used for this calculation"""
+    x_position: float
+    """[float] The cross-shore position of the required calculation and output - instance variable"""
+    top_layer_specification: TopLayerSpecification
+    """[TopLayerSpecification] The specification of the toplayer and desired calculation"""
+    calculation_settings: CalculationSettings | None = None
+    """[CalculationSettings] The calculation settings that need to be used for this calculation"""
 
 
 class AsphaltLayerSpecification(TopLayerSpecification):
-    def __init__(
-        self,
-        flexural_strength: float,
-        soil_elasticity: float,
-        upper_layer_thickness: float,
-        upper_layer_stiffness_modulus: float,
-    ) -> AsphaltLayerSpecification:
-        """
-        Creates an instance of the class to specify a calculation for an asphalt revetment.
-
-        Args:
-            flexural_strength (float): Break strength of the asphalt.
-            soil_elasticity (float): Spring constant of the soil.
-            upper_layer_thickness (float): Thickness of the asphalt upper layer.
-            upper_layer_stiffness_modulus (float): Stiffness modulus of the upper layer.
-
-        Returns:
-            AsphaltLayerSpecification: An instance of the output specification class for asphalt revetments.
-        """
-        super().__init__(
-            CalculationMethod.AsphaltWaveImpact,
-            TopLayerType.Asphalt,
-        )
-        self.flexural_strength: float = flexural_strength
-        self.soil_elasticity: float = soil_elasticity
-        self.upper_layer_thickness: float = upper_layer_thickness
-        self.upper_layer_elastic_modulus: float = upper_layer_stiffness_modulus
-        self.sub_layer_thickness: float = None
-        self.sub_layer_elastic_modulus: float = None
-        self.fatigue_asphalt_alpha: float = None
-        """The fatigue constant alpha of the asphalt top layer - instance variable."""
-        self.fatigue_asphalt_beta: float = None
-        """The fatigue constant beta of the asphalt top layer - instance variable."""
-        self.stiffness_ratio_nu: float = None
-        """The stiffness ratio nu of the asphalt top layer - instance variable."""
+    flexural_strength: float
+    soil_elasticity: float
+    upper_layer_thickness: float
+    upper_layer_elasticity_modulus: float
+    sub_layer_thickness: float | None = None
+    sub_layer_elastic_modulus: float | None = None
+    fatigue_asphalt_alpha: float | None = None
+    """The fatigue constant alpha of the asphalt top layer - instance variable."""
+    fatigue_asphalt_beta: float | None = None
+    """The fatigue constant beta of the asphalt top layer - instance variable."""
+    stiffness_ratio_nu: float | None = None
+    """The stiffness ratio nu of the asphalt top layer - instance variable."""
 
 
 class NordicStoneLayerSpecification(TopLayerSpecification):
-    def __init__(
-        self,
-        top_layer_thickness: float,
-        relative_density: float,
-    ) -> NordicStoneLayerSpecification:
-        """
-        Creates an instance of the class to specify a calculation for revetment made of nordic stones.
-
-        Args:
-            top_layer_thickness (float): Thickness of the stone top layer.
-            relative_density (float): Relative density of the stones.
-
-        Returns:
-            NordicStoneLayerSpecification: An instance of the output specification class for nordic stones.
-        """
-        super().__init__(
-            CalculationMethod.NaturalStone,
-            TopLayerType.NordicStone,
-        )
-        self.top_layer_thickness: float = top_layer_thickness
-        self.relative_density: float = relative_density
+    top_layer_thickness: float
+    relative_density: float
 
 
 class GrassWaveImpactLayerSpecification(TopLayerSpecification):
-    def __init__(
-        self,
-        top_layer_type: TopLayerType,
-    ) -> GrassWaveImpactLayerSpecification:
-        """
-        Creates an instance of the class to specify a calculation for a grass cover revetment wave impact calculation.
-
-        Args:
-            top_layer_type (TopLayerType): Type of the toplayer.
-
-        Returns:
-            GrassWaveImpactLayerSpecification: An instance of the output specification class for a grass cover wave impact calculation.
-        """
-        super().__init__(CalculationMethod.GrassWaveImpact, top_layer_type)
+    pass
 
 
 class GrassOvertoppingLayerSpecification(TopLayerSpecification):
-    def __init__(
-        self,
-        top_layer_type: TopLayerType,
-    ) -> GrassOvertoppingLayerSpecification:
-        """
-        Creates an instance of the class to specify a calculation for a grass overtopping calculation.
-
-        Args:
-            top_layer_type (TopLayerType): Type of the toplayer.
-
-        Returns:
-            GrassOvertoppingLayerSpecification: An instance of the output specification class for a grass overtopping calculation.
-        """
-        super().__init__(
-            CalculationMethod.GrassWaveOvertopping,
-            top_layer_type,
-        )
-        self.increased_load_transition_alpha_m: float = None
-        self.increased_load_transition_alpha_s: float = None
+    increased_load_transition_alpha_m: float | None = None
+    increased_load_transition_alpha_s: float | None = None
 
 
 class GrassWaveRunupLayerSpecification(TopLayerSpecification):
-    def __init__(
-        self, outer_slope: float, top_layer_type: TopLayerType
-    ) -> GrassWaveRunupLayerSpecification:
-        """
-        Creates an instance of the class to specify a calculation for a grass runup calculation.
-
-        Args:
-            outer_slope (float): Outer slope.
-            top_layer_type (TopLayerType): Type of the toplayer
-
-        Returns:
-            GrassWaveRunupLayerSpecification: An instance of the output specification class for a grass runup calculation.
-        """
-        super().__init__(CalculationMethod.GrassWaveRunup, top_layer_type)
-
-        self.outer_slope = outer_slope
-        self.increased_load_transition_alpha_m: float = None
-        self.increased_load_transition_alpha_s: float = None
-        self.reduced_strength_transition_2p_gamma_b: float = None
-        self.reduced_strength_transition_2p_gamma_f: float = None
+    outer_slope: float
+    increased_load_transition_alpha_m: float | None = None
+    increased_load_transition_alpha_s: float | None = None
+    reduced_strength_transition_2p_gamma_b: float | None = None
+    reduced_strength_transition_2p_gamma_f: float | None = None

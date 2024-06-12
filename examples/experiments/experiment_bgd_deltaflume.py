@@ -104,13 +104,13 @@ class BgdDeltaFlumeExperiment(Experiment):
 
     def generate_settings() -> list[CalculationSettings]:
         closed_sod_top_layer_settings = GrassWaveImpactTopLayerSettings(
-            TopLayerType.GrassClosedSod
+            top_layer_type=TopLayerType.GrassClosedSod
         )
         closed_sod_top_layer_settings.stance_time_line_a = 1.75
         closed_sod_top_layer_settings.stance_time_line_b = -0.035
         closed_sod_top_layer_settings.stance_time_line_c = 0.25
         wave_impact_settings = GrassWaveImpactCalculationSettings(
-            [closed_sod_top_layer_settings]
+            top_layers_settings=[closed_sod_top_layer_settings]
         )
         wave_impact_settings.te_min = 3.6
         wave_impact_settings.te_max = 3600000
@@ -120,8 +120,10 @@ class BgdDeltaFlumeExperiment(Experiment):
         x_positions = numpy.linspace(171.0, 190.0, 20)
         return [
             OutputLocationSpecification(
-                x_position,
-                GrassWaveImpactLayerSpecification(TopLayerType.GrassClosedSod),
+                x_position=x_position,
+                top_layer_specification=GrassWaveImpactLayerSpecification(
+                    top_layer_type=TopLayerType.GrassClosedSod
+                ),
             )
             for x_position in x_positions
         ]

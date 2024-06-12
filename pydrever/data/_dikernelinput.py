@@ -113,7 +113,7 @@ class DikernelInput:
             top_layer_specification (TopLayerSpecification): Specification of the top layer.
         """
         new_output_location = OutputLocationSpecification(
-            x_location, top_layer_specification
+            x_position=x_location, top_layer_specification=top_layer_specification
         )
         if self.output_locations is None:
             self.output_locations = [new_output_location]
