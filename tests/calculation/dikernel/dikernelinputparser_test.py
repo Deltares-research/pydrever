@@ -45,38 +45,54 @@ import pytest
 def asphalt_settings() -> AsphaltCalculationSettings:
     settings = AsphaltCalculationSettings()
     settings.calculation_method = "asphalt_settings"
+    # TODO: Move to initializaTion after using pydantic
     return settings
 
 
 @pytest.fixture
 def natural_stone_settings() -> NaturalStoneCalculationSettings:
-    settings = NaturalStoneCalculationSettings([NaturalStoneTopLayerSettings()])
+    settings = NaturalStoneCalculationSettings(
+        topLayers=[
+            NaturalStoneTopLayerSettings(top_layer_type=TopLayerType.NordicStone)
+        ],
+    )
     settings.calculation_method = "natural_stone_settings"
+    # TODO: Move to initializaTion after using pydantic
     return settings
 
 
 @pytest.fixture
 def grass_wave_impact_settings() -> GrassWaveImpactCalculationSettings:
     settings = GrassWaveImpactCalculationSettings(
-        [GrassWaveImpactLayerSpecification(TopLayerType.GrassClosedSod)]
+        [GrassWaveImpactLayerSpecification(top_layer_type=TopLayerType.GrassClosedSod)]
     )
     settings.calculation_method = "grass_wave_impact_settings"
+    # TODO: Move to initializaTion after using pydantic
     return settings
 
 
 @pytest.fixture
 def grass_wave_overtopping_settings() -> GrassWaveOvertoppingCalculationSettings:
     settings = GrassWaveOvertoppingCalculationSettings(
-        [GrassCumulativeOverloadTopLayerSettings(TopLayerType.GrassClosedSod)]
+        [
+            GrassCumulativeOverloadTopLayerSettings(
+                top_layer_type=TopLayerType.GrassClosedSod
+            )
+        ]
     )
     settings.calculation_method = "grass_wave_overtopping_settings"
+    # TODO: Move to initializaTion after using pydantic
     return settings
 
 
 @pytest.fixture
 def grass_wave_runup_settings() -> GrassWaveOvertoppingCalculationSettings:
     settings = GrassWaveRunupCalculationSettings(
-        [GrassCumulativeOverloadTopLayerSettings(TopLayerType.GrassClosedSod)]
+        topLayers=[
+            GrassCumulativeOverloadTopLayerSettings(
+                top_layer_type=TopLayerType.GrassClosedSod
+            )
+        ]
     )
     settings.calculation_method = "grass_wave_runup_settings"
     return settings
@@ -84,22 +100,37 @@ def grass_wave_runup_settings() -> GrassWaveOvertoppingCalculationSettings:
 
 @pytest.fixture
 def natural_stone_location_without_settings() -> OutputLocationSpecification:
-    return OutputLocationSpecification(0.0, NordicStoneLayerSpecification(1.0, 1.0))
+    return OutputLocationSpecification(
+        x_position=0.0,
+        top_layer_specification=NordicStoneLayerSpecification(
+            top_layer_thickness=1.0, relative_density=1.0
+        ),
+    )
 
 
 @pytest.fixture
 def natural_stone_location_with_settings() -> OutputLocationSpecification:
-    settings = NaturalStoneCalculationSettings([NaturalStoneTopLayerSettings()])
+    settings = NaturalStoneCalculationSettings(
+        [NaturalStoneTopLayerSettings(top_layer_type=TopLayerType.NordicStone)]
+    )
     settings.calculation_method = "location_specific_settings"
     return OutputLocationSpecification(
-        0.0, NordicStoneLayerSpecification(1.0, 1.0), settings
+        0.0,
+        NordicStoneLayerSpecification(top_layer_thickness=1.0, relative_density=1.0),
+        settings,
     )
 
 
 @pytest.fixture
 def asphalt_location_without_settings() -> OutputLocationSpecification:
     return OutputLocationSpecification(
-        0.0, AsphaltLayerSpecification(1.0, 1.0, 1.0, 1.0)
+        x_position=0.0,
+        top_layer_specification=AsphaltLayerSpecification(
+            flexural_strength=1.0,
+            soil_elasticity=1.0,
+            upper_layer_thickness=1.0,
+            upper_layer_stiffness_modulus=1.0,
+        ),
     )
 
 
@@ -108,63 +139,99 @@ def asphalt_location_with_settings() -> OutputLocationSpecification:
     settings = AsphaltCalculationSettings()
     settings.calculation_method = "location_specific_settings"
     return OutputLocationSpecification(
-        0.0, AsphaltLayerSpecification(1.0, 1.0, 1.0, 1.0), settings
+        x_position=0.0,
+        top_layer_specification=AsphaltLayerSpecification(
+            flexural_strength=1.0,
+            soil_elasticity=1.0,
+            upper_layer_thickness=1.0,
+            upper_layer_stiffness_modulus=1.0,
+        ),
+        calculation_settings=settings,
     )
 
 
 @pytest.fixture
 def grass_wave_impact_location_without_settings() -> OutputLocationSpecification:
     return OutputLocationSpecification(
-        0.0, GrassWaveImpactLayerSpecification(TopLayerType.GrassClosedSod)
+        x_position=0.0,
+        top_layer_specification=GrassWaveImpactLayerSpecification(
+            top_layer_type=TopLayerType.GrassClosedSod
+        ),
     )
 
 
 @pytest.fixture
 def grass_wave_impact_location_with_settings() -> OutputLocationSpecification:
     settings = GrassWaveImpactCalculationSettings(
-        [GrassWaveImpactTopLayerSettings(TopLayerType.GrassClosedSod)]
+        topLayers=[
+            GrassWaveImpactTopLayerSettings(top_layer_type=TopLayerType.GrassClosedSod)
+        ]
     )
     settings.calculation_method = "location_specific_settings"
     return OutputLocationSpecification(
-        0.0, GrassWaveImpactLayerSpecification(TopLayerType.GrassClosedSod), settings
+        x_position=0.0,
+        top_layer_specification=GrassWaveImpactLayerSpecification(
+            top_layer_type=TopLayerType.GrassClosedSod
+        ),
+        calculation_settings=settings,
     )
 
 
 @pytest.fixture
 def grass_wave_overtopping_location_without_settings() -> OutputLocationSpecification:
     return OutputLocationSpecification(
-        0.0, GrassOvertoppingLayerSpecification(TopLayerType.GrassClosedSod)
+        x_position=0.0,
+        top_layer_specification=GrassOvertoppingLayerSpecification(
+            top_layer_type=TopLayerType.GrassClosedSod
+        ),
     )
 
 
 @pytest.fixture
 def grass_wave_overtopping_location_with_settings() -> OutputLocationSpecification:
     settings = GrassWaveOvertoppingCalculationSettings(
-        [GrassCumulativeOverloadTopLayerSettings(TopLayerType.GrassClosedSod)]
+        topLayers=[
+            GrassCumulativeOverloadTopLayerSettings(
+                top_layer_type=TopLayerType.GrassClosedSod
+            )
+        ]
     )
     settings.calculation_method = "location_specific_settings"
     return OutputLocationSpecification(
-        0.0, GrassOvertoppingLayerSpecification(TopLayerType.GrassClosedSod), settings
+        x_position=0.0,
+        top_layer_specification=GrassOvertoppingLayerSpecification(
+            top_layer_type=TopLayerType.GrassClosedSod
+        ),
+        calculation_settings=settings,
     )
 
 
 @pytest.fixture
 def grass_wave_runup_location_without_settings() -> OutputLocationSpecification:
     return OutputLocationSpecification(
-        0.0, GrassCumulativeOverloadTopLayerSettings(TopLayerType.GrassClosedSod)
+        x_position=0.0,
+        top_layer_specification=GrassCumulativeOverloadTopLayerSettings(
+            top_layer_type=TopLayerType.GrassClosedSod
+        ),
     )
 
 
 @pytest.fixture
 def grass_wave_runup_location_with_settings() -> OutputLocationSpecification:
     settings = GrassWaveRunupCalculationSettings(
-        [GrassCumulativeOverloadTopLayerSettings(TopLayerType.GrassClosedSod)]
+        topLayers=[
+            GrassCumulativeOverloadTopLayerSettings(
+                top_layer_type=TopLayerType.GrassClosedSod
+            )
+        ]
     )
     settings.calculation_method = "location_specific_settings"
     return OutputLocationSpecification(
-        0.0,
-        GrassWaveRunupLayerSpecification(0.3, TopLayerType.GrassClosedSod),
-        settings,
+        x_position=0.0,
+        top_layer_specification=GrassWaveRunupLayerSpecification(
+            outer_slope=0.3, top_layer_type=TopLayerType.GrassClosedSod
+        ),
+        calculation_settings=settings,
     )
 
 

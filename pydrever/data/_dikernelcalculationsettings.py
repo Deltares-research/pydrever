@@ -21,16 +21,18 @@
 from __future__ import annotations
 from pydrever.data._toplayertypes import TopLayerType
 from pydrever.data._calculationmethods import CalculationMethod
+from pydantic import BaseModel, ConfigDict
 
 
-class TopLayerSettings:
+class TopLayerSettings(BaseModel):
     """
     Base class for specification of a top layer.
     """
 
-    def __init__(self, type: TopLayerType):
-        self.top_layer_type: TopLayerType = type
-        """The type of the top layer - instance variable."""
+    model_config = ConfigDict(validate_assignment=True)
+
+    top_layer_type: TopLayerType
+    """The type of the top layer - instance variable."""
 
 
 class GrassCumulativeOverloadTopLayerSettings(TopLayerSettings):
@@ -38,14 +40,10 @@ class GrassCumulativeOverloadTopLayerSettings(TopLayerSettings):
     Specification for a grass cover cumulative overload calculations.
     """
 
-    def __init__(
-        self, topLayerType: TopLayerType
-    ) -> GrassCumulativeOverloadTopLayerSettings:
-        super().__init__(topLayerType)
-        self.critical_cumulative_overload: float = None
-        """The critical cumulative overload - instance variable."""
-        self.critical_front_velocity: float = None
-        """The critical front velocity - instance variable."""
+    critical_cumulative_overload: float | None = None
+    """The critical cumulative overload - instance variable."""
+    critical_front_velocity: float | None = None
+    """The critical front velocity - instance variable."""
 
 
 class GrassWaveImpactTopLayerSettings(TopLayerSettings):
@@ -53,14 +51,12 @@ class GrassWaveImpactTopLayerSettings(TopLayerSettings):
     Specification for a grass cover wave impact calculation.
     """
 
-    def __init__(self, type: TopLayerType):
-        super().__init__(type)
-        self.stance_time_line_a: float = None
-        """The stance time line constant a - instance variable."""
-        self.stance_time_line_b: float = None
-        """The stance time line constant b - instance variable."""
-        self.stance_time_line_c: float = None
-        """The stance time line constant c - instance variable."""
+    stance_time_line_a: float | None = None
+    """The stance time line constant a - instance variable."""
+    stance_time_line_b: float | None = None
+    """The stance time line constant b - instance variable."""
+    stance_time_line_c: float | None = None
+    """The stance time line constant c - instance variable."""
 
 
 class NaturalStoneTopLayerSettings(TopLayerSettings):
@@ -68,25 +64,23 @@ class NaturalStoneTopLayerSettings(TopLayerSettings):
     Specification for a natural stone cover calculation.
     """
 
-    def __init__(self):
-        super().__init__(TopLayerType.NordicStone)
-        self.stability_plunging_a: float = None
-        """The plunging constant a - instance variable."""
-        self.stability_plunging_b: float = None
-        """The plunging constant b - instance variable."""
-        self.stability_plunging_c: float = None
-        """The plunging constant c - instance variable."""
-        self.stability_plunging_n: float = None
-        """The plunging constant n - instance variable."""
-        self.stability_surging_a: float = None
-        """The surging constant a - instance variable."""
-        self.stability_surging_b: float = None
-        """The surging constant b - instance variable."""
-        self.stability_surging_c: float = None
-        """The surging constant c - instance variable."""
-        self.stability_surging_n: float = None
-        """The surging constant n - instance variable."""
-        self.xib: float = None
+    stability_plunging_a: float | None = None
+    """The plunging constant a - instance variable."""
+    stability_plunging_b: float | None = None
+    """The plunging constant b - instance variable."""
+    stability_plunging_c: float | None = None
+    """The plunging constant c - instance variable."""
+    stability_plunging_n: float | None = None
+    """The plunging constant n - instance variable."""
+    stability_surging_a: float | None = None
+    """The surging constant a - instance variable."""
+    stability_surging_b: float | None = None
+    """The surging constant b - instance variable."""
+    stability_surging_c: float | None = None
+    """The surging constant c - instance variable."""
+    stability_surging_n: float | None = None
+    """The surging constant n - instance variable."""
+    xib: float | None = None
 
 
 class CalculationSettings:
