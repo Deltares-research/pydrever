@@ -44,8 +44,6 @@ import pytest
 @pytest.fixture
 def asphalt_settings() -> AsphaltCalculationSettings:
     settings = AsphaltCalculationSettings()
-    settings.calculation_method = "asphalt_settings"
-    # TODO: Move to initializaTion after using pydantic
     return settings
 
 
@@ -56,32 +54,28 @@ def natural_stone_settings() -> NaturalStoneCalculationSettings:
             NaturalStoneTopLayerSettings(top_layer_type=TopLayerType.NordicStone)
         ],
     )
-    settings.calculation_method = "natural_stone_settings"
-    # TODO: Move to initializaTion after using pydantic
     return settings
 
 
 @pytest.fixture
 def grass_wave_impact_settings() -> GrassWaveImpactCalculationSettings:
     settings = GrassWaveImpactCalculationSettings(
-        [GrassWaveImpactLayerSpecification(top_layer_type=TopLayerType.GrassClosedSod)]
+        top_layers_settings=[
+            GrassWaveImpactTopLayerSettings(top_layer_type=TopLayerType.GrassClosedSod)
+        ]
     )
-    settings.calculation_method = "grass_wave_impact_settings"
-    # TODO: Move to initializaTion after using pydantic
     return settings
 
 
 @pytest.fixture
 def grass_wave_overtopping_settings() -> GrassWaveOvertoppingCalculationSettings:
     settings = GrassWaveOvertoppingCalculationSettings(
-        [
+        top_layers_settings=[
             GrassCumulativeOverloadTopLayerSettings(
                 top_layer_type=TopLayerType.GrassClosedSod
             )
         ]
     )
-    settings.calculation_method = "grass_wave_overtopping_settings"
-    # TODO: Move to initializaTion after using pydantic
     return settings
 
 
@@ -94,7 +88,6 @@ def grass_wave_runup_settings() -> GrassWaveOvertoppingCalculationSettings:
             )
         ]
     )
-    settings.calculation_method = "grass_wave_runup_settings"
     return settings
 
 
@@ -111,9 +104,10 @@ def natural_stone_location_without_settings() -> OutputLocationSpecification:
 @pytest.fixture
 def natural_stone_location_with_settings() -> OutputLocationSpecification:
     settings = NaturalStoneCalculationSettings(
-        [NaturalStoneTopLayerSettings(top_layer_type=TopLayerType.NordicStone)]
+        top_layers_settings=[
+            NaturalStoneTopLayerSettings(top_layer_type=TopLayerType.NordicStone)
+        ]
     )
-    settings.calculation_method = "location_specific_settings"
     return OutputLocationSpecification(
         0.0,
         NordicStoneLayerSpecification(top_layer_thickness=1.0, relative_density=1.0),
@@ -137,7 +131,6 @@ def asphalt_location_without_settings() -> OutputLocationSpecification:
 @pytest.fixture
 def asphalt_location_with_settings() -> OutputLocationSpecification:
     settings = AsphaltCalculationSettings()
-    settings.calculation_method = "location_specific_settings"
     return OutputLocationSpecification(
         x_position=0.0,
         top_layer_specification=AsphaltLayerSpecification(
@@ -167,7 +160,6 @@ def grass_wave_impact_location_with_settings() -> OutputLocationSpecification:
             GrassWaveImpactTopLayerSettings(top_layer_type=TopLayerType.GrassClosedSod)
         ]
     )
-    settings.calculation_method = "location_specific_settings"
     return OutputLocationSpecification(
         x_position=0.0,
         top_layer_specification=GrassWaveImpactLayerSpecification(
@@ -196,7 +188,6 @@ def grass_wave_overtopping_location_with_settings() -> OutputLocationSpecificati
             )
         ]
     )
-    settings.calculation_method = "location_specific_settings"
     return OutputLocationSpecification(
         x_position=0.0,
         top_layer_specification=GrassOvertoppingLayerSpecification(
@@ -225,7 +216,6 @@ def grass_wave_runup_location_with_settings() -> OutputLocationSpecification:
             )
         ]
     )
-    settings.calculation_method = "location_specific_settings"
     return OutputLocationSpecification(
         x_position=0.0,
         top_layer_specification=GrassWaveRunupLayerSpecification(
@@ -245,8 +235,8 @@ def test_get_natural_stone_calculation_settings_from_location(
         natural_stone_location_with_settings, [asphalt_settings, natural_stone_settings]
     )
     assert (
-        return_settings.calculation_method
-        == natural_stone_location_with_settings.calculation_settings.calculation_method
+        return_settings.top_layers_settings
+        == natural_stone_location_with_settings.calculation_settings.top_layers_settings
     )
 
 
@@ -260,7 +250,8 @@ def test_get_natural_stone_calculation_settings_from_general_settings(
         [asphalt_settings, natural_stone_settings],
     )
     assert (
-        return_settings.calculation_method == natural_stone_settings.calculation_method
+        return_settings.top_layers_settings
+        == natural_stone_settings.top_layers_settings
     )
 
 
@@ -296,8 +287,8 @@ def test_get_asphalt_calculation_settings_from_location(
         asphalt_location_with_settings, [asphalt_settings, natural_stone_settings]
     )
     assert (
-        return_settings.calculation_method
-        == asphalt_location_with_settings.calculation_settings.calculation_method
+        return_settings.top_layers_settings
+        == asphalt_location_with_settings.calculation_settings.top_layers_settings
     )
 
 
@@ -310,7 +301,7 @@ def test_get_asphalt_calculation_settings_from_general_settings(
         asphalt_location_without_settings,
         [asphalt_settings, natural_stone_settings],
     )
-    assert return_settings.calculation_method == asphalt_settings.calculation_method
+    assert return_settings.top_layers_settings == asphalt_settings.top_layers_settings
 
 
 def test_get_asphalt_calculation_settings_no_settings_in_general_list(
@@ -346,8 +337,8 @@ def test_get_grass_wave_impact_calculation_settings_from_location(
         [asphalt_settings, natural_stone_settings],
     )
     assert (
-        return_settings.calculation_method
-        == grass_wave_impact_location_with_settings.calculation_settings.calculation_method
+        return_settings.top_layers_settings
+        == grass_wave_impact_location_with_settings.calculation_settings.top_layers_settings
     )
 
 
@@ -361,8 +352,8 @@ def test_get_grass_wave_impact_calculation_settings_from_general_settings(
         [asphalt_settings, grass_wave_impact_settings],
     )
     assert (
-        return_settings.calculation_method
-        == grass_wave_impact_settings.calculation_method
+        return_settings.top_layers_settings
+        == grass_wave_impact_settings.top_layers_settings
     )
 
 
@@ -399,8 +390,8 @@ def test_get_grass_wave_overtopping_calculation_settings_from_location(
         [asphalt_settings, natural_stone_settings],
     )
     assert (
-        return_settings.calculation_method
-        == grass_wave_overtopping_location_with_settings.calculation_settings.calculation_method
+        return_settings.top_layers_settings
+        == grass_wave_overtopping_location_with_settings.calculation_settings.top_layers_settings
     )
 
 
@@ -414,8 +405,8 @@ def test_get_grass_wave_overtopping_calculation_settings_from_general_settings(
         [asphalt_settings, grass_wave_overtopping_settings],
     )
     assert (
-        return_settings.calculation_method
-        == grass_wave_overtopping_settings.calculation_method
+        return_settings.top_layers_settings
+        == grass_wave_overtopping_settings.top_layers_settings
     )
 
 
@@ -452,8 +443,8 @@ def test_get_grass_wave_runup_calculation_settings_from_location(
         [asphalt_settings, natural_stone_settings],
     )
     assert (
-        return_settings.calculation_method
-        == grass_wave_runup_location_with_settings.calculation_settings.calculation_method
+        return_settings.top_layers_settings
+        == grass_wave_runup_location_with_settings.calculation_settings.top_layers_settings
     )
 
 
@@ -467,8 +458,8 @@ def test_get_grass_wave_runup_calculation_settings_from_general_settings(
         [asphalt_settings, grass_wave_runup_settings],
     )
     assert (
-        return_settings.calculation_method
-        == grass_wave_runup_settings.calculation_method
+        return_settings.top_layers_settings
+        == grass_wave_runup_settings.top_layers_settings
     )
 
 

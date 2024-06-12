@@ -20,7 +20,6 @@
 
 from __future__ import annotations
 from pydrever.data._toplayertypes import TopLayerType
-from pydrever.data._calculationmethods import CalculationMethod
 from pydantic import BaseModel, ConfigDict
 
 
@@ -83,20 +82,17 @@ class NaturalStoneTopLayerSettings(TopLayerSettings):
     xib: float | None = None
 
 
-class CalculationSettings:
+class CalculationSettings(BaseModel):
     """
     Base class for specification of calculation settings.
     """
 
-    def __init__(
-        self, calculation_method: CalculationMethod, topLayers: list[TopLayerSettings]
-    ):
-        self.calculation_method: CalculationMethod = calculation_method
-        """The calculation method this setting is for - instance variable."""
-        self.failure_number: float = None
-        """The damage number that is considered to indicate failure of the revetment - instance variable."""
-        self.top_layers_settings: list[TopLayerSettings] = topLayers
-        """Calculation settings specific for this type of top layer - instance variable."""
+    model_config = ConfigDict(validate_assignment=True)
+
+    failure_number: float | None = None
+    """The damage number that is considered to indicate failure of the revetment - instance variable."""
+    top_layers_settings: list[TopLayerSettings] | None = None
+    """Calculation settings specific for this type of top layer - instance variable."""
 
 
 class AsphaltCalculationSettings(CalculationSettings):
@@ -104,20 +100,18 @@ class AsphaltCalculationSettings(CalculationSettings):
     Class for specification of asphalt calculation settings.
     """
 
-    def __init__(self):
-        super().__init__(CalculationMethod.AsphaltWaveImpact, None)
-        self.density_of_water: float = None
-        """The density of the water - instance variable."""
-        self.factor_ctm: float = None
-        """The ctm factor - instance variable."""
-        self.impact_number_c: float = None
-        """The impact number c - instance variable."""
-        self.width_factors: list[float, float] = None
-        """A list of width factors - instance variable."""
-        self.depth_factors: list[float, float] = None
-        """A list of depth factors - instance variable."""
-        self.impact_factors: list[float, float] = None
-        """A list of impact factors - instance variable."""
+    density_of_water: float | None = None
+    """The density of the water - instance variable."""
+    factor_ctm: float | None = None
+    """The ctm factor - instance variable."""
+    impact_number_c: float | None = None
+    """The impact number c - instance variable."""
+    width_factors: list[list[float]] | None = None
+    """A list of width factors - instance variable."""
+    depth_factors: list[list[float]] | None = None
+    """A list of depth factors - instance variable."""
+    impact_factors: list[list[float]] | None = None
+    """A list of impact factors - instance variable."""
 
 
 class GrassWaveOvertoppingCalculationSettings(CalculationSettings):
@@ -125,20 +119,18 @@ class GrassWaveOvertoppingCalculationSettings(CalculationSettings):
     Class for specification of wave overtopping calculation settings.
     """
 
-    def __init__(self, topLayers: list[TopLayerSettings]):
-        super().__init__(CalculationMethod.GrassWaveOvertopping, topLayers)
-        self.acceleration_alpha_a_for_crest: float = None
-        """The alpha a at the crest of the dike - instance variable."""
-        self.acceleration_alpha_a_for_inner_slope: float = None
-        """The alpha a at the inner slope of the dike - instance variable."""
-        self.fixed_number_of_waves: int = None
-        """Fixed number of waves - instance variable."""
-        self.front_velocity_c_wo: float = None
-        """The front velocity constant c of the overtopping wave - instance variable."""
-        self.average_number_of_waves_factor_ctm: float = None
-        """The ctm factor - instance variable."""
-        self.dike_height: float = None
-        """The height of the dike used in the overtopping calculation - instance variable."""
+    acceleration_alpha_a_for_crest: float | None = None
+    """The alpha a at the crest of the dike - instance variable."""
+    acceleration_alpha_a_for_inner_slope: float | None = None
+    """The alpha a at the inner slope of the dike - instance variable."""
+    fixed_number_of_waves: int | None = None
+    """Fixed number of waves - instance variable."""
+    front_velocity_c_wo: float | None = None
+    """The front velocity constant c of the overtopping wave - instance variable."""
+    average_number_of_waves_factor_ctm: float | None = None
+    """The ctm factor - instance variable."""
+    dike_height: float | None = None
+    """The height of the dike used in the overtopping calculation - instance variable."""
 
 
 class GrassWaveImpactCalculationSettings(CalculationSettings):
@@ -146,20 +138,18 @@ class GrassWaveImpactCalculationSettings(CalculationSettings):
     Class for specification of wave impact calculation settings.
     """
 
-    def __init__(self, topLayers: list[TopLayerSettings]):
-        super().__init__(CalculationMethod.GrassWaveImpact, topLayers)
-        self.loading_upper_limit: float = None
-        """Upper limit of the loading - instance variable."""
-        self.loading_lower_limit: float = None
-        """Lower limit of the loading - instance variable."""
-        self.wave_angle_impact_n: float = None
-        """Wave angle impact constant n - instance variable."""
-        self.wave_angle_impact_q: float = None
-        """Wave angle impact constant q - instance variable."""
-        self.wave_angle_impact_r: float = None
-        """Wave angle impact constant r - instance variable."""
-        self.te_max: float = None
-        self.te_min: float = None
+    loading_upper_limit: float | None = None
+    """Upper limit of the loading - instance variable."""
+    loading_lower_limit: float | None = None
+    """Lower limit of the loading - instance variable."""
+    wave_angle_impact_n: float | None = None
+    """Wave angle impact constant n - instance variable."""
+    wave_angle_impact_q: float | None = None
+    """Wave angle impact constant q - instance variable."""
+    wave_angle_impact_r: float | None = None
+    """Wave angle impact constant r - instance variable."""
+    te_max: float | None = None
+    te_min: float | None = None
 
 
 class GrassWaveRunupCalculationSettings(CalculationSettings):
@@ -167,17 +157,15 @@ class GrassWaveRunupCalculationSettings(CalculationSettings):
     Class for specification of wave runup calculation settings.
     """
 
-    def __init__(self, topLayers: list[TopLayerSettings]):
-        super().__init__(CalculationMethod.GrassWaveImpact, topLayers)
-        self.average_number_of_waves_factor_ctm: float = None
-        """The ctm factor - instance variable."""
-        self.representative_wave_runup_2p_aru: float = None
-        self.representative_wave_runup_2p_bru: float = None
-        self.representative_wave_runup_2p_cru: float = None
-        self.wave_angle_impact_a_beta: float = None
-        self.wave_angle_impact_beta_max: float = None
-        self.fixed_number_of_waves: int = None
-        self.front_velocity_cu: float = None
+    average_number_of_waves_factor_ctm: float = None
+    """The ctm factor - instance variable."""
+    representative_wave_runup_2p_aru: float | None = None
+    representative_wave_runup_2p_bru: float | None = None
+    representative_wave_runup_2p_cru: float | None = None
+    wave_angle_impact_a_beta: float | None = None
+    wave_angle_impact_beta_max: float | None = None
+    fixed_number_of_waves: int | None = None
+    front_velocity_cu: float | None = None
 
 
 class NaturalStoneCalculationSettings(CalculationSettings):
@@ -185,18 +173,16 @@ class NaturalStoneCalculationSettings(CalculationSettings):
     Class for specification of natural stone calculation settings.
     """
 
-    def __init__(self, topLayers: list[TopLayerSettings]):
-        super().__init__(CalculationMethod.NaturalStone, topLayers)
-        self.distance_maximum_wave_elevation_a: float = None
-        self.distance_maximum_wave_elevation_b: float = None
-        self.slope_upper_level: float = None
-        self.sLope_lower_level: float = None
-        self.normative_width_of_wave_impact_a: float = None
-        self.normative_width_of_wave_impact_b: float = None
-        self.upper_limit_loading_a: float = None
-        self.upper_limit_loading_b: float = None
-        self.upper_limit_loading_c: float = None
-        self.lower_limit_loading_a: float = None
-        self.lower_limit_loading_b: float = None
-        self.lower_limit_loading_c: float = None
-        self.wave_angle_impact_beta_max: float = None
+    distance_maximum_wave_elevation_a: float | None = None
+    distance_maximum_wave_elevation_b: float | None = None
+    slope_upper_level: float | None = None
+    sLope_lower_level: float | None = None
+    normative_width_of_wave_impact_a: float | None = None
+    normative_width_of_wave_impact_b: float | None = None
+    upper_limit_loading_a: float | None = None
+    upper_limit_loading_b: float | None = None
+    upper_limit_loading_c: float | None = None
+    lower_limit_loading_a: float | None = None
+    lower_limit_loading_b: float | None = None
+    lower_limit_loading_c: float | None = None
+    wave_angle_impact_beta_max: float | None = None
