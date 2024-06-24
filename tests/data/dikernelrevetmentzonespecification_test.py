@@ -27,6 +27,7 @@ from pydrever.data import (
     TopLayerType,
 )
 import pytest
+from pydantic import ValidationError
 
 
 def test_asphalt_zone():
@@ -153,6 +154,27 @@ def test_horizontal_zone_excludes_profile_points():
     assert x_coordinates[3] == 7.0
 
 
+def test_horizontal_zone_definition_throws_on_wrong_nz():
+    with pytest.raises(ValidationError) as v_error:
+        o = HorizontalRevetmentZoneDefinition(x_min=0.2, x_max=5.0, nx=-1)
+
+    errors = v_error.value.errors()
+    assert len(errors) == 1
+    assert errors[0]["loc"][0] == "nx"
+
+
+def test_horizontal_zone_wrong_z_values_throws():
+    with pytest.raises(ValueError) as v_error:
+        o = HorizontalRevetmentZoneDefinition(x_min=3.0, x_max=1.0, dx_max=0.5)
+
+    errors = v_error.value.errors()
+    assert len(errors) == 1
+    assert (
+        errors[0]["msg"]
+        == "Value error, x_max (1.0) should be greater than x_min (3.0)"
+    )
+
+
 def test_vertical_zone_definition_creates_coordinates_with_dz():
     zone = VerticalRevetmentZoneDefinition(z_min=-2.0, z_max=2.0, dz_max=2.0)
     dike_schem = DikeSchematization(0.0, [0.0, 10.0], [-5.0, 5.0], [1.0], 0.0, 10.0)
@@ -230,3 +252,24 @@ def test_vertical_zone_excludes_profile_points():
     assert x_coordinates[1] == 5.0
     assert x_coordinates[2] == 6.0
     assert x_coordinates[3] == 7.0
+
+
+def test_vertical_zone_definition_throws_on_wrong_nz():
+    with pytest.raises(ValidationError) as v_error:
+        o = VerticalRevetmentZoneDefinition(z_min=0.2, z_max=5.0, nz=-1)
+
+    errors = v_error.value.errors()
+    assert len(errors) == 1
+    assert errors[0]["loc"][0] == "nz"
+
+
+def test_vertical_zone_wrong_z_values_throws():
+    with pytest.raises(ValueError) as v_error:
+        o = VerticalRevetmentZoneDefinition(z_min=3.0, z_max=1.0, dz_max=0.5)
+
+    errors = v_error.value.errors()
+    assert len(errors) == 1
+    assert (
+        errors[0]["msg"]
+        == "Value error, z_max (1.0) should be greater than z_min (3.0)"
+    )

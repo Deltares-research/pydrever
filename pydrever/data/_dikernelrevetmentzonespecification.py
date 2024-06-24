@@ -27,8 +27,8 @@ from pydrever.data._dikerneloutputspecification import (
 from pydrever.data._dikernelcalculationsettings import CalculationSettings
 from abc import ABC, abstractmethod
 import numpy as numpy
-
-from pydantic import BaseModel, ConfigDict, root_validator
+import pydrever.data._data_validation as data_validation
+from pydantic import BaseModel, ConfigDict, root_validator, Field
 
 
 class RevetmentZoneDefinition(BaseModel, ABC):
@@ -44,19 +44,17 @@ class RevetmentZoneDefinition(BaseModel, ABC):
 class HorizontalRevetmentZoneDefinition(RevetmentZoneDefinition):
     x_min: float
     x_max: float
-    nx: int | None = None
-    dx_max: float | None = None
+    nx: int | None = Field(gt=1, default=None)
+    dx_max: float | None = Field(gt=0.0, default=None)
 
     @root_validator(pre=True)
     def validate_nr_or_dx_max(cls, values):
-        nx_value = values["nx"] if "nx" in values else None
-        dx_max_value = values["dx_max"] if "dx_max" in values else None
-        if nx_value is not None and dx_max_value is not None:
-            raise ValueError("Either nx or dx_max should be specified.")
-        if nx_value is None and dx_max_value is None:
-            raise ValueError("One of nx or dx_max should be specified.")
-
-        return values
+        data_validation.validate_greater_than(
+            values=values, first_parameter_name="x_max", second_parameter_name="x_min"
+        )
+        return data_validation.validate_one_of_two_should_be_specified(
+            values=values, first_parameter_name="nx", second_parameter_name="dx_max"
+        )
 
     def get_x_coordinates(self, dike_schematizaion: DikeSchematization):
         if self.nx is not None:
@@ -81,19 +79,17 @@ class HorizontalRevetmentZoneDefinition(RevetmentZoneDefinition):
 class VerticalRevetmentZoneDefinition(RevetmentZoneDefinition):
     z_min: float
     z_max: float
-    nz: int | None = None
-    dz_max: float | None = None
+    nz: int | None = Field(gt=1, default=None)
+    dz_max: float | None = Field(gt=0.0, default=None)
 
     @root_validator(pre=True)
     def validate_nr_or_dx_max(cls, values):
-        nz_value = values["nz"] if "nz" in values else None
-        dz_max_value = values["dz_max"] if "dz_max" in values else None
-        if nz_value is not None and dz_max_value is not None:
-            raise ValueError("Either nz or dz_max should be specified.")
-        if nz_value is None and dz_max_value is None:
-            raise ValueError("One of nz or dz_max should be specified.")
-
-        return values
+        data_validation.validate_greater_than(
+            values=values, first_parameter_name="z_max", second_parameter_name="z_min"
+        )
+        return data_validation.validate_one_of_two_should_be_specified(
+            values=values, first_parameter_name="nz", second_parameter_name="dz_max"
+        )
 
     def get_x_coordinates(
         self, dike_schematizaion: DikeSchematization, inner_slope: bool = False
