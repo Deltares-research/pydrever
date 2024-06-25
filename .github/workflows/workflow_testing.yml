@@ -33,7 +33,7 @@ jobs:
     - name: Install mono
       if: ${{ matrix.os == 'macos-latest-xlarge' }} 
       run: |
-        brew install mono
+        brew install mono-mdk --cask
 #        export PATH=$PATH:/opt/local/bin
 #        sudo port install mono
     - name: Install dependencies
