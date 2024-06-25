@@ -56,7 +56,10 @@ def get_run_input(input: DikernelInput) -> DikernelInput:
             run_time_steps,
         ),
     )
-    run_input = DikernelInput(run_hydrodynamics, input.dike_schematization)
+    run_input = DikernelInput(
+        hydrodynamic_input=run_hydrodynamics,
+        dike_schematization=input.dike_schematization,
+    )
     run_input.output_locations = copy.deepcopy(input.output_locations)
     run_input.output_revetment_zones = copy.deepcopy(input.output_revetment_zones)
     run_input.settings = copy.deepcopy(input.settings)

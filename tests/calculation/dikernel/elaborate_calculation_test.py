@@ -26,7 +26,7 @@ from pydrever.calculation import Dikernel
 import pytest
 
 
-@pytest.mark.skip(reason="Only run this test locally")
+# @pytest.mark.skip(reason="Only run this test locally")
 def test_elaborate_caculation():
     x_positions = [0.0, 25.0, 35.0, 41.0, 45, 50, 60, 70]
     z_positions = [-3, 0.0, 1.5, 1.7, 3.0, 3.1, 0, -1]
@@ -84,11 +84,10 @@ def test_elaborate_caculation():
         soil_elasticity=64.0,
         upper_layer_thickness=0.146,
         upper_layer_elasticity_modulus=5712.0,
+        stiffness_ratio_nu=0.35,
+        fatigue_asphalt_alpha=0.5,
+        fatigue_asphalt_beta=5.4,
     )
-    # TODO: Move after implementing BaseModel
-    asphalt_layer.stiffness_ratio_nu = 0.35
-    asphalt_layer.fatigue_asphalt_alpha = 0.5
-    asphalt_layer.fatigue_asphalt_beta = 5.4
 
     nordic_stone_layer = NordicStoneLayerSpecification(
         top_layer_thickness=0.28, relative_density=2.45
@@ -108,24 +107,40 @@ def test_elaborate_caculation():
 
     revetment_zones = [
         RevetmentZoneSpecification(
-            HorizontalRevetmentZoneDefinition(25.01, 34.9, 0.5), nordic_stone_layer
+            zone_definition=HorizontalRevetmentZoneDefinition(
+                x_min=25.01, x_max=34.9, dx_max=0.5
+            ),
+            top_layer_specification=nordic_stone_layer,
         ),
         RevetmentZoneSpecification(
-            HorizontalRevetmentZoneDefinition(35.1, 40.9, 0.5), asphalt_layer
+            zone_definition=HorizontalRevetmentZoneDefinition(
+                x_min=35.1, x_max=40.9, dx_max=0.5
+            ),
+            top_layer_specification=asphalt_layer,
         ),
         RevetmentZoneSpecification(
-            HorizontalRevetmentZoneDefinition(41.1, 44.9, 0.5), grass_wave_impact_layer
+            zone_definition=HorizontalRevetmentZoneDefinition(
+                x_min=41.1, x_max=44.9, dx_max=0.5
+            ),
+            top_layer_specification=grass_wave_impact_layer,
         ),
         RevetmentZoneSpecification(
-            HorizontalRevetmentZoneDefinition(41.1, 44.9, 0.5), grass_wave_runup_layer
+            zone_definition=HorizontalRevetmentZoneDefinition(
+                x_min=41.1, x_max=44.9, dx_max=0.5
+            ),
+            top_layer_specification=grass_wave_runup_layer,
         ),
         RevetmentZoneSpecification(
-            HorizontalRevetmentZoneDefinition(45.0, 49.99, 0.5),
-            grass_overtopping_layer_closed,
+            zone_definition=HorizontalRevetmentZoneDefinition(
+                x_min=45.0, x_max=49.99, dx_max=0.5
+            ),
+            top_layer_specification=grass_overtopping_layer_closed,
         ),
         RevetmentZoneSpecification(
-            HorizontalRevetmentZoneDefinition(52.0, 58, 2.0),
-            grass_overtopping_layer_open,
+            zone_definition=HorizontalRevetmentZoneDefinition(
+                x_min=52.0, x_max=58, dx_max=2.0
+            ),
+            top_layer_specification=grass_overtopping_layer_open,
         ),
     ]
 
@@ -136,7 +151,9 @@ def test_elaborate_caculation():
         get_grass_wave_overtopping_calculation_settings(),
     ]
 
-    input = DikernelInput(hydrodynamic_conditions, schematization)
+    input = DikernelInput(
+        hydrodynamic_input=hydrodynamic_conditions, dike_schematization=schematization
+    )
     input.output_revetment_zones = revetment_zones
     input.settings = calculation_settings
 

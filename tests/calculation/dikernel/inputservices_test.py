@@ -28,6 +28,7 @@ from pydrever.data import (
     DikeSchematization,
     TopLayerSpecification,
     TopLayerType,
+    HydrodynamicConditions,
 )
 
 import pytest
@@ -43,6 +44,29 @@ def top_layer_specification() -> TopLayerSpecification:
 
 
 @pytest.fixture
+def empty_schematization() -> DikeSchematization:
+    return DikeSchematization(
+        dike_orientation=0.0,
+        x_positions=[0.0],
+        z_positions=[0.0],
+        roughnesses=[1.0],
+        x_outer_toe=0,
+        x_outer_crest=1.0,
+    )
+
+
+@pytest.fixture
+def empty_hydrodynamics() -> HydrodynamicConditions:
+    return HydrodynamicConditions(
+        water_levels=[0.0],
+        time_steps=[0.0, 1.0],
+        wave_heights=[0.0],
+        wave_periods=[0.0],
+        wave_directions=[0.0],
+    )
+
+
+@pytest.fixture
 def valid_output_location_specification(
     top_layer_specification,
 ) -> OutputLocationSpecification:
@@ -52,8 +76,12 @@ def valid_output_location_specification(
     )
 
 
-def test_get_output_locations_returns_output_locations(top_layer_specification):
-    input = DikernelInput(None, None)
+def test_get_output_locations_returns_output_locations(
+    top_layer_specification, empty_schematization, empty_hydrodynamics
+):
+    input = DikernelInput(
+        dike_schematization=empty_schematization, hydrodynamic_input=empty_hydrodynamics
+    )
     spec1 = top_layer_specification.copy()
     spec1.test_field = "a"
     spec2 = top_layer_specification.copy()
@@ -72,9 +100,11 @@ def test_get_output_locations_returns_output_locations(top_layer_specification):
 
 
 def test_get_output_locations_returns_output_locations_from_zone(
-    top_layer_specification,
+    top_layer_specification, empty_schematization, empty_hydrodynamics
 ):
-    input = DikernelInput(None, None)
+    input = DikernelInput(
+        dike_schematization=empty_schematization, hydrodynamic_input=empty_hydrodynamics
+    )
     input.output_revetment_zones = [
         RevetmentZoneSpecification(
             zone_definition=HorizontalRevetmentZoneDefinition(
@@ -95,9 +125,11 @@ def test_get_output_locations_returns_output_locations_from_zone(
 
 
 def test_get_output_locations_returns_output_locations_from_zones(
-    top_layer_specification,
+    top_layer_specification, empty_schematization, empty_hydrodynamics
 ):
-    input = DikernelInput(None, None)
+    input = DikernelInput(
+        dike_schematization=empty_schematization, hydrodynamic_input=empty_hydrodynamics
+    )
     input.output_revetment_zones = [
         RevetmentZoneSpecification(
             zone_definition=HorizontalRevetmentZoneDefinition(
@@ -124,7 +156,7 @@ def test_get_output_locations_returns_output_locations_from_zones(
 
 
 def test_get_output_locations_returns_combined_output_locations(
-    top_layer_specification,
+    top_layer_specification, empty_hydrodynamics
 ):
     schematization = DikeSchematization(
         dike_orientation=0.0,
@@ -134,7 +166,9 @@ def test_get_output_locations_returns_combined_output_locations(
         x_outer_toe=0.0,
         x_outer_crest=10.0,
     )
-    input = DikernelInput(None, schematization)
+    input = DikernelInput(
+        dike_schematization=schematization, hydrodynamic_input=empty_hydrodynamics
+    )
     input.output_locations = [
         OutputLocationSpecification(
             x_position=0.0, top_layer_specification=top_layer_specification

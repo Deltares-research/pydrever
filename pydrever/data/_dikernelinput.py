@@ -55,36 +55,26 @@ class HydrodynamicConditions(BaseModel):
         return values
 
 
-class DikernelInput:
-    def __init__(
-        self,
-        hydrodynamic_input: HydrodynamicConditions,
-        dike_schematization: DikeSchematization,
-    ):
-        """
-        Constructor for the DikernelInput class.
+class DikernelInput(BaseModel):
+    model_config = ConfigDict(validate_assignment=True)
 
-        Args:
-            hydrodynamicInput (HydrodynamicInput): object containing the hydrodynamic input
-            dikeSchematization (DikeSchematization): object containing the dike schematization
-        """
-        self.hydrodynamic_input: HydrodynamicConditions = hydrodynamic_input
-        """Hydrodynamic input specification - instance variable."""
-        self.dike_schematization: DikeSchematization = dike_schematization
-        """Schematization of the dike cross-shore profile and characteristic points - instance variable."""
-        self.output_locations: list[OutputLocationSpecification] = None
-        """Specification of the desired calculation and output locations - instance variable."""
-        self.output_revetment_zones: list[RevetmentZoneSpecification] = None
-        """Specification of the desired calculation and output locations by zone - instance variable."""
-        self.settings: list[CalculationSettings] = None
-        """List of calculation settings that are used for the various types of revetments - instance variable."""
-        self.start_time: float = None
-        """Optional start time of the calculation - instance variable."""
-        self.stop_time: float = None
-        """Optional stop time of the calculation - instance variable."""
-        self.output_time_steps: list[float] = None
-        """Optional list of desired output time steps. This will add output times to the calculation - instance variable."""
-        # Results are not filtered based on this list (cumulative values such as the damage increment in the results would not make sense anymore).
+    hydrodynamic_input: HydrodynamicConditions
+    """Hydrodynamic input specification - instance variable."""
+    dike_schematization: DikeSchematization
+    """Schematization of the dike cross-shore profile and characteristic points - instance variable."""
+    output_locations: list[OutputLocationSpecification] | None = None
+    """Specification of the desired calculation and output locations - instance variable."""
+    output_revetment_zones: list[RevetmentZoneSpecification] | None = None
+    """Specification of the desired calculation and output locations by zone - instance variable."""
+    settings: list[CalculationSettings] | None = None
+    """List of calculation settings that are used for the various types of revetments - instance variable."""
+    start_time: float | None = None
+    """Optional start time of the calculation - instance variable."""
+    stop_time: float | None = None
+    """Optional stop time of the calculation - instance variable."""
+    output_time_steps: list[float] | None = None
+    """Optional list of desired output time steps. This will add output times to the calculation - instance variable."""
+    # Results are not filtered based on this list (cumulative values such as the damage increment in the results would not make sense anymore).
 
     def add_output_location(
         self, x_location: float, top_layer_specification: TopLayerSpecification
