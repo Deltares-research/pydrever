@@ -87,36 +87,36 @@ def __add_dike_profile_to_builder(
         roughness = dike_schematization.roughnesses[i]
         builder.AddDikeProfileSegment(x_start, z_start, x_end, z_end, roughness)
 
-    if dike_schematization.outer_toe is not None:
+    if dike_schematization.x_outer_toe is not None:
         builder.AddDikeProfilePoint(
-            dike_schematization.outer_toe, CharacteristicPointType.OuterToe
+            dike_schematization.x_outer_toe, CharacteristicPointType.OuterToe
         )
 
-    if dike_schematization.crest_outer_berm is not None:
+    if dike_schematization.x_crest_outer_berm is not None:
         builder.AddDikeProfilePoint(
-            dike_schematization.crest_outer_berm,
+            dike_schematization.x_crest_outer_berm,
             CharacteristicPointType.CrestOuterBerm,
         )
 
-    if dike_schematization.notch_outer_berm is not None:
+    if dike_schematization.x_notch_outer_berm is not None:
         builder.AddDikeProfilePoint(
-            dike_schematization.notch_outer_berm,
+            dike_schematization.x_notch_outer_berm,
             CharacteristicPointType.NotchOuterBerm,
         )
 
-    if dike_schematization.outer_crest is not None:
+    if dike_schematization.x_outer_crest is not None:
         builder.AddDikeProfilePoint(
-            dike_schematization.outer_crest, CharacteristicPointType.OuterCrest
+            dike_schematization.x_outer_crest, CharacteristicPointType.OuterCrest
         )
 
-    if dike_schematization.inner_crest is not None:
+    if dike_schematization.x_inner_crest is not None:
         builder.AddDikeProfilePoint(
-            dike_schematization.inner_crest, CharacteristicPointType.InnerCrest
+            dike_schematization.x_inner_crest, CharacteristicPointType.InnerCrest
         )
 
-    if dike_schematization.inner_toe is not None:
+    if dike_schematization.x_inner_toe is not None:
         builder.AddDikeProfilePoint(
-            dike_schematization.inner_toe, CharacteristicPointType.InnerToe
+            dike_schematization.x_inner_toe, CharacteristicPointType.InnerToe
         )
 
 

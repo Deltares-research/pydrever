@@ -39,10 +39,10 @@ def test_elaborate_caculation():
         x_outer_toe=25.0,
         x_outer_crest=45.0,
     )
-    schematization.crest_outer_berm = 35.0
-    schematization.notch_outer_berm = 41.0
-    schematization.inner_crest = 50.0
-    schematization.inner_toe = 60.0
+    schematization.x_crest_outer_berm = 35.0
+    schematization.x_notch_outer_berm = 41.0
+    schematization.x_inner_crest = 50.0
+    schematization.x_inner_toe = 60.0
 
     time_steps = numpy.linspace(
         0.0, 126000.0, int(126000.0 / 1000.0), dtype=float, endpoint=True

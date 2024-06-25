@@ -126,7 +126,14 @@ def test_get_output_locations_returns_output_locations_from_zones(
 def test_get_output_locations_returns_combined_output_locations(
     top_layer_specification,
 ):
-    schematization = DikeSchematization(0.0, [0.0, 10.0], [0.0, 5.0], [1.0], 0.0, 10.0)
+    schematization = DikeSchematization(
+        dike_orientation=0.0,
+        x_positions=[0.0, 10.0],
+        z_positions=[0.0, 5.0],
+        roughnesses=[1.0],
+        x_outer_toe=0.0,
+        x_outer_crest=10.0,
+    )
     input = DikernelInput(None, schematization)
     input.output_locations = [
         OutputLocationSpecification(

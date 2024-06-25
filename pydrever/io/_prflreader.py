@@ -84,12 +84,12 @@ def read(file_name: str) -> DikeSchematization:
     x_coordinates, z_coordinates, roughness = __read_coordinates(lines)
     x_outer_crest = __find_outer_crest(x_coordinates, z_coordinates)
     return DikeSchematization(
-        orientation,
-        x_coordinates,
-        z_coordinates,
-        roughness,
-        min(x_coordinates),
-        x_outer_crest,
+        dike_orientation=orientation,
+        x_positions=x_coordinates,
+        z_positions=z_coordinates,
+        roughnesses=roughness,
+        x_outer_toe=min(x_coordinates),
+        x_outer_crest=x_outer_crest,
     )
 
 

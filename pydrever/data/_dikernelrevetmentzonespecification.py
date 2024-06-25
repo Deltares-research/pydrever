@@ -97,9 +97,9 @@ class VerticalRevetmentZoneDefinition(RevetmentZoneDefinition):
         x_coordaintes = numpy.array(dike_schematizaion.x_positions)
         z_coordaintes = numpy.array(dike_schematizaion.z_positions)
         filter_mask = (
-            x_coordaintes <= dike_schematizaion.outer_crest
+            x_coordaintes <= dike_schematizaion.x_outer_crest
             if not inner_slope
-            else x_coordaintes >= dike_schematizaion.outer_crest
+            else x_coordaintes >= dike_schematizaion.x_outer_crest
         )
         x_dike = numpy.array(x_coordaintes[filter_mask])
         z_dike = numpy.array(z_coordaintes[filter_mask])
