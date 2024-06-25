@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
-        os: [ubuntu-latest, windows-latest, macos-latest-xlarge]
+        os: [ubuntu-latest, windows-latest] #, macos-latest-xlarge
 
     steps:
     - name: Checkout repository
@@ -30,10 +30,10 @@ jobs:
 #      if: ${{ matrix.os == 'macos-latest-xlarge' }} 
 #      uses: melusina-org/setup-macports@v1
 #      id: 'macports'
-    - name: Install mono
-      if: ${{ matrix.os == 'macos-latest-xlarge' }} 
-      run: |
-        brew install mono-mdk --cask
+#    - name: Install mono
+#      if: ${{ matrix.os == 'macos-latest-xlarge' }} 
+#      run: |
+#        brew install mono-mdk --cask
 #        export PATH=$PATH:/opt/local/bin
 #        sudo port install mono
     - name: Install dependencies
