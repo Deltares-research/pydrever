@@ -27,11 +27,11 @@ jobs:
     - name: Display Python version
       run: python -c "import sys; print(sys.version)"
     - name: Instal MacPorts
-      if: ${{ matrix.os == 'macos-latest' }} 
+      if: ${{ matrix.os == 'macos-latest-xlarge' }} 
       uses: melusina-org/setup-macports@v1
       id: 'macports'
     - name: Install mono
-      if: ${{ matrix.os == 'macos-latest' }} 
+      if: ${{ matrix.os == 'macos-latest-xlarge' }} 
       run: |
         export PATH=$PATH:/opt/local/bin
         sudo port install mono
