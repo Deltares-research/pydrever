@@ -32,7 +32,7 @@ jobs:
       id: 'macports'
     - name: Install mono
       if: ${{ matrix.os == 'macos-latest' }} 
-     run: |
+      run: |
         export PATH=$PATH:/opt/local/bin
         sudo port install mono
     - name: Install dependencies
