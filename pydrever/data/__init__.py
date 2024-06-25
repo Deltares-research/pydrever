@@ -18,7 +18,6 @@
  Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
-from ._calculationmethods import CalculationMethod
 from ._toplayertypes import TopLayerType
 from ._quantities import TimeDependentOutputQuantity
 

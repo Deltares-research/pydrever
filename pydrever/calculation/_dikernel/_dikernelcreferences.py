@@ -29,7 +29,6 @@ import os
 dll_base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_dikerneldll")
 clr.AddReference(os.path.join(dll_base_path, "DiKErnel.Core.dll"))
 clr.AddReference(os.path.join(dll_base_path, "DiKErnel.Integration.dll"))
-clr.AddReference(os.path.join(dll_base_path, "dllDikesOvertopping.dll"))
 
 
 from System import Double, ValueTuple
