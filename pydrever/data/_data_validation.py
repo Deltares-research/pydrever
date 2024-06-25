@@ -20,8 +20,20 @@
 
 
 def validate_one_of_two_should_be_specified(
-    values, first_parameter_name: str, second_parameter_name: str
+    values: dict, first_parameter_name: str, second_parameter_name: str
 ):
+    """
+    This method validates whether only one of two parameters is specified.
+
+    Args:
+        values (dict): Specified input values of the various parameters.
+        first_parameter_name (str): Name of the first parameter
+        second_parameter_name (str): Name of a different parameter
+
+    Raises:
+        ValueError: In case both parameters are specified.
+        ValueError: In case none of the specified parameters is provided.
+    """
     first_parameter_value = (
         values[first_parameter_name] if first_parameter_name in values else None
     )
@@ -40,12 +52,22 @@ def validate_one_of_two_should_be_specified(
                 first_parameter_name, second_parameter_name
             )
         )
-    return values
 
 
 def validate_greater_than(
-    values, first_parameter_name: str, second_parameter_name: str
+    values: dict, first_parameter_name: str, second_parameter_name: str
 ):
+    """
+    This method validates whether the first argument is greater than the second parameter
+
+    Args:
+        values (dict): Specified input values of the various parameters.
+        first_parameter_name (str): Name of the first parameter
+        second_parameter_name (str): Name of a different parameter
+
+    Raises:
+        ValueError: In case the first parameter is not greater than the second parameter
+    """
     first_parameter_value = (
         values[first_parameter_name] if first_parameter_name in values else None
     )
@@ -61,10 +83,24 @@ def validate_greater_than(
                 second_parameter_value,
             )
         )
-    return values
 
 
-def validate_hydrodynamics_length(values):
+def validate_hydrodynamics_length(values: dict):
+    """
+    This method validates the length of the specified arrays for the various input
+    variables of a HydrodynamicConditions object.
+
+    Args:
+        values (dict): Specified input for creating a HydrodynamicConditions object.
+
+    Raises:
+        Exception: In case the specified water_levels, wave_heights, wave_periods and wave_drections
+        do not have the same length or in case the length of these specified parameters is
+        not equal to the length of the specified time_steps - 1.
+
+    Returns:
+        _type_: _description_
+    """
     time_steps = __get_value(values, "time_steps")
     wave_heights = __get_value(values, "wave_heights")
     water_levels = __get_value(values, "water_levels")
@@ -83,5 +119,5 @@ def validate_hydrodynamics_length(values):
     return values
 
 
-def __get_value(values, name):
+def __get_value(values: dict, name: str):
     return values[name] if name in values else None

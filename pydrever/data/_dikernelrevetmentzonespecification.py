@@ -35,9 +35,19 @@ class RevetmentZoneDefinition(BaseModel, ABC):
     model_config = ConfigDict(validate_assignment=True)
 
     include_schematization_coordinates: bool = False
+    """ Determines whether the profile coordinates of the DikeSchematization are also returned when calling get_x_coordinates"""
 
     @abstractmethod
     def get_x_coordinates(self, dike_schematization: DikeSchematization) -> list[float]:
+        """
+        This method returns the x-locations where calculations should be performed.
+
+        Args:
+            dike_schematization (DikeSchematization): The dike schematization.
+
+        Returns:
+            list[float]: A list of x-locations
+        """
         return None
 
 
