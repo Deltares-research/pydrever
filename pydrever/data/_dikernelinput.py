@@ -19,6 +19,8 @@
 """
 
 from __future__ import annotations
+from pydantic import BaseModel, ConfigDict, root_validator
+
 import numpy as numpy
 from pydrever.data._dikerneloutputspecification import (
     OutputLocationSpecification,
@@ -29,46 +31,28 @@ from pydrever.data._dikernelrevetmentzonespecification import (
     RevetmentZoneSpecification,
 )
 from pydrever.data._dikernelcalculationsettings import CalculationSettings
+from pydrever.data import _data_validation as data_validation
 
 
-class HydrodynamicConditions:
-    def __init__(
-        self,
-        time_steps: list[float],
-        water_levels: list[float],
-        wave_heights: list[float],
-        wave_periods: list[float],
-        wave_directions: list[float],
-    ):
-        """
-        Constructor for the hydrodynamic input.
+class HydrodynamicConditions(BaseModel):
+    model_config = ConfigDict(validate_assignment=True)
 
-        Args:
-            time_steps (list[float]): list of timesteps.
-            water_levels (list[float]): list of waterlevels
-            wave_heights (list[float]): list of significant wave heights (Hs)
-            wave_periods (list[float]): list of wave periods
-            wave_directions (list[float]): list of wave directions
-        Raises:
-            Exception: In case the length of either the specified water level series, the wave heights, wave periods or wave angles is not exactly 1 less than the length of the specified time steps.
-        """
-        nr_time_steps = len(time_steps)
-        if (
-            nr_time_steps - 1 != len(water_levels)
-            or nr_time_steps - 1 != len(wave_heights)
-            or nr_time_steps - 1 != len(wave_periods)
-            or nr_time_steps - 1 != len(wave_directions)
-        ):
-            raise Exception(
-                "Length of the specified series for waterlevels, wave heights, wave periods and wave angles needs to be exactly 1 less than the length of the specified time steps."
-            )
+    time_steps: list[float]
+    """list of timesteps."""
+    water_levels: list[float]
+    """list of waterlevels"""
+    wave_heights: list[float]
+    """list of significant wave heights (Hs)"""
+    wave_periods: list[float]
+    """list of wave periods"""
+    wave_directions: list[float]
+    """list of wave directions"""
+    # TODO: Maybe automatically correct the wave directions?
 
-        self.time_steps = time_steps
-        self.water_levels = water_levels
-        self.wave_heights = wave_heights
-        self.wave_periods = wave_periods
-        self.wave_directions = wave_directions
-        # TODO: Maybe automatically correct the wave directions?
+    @root_validator(pre=True)
+    def validate_nr_or_dx_max(cls, values):
+        data_validation.validate_hydrodynamics_length(values=values)
+        return values
 
 
 class DikernelInput:

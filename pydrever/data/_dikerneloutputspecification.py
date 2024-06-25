@@ -20,7 +20,6 @@
 
 from __future__ import annotations
 from pydrever.data._toplayertypes import TopLayerType
-from pydrever.data._calculationmethods import CalculationMethod
 from pydrever.data._dikernelcalculationsettings import CalculationSettings
 from pydantic import BaseModel, ConfigDict
 

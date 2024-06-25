@@ -40,17 +40,17 @@ def get_run_input(input: DikernelInput) -> DikernelInput:
     time_steps = input.hydrodynamic_input.time_steps
     run_time_steps = get_run_time_steps(input)
     run_hydrodynamics = HydrodynamicConditions(
-        run_time_steps,
-        interpolation.interpolate_time_series(
+        time_steps=run_time_steps,
+        water_levels=interpolation.interpolate_time_series(
             time_steps, input.hydrodynamic_input.water_levels, run_time_steps
         ),
-        interpolation.interpolate_time_series(
+        wave_heights=interpolation.interpolate_time_series(
             time_steps, input.hydrodynamic_input.wave_heights, run_time_steps
         ),
-        interpolation.interpolate_time_series(
+        wave_periods=interpolation.interpolate_time_series(
             time_steps, input.hydrodynamic_input.wave_periods, run_time_steps
         ),
-        interpolation.interpolate_time_series(
+        wave_directions=interpolation.interpolate_time_series(
             time_steps,
             input.hydrodynamic_input.wave_directions,
             run_time_steps,

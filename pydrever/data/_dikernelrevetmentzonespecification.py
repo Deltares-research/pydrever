@@ -52,9 +52,10 @@ class HorizontalRevetmentZoneDefinition(RevetmentZoneDefinition):
         data_validation.validate_greater_than(
             values=values, first_parameter_name="x_max", second_parameter_name="x_min"
         )
-        return data_validation.validate_one_of_two_should_be_specified(
+        data_validation.validate_one_of_two_should_be_specified(
             values=values, first_parameter_name="nx", second_parameter_name="dx_max"
         )
+        return values
 
     def get_x_coordinates(self, dike_schematizaion: DikeSchematization):
         if self.nx is not None:
@@ -87,9 +88,10 @@ class VerticalRevetmentZoneDefinition(RevetmentZoneDefinition):
         data_validation.validate_greater_than(
             values=values, first_parameter_name="z_max", second_parameter_name="z_min"
         )
-        return data_validation.validate_one_of_two_should_be_specified(
+        data_validation.validate_one_of_two_should_be_specified(
             values=values, first_parameter_name="nz", second_parameter_name="dz_max"
         )
+        return values
 
     def get_x_coordinates(
         self, dike_schematizaion: DikeSchematization, inner_slope: bool = False
