@@ -22,6 +22,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as numpy
 from pydrever.data import DikernelInput, DikernelOutputLocation
+from pydrever.calculation._dikernel._inputservices import get_run_input
 
 
 def animate_damage_development(
@@ -29,7 +30,7 @@ def animate_damage_development(
 ):
     from matplotlib import animation
 
-    run_input = input.get_run_input()
+    run_input = get_run_input(input)
     x_positions = [l.x_position for l in output]
     damage_development = [[0.0] * len(x_positions)]
     t_output = run_input.hydrodynamic_input.time_steps
@@ -119,9 +120,9 @@ def animate_damage_development(
         except:
             print("Oops")
         fig.suptitle("Tijd = %0.0f [sec]" % (t_output[i]))
-        vline.set_xdata(t_output[i])
+        vline.set_xdata([t_output[i]])
         water_level.set_ydata(
-            run_input.hydrodynamic_input.water_levels[max([0, i - 1])]
+            [run_input.hydrodynamic_input.water_levels[max([0, i - 1])]]
         )
         fig.canvas.draw()
         return (line,)
