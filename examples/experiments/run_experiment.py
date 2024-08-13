@@ -39,7 +39,7 @@ plot_hydrodynamic_conditions(input)
 
 runResult = kernel.run()
 if not runResult:
-    for message in kernel.messages:
+    for message in kernel.errors:
         print(message)
     quit()
 

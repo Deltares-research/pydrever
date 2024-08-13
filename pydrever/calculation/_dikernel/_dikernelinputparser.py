@@ -40,6 +40,7 @@ from pydrever.data import (
     TopLayerType,
 )
 from pydrever.calculation._dikernel import _inputservices as _input_service
+from pydrever.calculation._dikernel import _messagehelper as _message_helper
 from pydrever.calculation._dikernel._dikernelcreferences import *
 
 
@@ -59,11 +60,9 @@ def parse(input: DikernelInput) -> ICalculationInput:
     __add_output_location_specifications_to_builder(builder, input)
     composed_input = builder.Build()
 
-    messages = []
-    if not composed_input.Successful:
-        messages = [ev.Message for ev in composed_input.Events]
-
-    return composed_input.Data, messages
+    warnings, errors = _message_helper.parse_messages(composed_input)
+    
+    return composed_input.Data, warnings, errors
 
 
 def __add_dike_profile_to_builder(

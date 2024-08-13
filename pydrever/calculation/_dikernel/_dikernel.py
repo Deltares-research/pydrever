@@ -23,6 +23,7 @@ from pydrever.calculation._dikernel._dikernelcreferences import *
 import pydrever.calculation._dikernel._dikernelinputparser as _input_parser
 import pydrever.calculation._dikernel._dikerneloutputparser as _output_parser
 import pydrever.calculation._dikernel._inputservices as _input_services
+import pydrever.calculation._dikernel._messagehelper as _message_helper
 import numpy as numpy
 
 
@@ -40,7 +41,8 @@ class Dikernel:
         """
         self.input: DikernelInput = input
         self.output: list[DikernelOutputLocation] = None
-        self.messages: list[str] = list[str]()
+        self.warnings: list[str] = list[str]()
+        self.errors: list[str] = list[str]()
         self.__c_input = None
         self.__c_output = None
         self.__c_validation_result = None
@@ -60,6 +62,17 @@ class Dikernel:
             calculator.WaitForCompletion()
 
             self.__c_output = calculator.Result
+
+            warnings, errors = _message_helper.parse_messages(self.__c_output)
+            self.warnings.extend(warnings)
+            self.errors.extend(errors)
+
+            if (
+                not self.__c_output.Successful
+                or self.__c_output.Data is None
+                or len(self.errors) > 0
+            ):
+                return False
 
             x_positions = [
                 l.x_position
@@ -94,20 +107,22 @@ class Dikernel:
         return self.__run_kernel_validation()
 
     def __convert_input_to_c(self) -> bool:
-        self.__c_input, messages = _input_parser.parse(
+        self.__c_input, warnings, errors = _input_parser.parse(
             _input_services.get_run_input(self.input)
         )
-        if self.__c_input is None:
-            self.messages.append("Could not parse input.")
-            for m in messages:
-                self.messages.append(m)
+
+        self.warnings.extend(warnings)
+        self.errors.extend(errors)
+        if self.__c_input is None or len(self.errors) > 0:
             return False
 
         return True
 
     def __run_kernel_validation(self) -> bool:
         self.__c_validation_result = Validator.Validate(self.__c_input)
-        self.messages.extend(list(i.Message for i in self.__c_validation_result.Events))
+        warnings, errors = _message_helper.parse_messages(self.__c_validation_result)
+        self.warnings.extend(warnings)
+        self.errors.extend(errors)
 
         return self.__c_validation_result.Successful and int(
             self.__c_validation_result.Data
@@ -121,31 +136,31 @@ class Dikernel:
             bool: True if the specified input meets criteria to be able to convert to C#. In case it is false, the instanve variable "validation_messages" contains information on why validation was not successfull.
         """
         if self.input is None:
-            self.messages.append("Specify input first")
+            self.errors.append("Specify input first")
             return False
 
         result = True
         if self.input.hydrodynamic_input is None:
-            self.messages.append("Hydrodynamic input must be specified.")
+            self.errors.append("Hydrodynamic input must be specified.")
             result = False
         elif (
             self.input.hydrodynamic_input.time_steps is None
             or len(self.input.hydrodynamic_input.time_steps) < 2
         ):
-            self.messages.append(
+            self.errors.append(
                 "At least two time steps need to be specified in the hydrodynamic input."
             )
             result = False
 
         if self.input.dike_schematization is None:
-            self.messages.append("Dike schematization must be specified")
+            self.errors.append("Dike schematization must be specified")
             result = False
         if (
             self.input.dike_schematization.dike_orientation is None
             or self.input.dike_schematization.dike_orientation < 0
             or self.input.dike_schematization.dike_orientation > 360
         ):
-            self.messages.append(
+            self.errors.append(
                 "Dike orientation must be specified as a number between 0 and 360 degrees."
             )
             result = False
@@ -155,12 +170,12 @@ class Dikernel:
             self.input.output_revetment_zones is None
             or len(self.input.output_revetment_zones) < 1
         ):
-            self.messages.append("At least one outputlocation needs to be specified.")
+            self.errors.append("At least one outputlocation needs to be specified.")
             result = False
         if self.input.start_time is not None and self.input.start_time > numpy.max(
             self.input.hydrodynamic_input.time_steps
         ):
-            self.messages.append(
+            self.errors.append(
                 "Start time should not exceed the specified hydrodynamic boundary conditions."
             )
             result = False
@@ -173,7 +188,7 @@ class Dikernel:
                 self.input.start_time is not None
                 and minimumOutputTime < self.input.start_time
             ):
-                self.messages.append(
+                self.errors.append(
                     "Specified output time steps should all be greater than the specified start time."
                 )
                 result = False
@@ -182,7 +197,7 @@ class Dikernel:
                 and minimumOutputTime
                 < numpy.min(self.input.hydrodynamic_input.time_steps)
             ):
-                self.messages.append(
+                self.errors.append(
                     "Specified output time steps should all be greater than the minimum specified time step of the hydrodynamic conditions."
                 )
                 result = False
@@ -192,7 +207,7 @@ class Dikernel:
                 and maximumOutputTime
                 > numpy.max(self.input.hydrodynamic_input.time_steps)
             ):
-                self.messages.append(
+                self.errors.append(
                     "Specified output time steps should not be greater than the maximum specified time step of the hydrodynamic conditions."
                 )
                 result = False
