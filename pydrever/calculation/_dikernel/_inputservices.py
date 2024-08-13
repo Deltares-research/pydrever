@@ -119,3 +119,23 @@ def get_output_locations_from_input(
             locations = locations + zone.get_output_locations(input.dike_schematization)
 
     return sorted(locations, key=lambda l: l.x_position)
+
+
+def rearrange_profile_coordinates(
+    x_coordinates_unsorted: list[float], z_coordinates_unsorted: list[float]
+) -> tuple[list[float], list[float]]:
+    """
+    This method sorts coordinates such that x_coordniates are continuously increasing and the returned z_coordinates are rearranged in the same way.
+
+    Args:
+        x_coordinates_unsorted (list[float]): Unsorted x-coordinates
+        z_coordinates_unsorted (list[float]): Unsorted z-coordinates
+
+    Returns:
+        tuple[list[float], list[float]]: sorted x-coordinates (first result) and z-coordinates (second result)
+    """
+    xcoordinates = sorted(x_coordinates_unsorted)
+    zcoordinates = [
+        z for _, z in sorted(zip(x_coordinates_unsorted, z_coordinates_unsorted))
+    ]
+    return xcoordinates, zcoordinates

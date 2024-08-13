@@ -24,6 +24,7 @@ import pydrever.calculation._dikernel._dikernelinputparser as _input_parser
 import pydrever.calculation._dikernel._dikerneloutputparser as _output_parser
 import pydrever.calculation._dikernel._inputservices as _input_services
 import pydrever.calculation._dikernel._messagehelper as _message_helper
+import pydrever.calculation._dikernel._validationhelper as _validation_helper
 import numpy as numpy
 
 
@@ -155,15 +156,28 @@ class Dikernel:
         if self.input.dike_schematization is None:
             self.errors.append("Dike schematization must be specified")
             result = False
-        if (
-            self.input.dike_schematization.dike_orientation is None
-            or self.input.dike_schematization.dike_orientation < 0
-            or self.input.dike_schematization.dike_orientation > 360
+        if not _validation_helper.is_valid_orientation(
+            self.input.dike_schematization.dike_orientation
         ):
             self.errors.append(
                 "Dike orientation must be specified as a number between 0 and 360 degrees."
             )
             result = False
+            # TODO: Correct orientation?
+        if not _validation_helper.is_continuously_increasing(
+            self.input.dike_schematization.x_positions
+        ):
+            self.warnings.append(
+                "X and Z positions of the dike schematization where re-arranged as they need to be continously increasing."
+            )
+            (
+                self.input.dike_schematization.x_positions,
+                self.input.dike_schematization.z_positions,
+            ) = _input_services.rearrange_profile_coordinates(
+                self.input.dike_schematization.x_positions,
+                self.input.dike_schematization.z_positions,
+            )
+
         if (
             self.input.output_locations is None or len(self.input.output_locations) < 1
         ) and (
