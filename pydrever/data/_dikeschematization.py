@@ -37,6 +37,9 @@ class DikeSchematization(BaseModel):
     x_outer_crest: float
     """The cross-shore location of the (outer) crest of the dike"""
     x_crest_outer_berm: float | None = None
+    """The cross-shore location of the notch of the outer berm"""
     x_notch_outer_berm: float | None = None
+    """The cross-shore location of the inner crest of the dike"""
     x_inner_crest: float | None = None
+    """The cross-shore location of the inner toe of the dike"""
     x_inner_toe: float | None = None

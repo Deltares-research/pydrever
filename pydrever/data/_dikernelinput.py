@@ -39,6 +39,7 @@ class HydrodynamicConditions(BaseModel):
 
     time_steps: list[float]
     """list of timesteps."""
+    # TODO: Check whether all time steps are increasing? Or does the dikernel give this error?
     water_levels: list[float]
     """list of waterlevels"""
     wave_heights: list[float]
@@ -47,7 +48,7 @@ class HydrodynamicConditions(BaseModel):
     """list of wave periods"""
     wave_directions: list[float]
     """list of wave directions"""
-    # TODO: Maybe automatically correct the wave directions?
+    # TODO: Maybe automatically correct the wave directions? But not here.. only validate the directions in this class.
 
     @root_validator(pre=True)
     def validate_nr_or_dx_max(cls, values):

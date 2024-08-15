@@ -42,6 +42,8 @@ class OutputLocationSpecification(BaseModel):
     class to specify the desired calculations and output.
     """
 
+    model_config = ConfigDict(validate_assignment=True)
+
     x_position: float
     """[float] The cross-shore position of the required calculation and output - instance variable"""
     top_layer_specification: TopLayerSpecification
@@ -66,20 +68,38 @@ class AsphaltLayerSpecification(TopLayerSpecification):
 
 
 class NordicStoneLayerSpecification(TopLayerSpecification):
+    """
+    Specification of a nordic stone top layer.
+    """
+
     top_layer_thickness: float
+    """Thickness of the top layer in meters."""
     relative_density: float
+    """Relative density of the stone material."""
 
 
 class GrassWaveImpactLayerSpecification(TopLayerSpecification):
+    """
+    Specification of a grass top layer for wave impact calculations.
+    """
+
     pass
 
 
 class GrassOvertoppingLayerSpecification(TopLayerSpecification):
+    """
+    Specification of a grass top layer for wave overtopping calculations.
+    """
+
     increased_load_transition_alpha_m: float | None = None
     increased_load_transition_alpha_s: float | None = None
 
 
 class GrassWaveRunupLayerSpecification(TopLayerSpecification):
+    """
+    Specification of a grass top layer for wave runup calculations.
+    """
+
     outer_slope: float
     increased_load_transition_alpha_m: float | None = None
     increased_load_transition_alpha_s: float | None = None

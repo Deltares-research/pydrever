@@ -32,6 +32,11 @@ from pydantic import BaseModel, ConfigDict, root_validator, Field
 
 
 class RevetmentZoneDefinition(BaseModel, ABC):
+    """
+    This class acts as a base class for defining revetment zones. Each derived class
+    should define a ethod that returns a list of output locations (x-positions).
+    """
+
     model_config = ConfigDict(validate_assignment=True)
 
     include_schematization_coordinates: bool = False
@@ -52,10 +57,23 @@ class RevetmentZoneDefinition(BaseModel, ABC):
 
 
 class HorizontalRevetmentZoneDefinition(RevetmentZoneDefinition):
+    """
+    This class defines a revetment zone in a horizontal way, meaning that it can be used to
+    define output locations based on a minimum and maximum x-location cross-shore to the dike.
+
+    When creating this class, either the number of output points between this minimum and maximum
+    should be provided, or a maximum cross-shore distance between the output points. This class
+    will then automatically generate all x-locations for the output points.
+    """
+
     x_min: float
+    """The minimum x cross-shore coordinate of this revetment zone."""
     x_max: float
+    """The maximum x cross-shore coordinate of this revetment zone."""
     nx: int | None = Field(gt=1, default=None)
+    """The number of desired output locations."""
     dx_max: float | None = Field(gt=0.0, default=None)
+    """The maximum distance between output locations."""
 
     @root_validator(pre=True)
     def validate_nr_or_dx_max(cls, values):
@@ -88,10 +106,23 @@ class HorizontalRevetmentZoneDefinition(RevetmentZoneDefinition):
 
 
 class VerticalRevetmentZoneDefinition(RevetmentZoneDefinition):
+    """
+    This class defines a revetment zone in a vertical way, meaning that it can be used to
+    define output locations based on a minimum and maximum elevation.
+
+    When creating this class, either the number of output points between this minimum and maximum
+    should be provided, or a maximum (vertical) distance between the output points should be provided.
+    This class will then automatically generate all x-locations for the output points.
+    """
+
     z_min: float
+    """The minimum elevation of this revetment zone."""
     z_max: float
+    """The maximum elevation of this revetment zone."""
     nz: int | None = Field(gt=1, default=None)
+    """The number of (vertical) levels at which output is required."""
     dz_max: float | None = Field(gt=0.0, default=None)
+    """The maximum (vertical) distance between output points."""
 
     @root_validator(pre=True)
     def validate_nr_or_dx_max(cls, values):
@@ -138,13 +169,36 @@ class VerticalRevetmentZoneDefinition(RevetmentZoneDefinition):
 
 
 class RevetmentZoneSpecification(BaseModel):
+    """
+    Specifies a revetment zone. This class holds a top layer specification
+    and a revetment zone definition. Optionally also calculation settings specific
+    for this revetment zone can be specified.
+
+    The class offers also a method get_output_locations to generate desired output-/
+    calculation locations, all with the same top layer specification and optional
+    settings.
+    """
+
     top_layer_specification: TopLayerSpecification
+    """Specification of the top layer of this revetment zone."""
     zone_definition: RevetmentZoneDefinition
+    """Specification of the geometry of the revetment zone (either vertical or horizontal)."""
     calculation_settings: CalculationSettings | None = None
+    """Optionl settings that should be used when calculating along this revetment zone."""
 
     def get_output_locations(
         self, dike_schematization: DikeSchematization
     ) -> list[OutputLocationSpecification]:
+        """
+        Automatically generates the desired output locations based on the specified zone_definition
+        and top_layer_specification.
+
+        Args:
+            dike_schematization (DikeSchematization): The schematization of the dike, needed in order to generate locations based on the revetment zone definition.
+
+        Returns:
+            list[OutputLocationSpecification]: A list of output location specifications to be used by Dikernel.
+        """
         x_output_locations = self.zone_definition.get_x_coordinates(dike_schematization)
         return [
             OutputLocationSpecification(
