@@ -30,6 +30,7 @@ dll_base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_diker
 clr.AddReference(os.path.join(dll_base_path, "DiKErnel.Core.dll"))
 clr.AddReference(os.path.join(dll_base_path, "DiKErnel.Integration.dll"))
 clr.AddReference(os.path.join(dll_base_path, "DiKErnel.Util.dll"))
+clr.AddReference(os.path.join(dll_base_path, "DiKErnel.FunctionLibrary.dll"))
 
 
 from System import Double, ValueTuple
@@ -73,3 +74,9 @@ from DiKErnel.Integration.Data.GrassRevetmentWaveRunup import (
 from DiKErnel.Integration import CalculationInputBuilder
 
 from DiKErnel.Util import EventType
+
+from DiKErnel.FunctionLibrary import HydraulicLoadFunctions
+
+from DiKErnel.FunctionLibrary.GrassRevetmentWaveImpact import (
+    GrassRevetmentWaveImpactFunctions,
+)

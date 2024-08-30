@@ -20,3 +20,4 @@
 
 from pydrever.calculation._dikernel import Dikernel
 import pydrever.calculation._hydrodynamicsinterpolation as hydrodynamicsinterpolator
+import pydrever.calculation._grassresistancetimescalculator as grassresistancetimescalculator

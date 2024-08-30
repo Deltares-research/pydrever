@@ -139,9 +139,9 @@ class GrassWaveImpactCalculationSettings(CalculationSettings):
     """
 
     loading_upper_limit: float | None = None
-    """Upper limit of the loading - instance variable."""
+    """Fraction of the wave height that is added to the water level to determine the loading zone upper limit - instance variable."""
     loading_lower_limit: float | None = None
-    """Lower limit of the loading - instance variable."""
+    """Fraction of the wave height that is subtracted from the water level to determine the loading zone lower limit - instance variable."""
     wave_angle_impact_n: float | None = None
     """Wave angle impact constant n - instance variable."""
     wave_angle_impact_q: float | None = None
@@ -149,7 +149,9 @@ class GrassWaveImpactCalculationSettings(CalculationSettings):
     wave_angle_impact_r: float | None = None
     """Wave angle impact constant r - instance variable."""
     te_max: float | None = None
+    """Maximum grass resistance time calculated (to avoid division by 0 all higher values will be limited to this resistance time)."""
     te_min: float | None = None
+    """Minimum grass resistance time calculated (times shorter than this will be limited to this time)"""
 
 
 class GrassWaveRunupCalculationSettings(CalculationSettings):
