@@ -384,7 +384,7 @@ def __convert_to_cList(lst: list[list[float]]):
 
 
 def __get_first_natural_stone_toplayer_of_type(
-    settings: CalculationSettings | None, top_layer_type: TopLayerType
+    settings: CalculationSettings | None, top_layer_type: TopLayerType | None
 ) -> NaturalStoneTopLayerSettings | None:
     if settings is not None:
         return (
@@ -404,7 +404,7 @@ def __get_first_natural_stone_toplayer_of_type(
 
 
 def __get_first_grass_wave_impact_toplayer_of_type(
-    settings: CalculationSettings | None, top_layer_type: TopLayerType
+    settings: CalculationSettings | None, top_layer_type: TopLayerType | None
 ) -> GrassWaveImpactTopLayerSettings | None:
     return (
         next(
@@ -421,7 +421,7 @@ def __get_first_grass_wave_impact_toplayer_of_type(
 
 
 def __get_first_grass_cumulative_overload_toplayer_of_type(
-    settings: CalculationSettings | None, top_layer_type: TopLayerType
+    settings: CalculationSettings | None, top_layer_type: TopLayerType | None
 ) -> GrassCumulativeOverloadTopLayerSettings | None:
     return (
         next(
