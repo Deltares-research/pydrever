@@ -1,21 +1,21 @@
 """
- Copyright (C) Stichting Deltares 2024. All rights reserved.
- 
- This file is part of the dikernel-python toolbox.
- 
- This program is free software; you can redistribute it and/or modify it under the terms of
- the GNU Lesser General Public License as published by the Free Software Foundation; either
- version 3 of the License, or (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- See the GNU Lesser General Public License for more details.
- 
- You should have received a copy of the GNU Lesser General Public License along with this
- program; if not, see <https://www.gnu.org/licenses/>.
- 
- All names, logos, and references to "Deltares" are registered trademarks of Stichting
- Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
+Copyright (C) Stichting Deltares 2024. All rights reserved.
+
+This file is part of the dikernel-python toolbox.
+
+This program is free software; you can redistribute it and/or modify it under the terms of
+the GNU Lesser General Public License as published by the Free Software Foundation; either
+version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along with this
+program; if not, see <https://www.gnu.org/licenses/>.
+
+All names, logos, and references to "Deltares" are registered trademarks of Stichting
+Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
 from __future__ import annotations
@@ -53,7 +53,7 @@ class RevetmentZoneDefinition(BaseModel, ABC):
         Returns:
             list[float]: A list of x-locations
         """
-        return None
+        return []
 
 
 class HorizontalRevetmentZoneDefinition(RevetmentZoneDefinition):
@@ -77,29 +77,24 @@ class HorizontalRevetmentZoneDefinition(RevetmentZoneDefinition):
 
     @root_validator(pre=True)
     def validate_nr_or_dx_max(cls, values):
-        data_validation.validate_greater_than(
-            values=values, first_parameter_name="x_max", second_parameter_name="x_min"
-        )
-        data_validation.validate_one_of_two_should_be_specified(
-            values=values, first_parameter_name="nx", second_parameter_name="dx_max"
-        )
+        data_validation.validate_greater_than(values=values, first_parameter_name="x_max", second_parameter_name="x_min")
+        data_validation.validate_one_of_two_should_be_specified(values=values, first_parameter_name="nx", second_parameter_name="dx_max")
         return values
 
     def get_x_coordinates(self, dike_schematizaion: DikeSchematization):
         if self.nx is not None:
             nx = self.nx
-        else:
+        elif self.dx_max is not None:
             nx = numpy.ceil((self.x_max - self.x_min) / self.dx_max).astype(int) + 1
+        else:
+            # TODO: Throw? input is not specified correctly
+            nx = 1
 
         x_coordinates = numpy.linspace(self.x_min, self.x_max, nx)
         if self.include_schematization_coordinates and dike_schematizaion is not None:
             x_coordinates = numpy.union1d(
                 x_coordinates,
-                [
-                    x
-                    for x in dike_schematizaion.x_positions
-                    if x < self.x_max and x > self.x_min
-                ],
+                [x for x in dike_schematizaion.x_positions if x < self.x_max and x > self.x_min],
             )
 
         return x_coordinates
@@ -126,31 +121,26 @@ class VerticalRevetmentZoneDefinition(RevetmentZoneDefinition):
 
     @root_validator(pre=True)
     def validate_nr_or_dx_max(cls, values):
-        data_validation.validate_greater_than(
-            values=values, first_parameter_name="z_max", second_parameter_name="z_min"
-        )
-        data_validation.validate_one_of_two_should_be_specified(
-            values=values, first_parameter_name="nz", second_parameter_name="dz_max"
-        )
+        data_validation.validate_greater_than(values=values, first_parameter_name="z_max", second_parameter_name="z_min")
+        data_validation.validate_one_of_two_should_be_specified(values=values, first_parameter_name="nz", second_parameter_name="dz_max")
         return values
 
-    def get_x_coordinates(
-        self, dike_schematizaion: DikeSchematization, inner_slope: bool = False
-    ):
+    def get_x_coordinates(self, dike_schematizaion: DikeSchematization, inner_slope: bool = False):
         x_coordaintes = numpy.array(dike_schematizaion.x_positions)
         z_coordaintes = numpy.array(dike_schematizaion.z_positions)
         filter_mask = (
-            x_coordaintes <= dike_schematizaion.x_outer_crest
-            if not inner_slope
-            else x_coordaintes >= dike_schematizaion.x_outer_crest
+            x_coordaintes <= dike_schematizaion.x_outer_crest if not inner_slope else x_coordaintes >= dike_schematizaion.x_outer_crest
         )
         x_dike = numpy.array(x_coordaintes[filter_mask])
         z_dike = numpy.array(z_coordaintes[filter_mask])
 
         if self.nz is not None:
             nz = self.nz
-        else:
+        elif self.dz_max is not None:
             nz = numpy.ceil((self.z_max - self.z_min) / self.dz_max).astype(int) + 1
+        else:
+            nz = 1
+            # TODO: Throw an error? Input is not specified correctly.
 
         z_output_coordinates = numpy.linspace(self.z_min, self.z_max, nz)
         x_output_coordinates = numpy.interp(
@@ -186,9 +176,7 @@ class RevetmentZoneSpecification(BaseModel):
     calculation_settings: CalculationSettings | None = None
     """Optionl settings that should be used when calculating along this revetment zone."""
 
-    def get_output_locations(
-        self, dike_schematization: DikeSchematization
-    ) -> list[OutputLocationSpecification]:
+    def get_output_locations(self, dike_schematization: DikeSchematization) -> list[OutputLocationSpecification]:
         """
         Automatically generates the desired output locations based on the specified zone_definition
         and top_layer_specification.

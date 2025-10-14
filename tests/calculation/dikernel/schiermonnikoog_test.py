@@ -1,21 +1,21 @@
 """
- Copyright (C) Stichting Deltares 2023-2024. All rights reserved.
- 
- This file is part of the dikernel-python toolbox.
- 
- This program is free software; you can redistribute it and/or modify it under the terms of
- the GNU Lesser General Public License as published by the Free Software Foundation; either
- version 3 of the License, or (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- See the GNU Lesser General Public License for more details.
- 
- You should have received a copy of the GNU Lesser General Public License along with this
- program; if not, see <https://www.gnu.org/licenses/>.
- 
- All names, logos, and references to "Deltares" are registered trademarks of Stichting
- Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
+Copyright (C) Stichting Deltares 2023-2024. All rights reserved.
+
+This file is part of the dikernel-python toolbox.
+
+This program is free software; you can redistribute it and/or modify it under the terms of
+the GNU Lesser General Public License as published by the Free Software Foundation; either
+version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along with this
+program; if not, see <https://www.gnu.org/licenses/>.
+
+All names, logos, and references to "Deltares" are registered trademarks of Stichting
+Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
 import numpy
@@ -67,42 +67,29 @@ def test_schiermonnikoog():
     tidal_emplitude_sun = 0.4
     time_steps_per_hour = 1
     signal_length = 36
-    time_steps = (
-        numpy.linspace(0, signal_length, signal_length * time_steps_per_hour + 1) * 3600
-    )
+    time_steps = numpy.linspace(0, signal_length, signal_length * time_steps_per_hour + 1) * 3600
     tidal_signal = (
         numpy.add(
-            (
-                numpy.sin(time_steps[:-1] * (2 * numpy.pi) / ((12 * 60 + 25) * 60))
-                * tidal_emplitude_moon
-            ),
-            (
-                numpy.sin(time_steps[:-1] * (2 * numpy.pi) / ((24 * 60 + 50) * 60))
-                * tidal_emplitude_sun
-                * -1.0
-            ),
+            (numpy.sin(time_steps[:-1] * (2 * numpy.pi) / ((12 * 60 + 25) * 60)) * tidal_emplitude_moon),
+            (numpy.sin(time_steps[:-1] * (2 * numpy.pi) / ((24 * 60 + 50) * 60)) * tidal_emplitude_sun * -1.0),
         )
         + mean_water_level
     )
 
-    water_level_setup = numpy.interp(
-        time_steps[:-1], numpy.array([0, 18, 36]) * 3600, [0, 5.6, 0]
-    )
+    water_level_setup = numpy.interp(time_steps[:-1], numpy.array([0, 18, 36]) * 3600, [0, 5.6, 0])
     water_levels = numpy.add(tidal_signal, water_level_setup)
 
-    wave_heights = numpy.interp(
-        time_steps[:-1], numpy.array([0, 16.5, 36]) * 3600, [0.5, 2.8, 1.2]
-    )
+    wave_heights = numpy.interp(time_steps[:-1], numpy.array([0, 16.5, 36]) * 3600, [0.5, 2.8, 1.2])
 
     wave_periods = numpy.ones(tidal_signal.size) * 7.0
     wave_directions = numpy.ones(tidal_signal.size) * 210.0
 
     hydrodynamic_conditions = HydrodynamicConditions(
-        time_steps=time_steps,
-        water_levels=water_levels,
-        wave_heights=wave_heights,
-        wave_periods=wave_periods,
-        wave_directions=wave_directions,
+        time_steps=time_steps.tolist(),
+        water_levels=water_levels.tolist(),
+        wave_heights=wave_heights.tolist(),
+        wave_periods=wave_periods.tolist(),
+        wave_directions=wave_directions.tolist(),
     )
 
     input = DikernelInput(
@@ -113,25 +100,19 @@ def test_schiermonnikoog():
     input.start_time = 0.0
     output_time_steps = numpy.arange(0.0, 126000, 1000)
     output_time_steps = numpy.union1d(time_steps, output_time_steps)
-    input.output_time_steps = output_time_steps
+    input.output_time_steps = output_time_steps.tolist()
 
     input.output_revetment_zones = []
     input.output_revetment_zones.append(
         RevetmentZoneSpecification(
-            zone_definition=HorizontalRevetmentZoneDefinition(
-                x_min=0.9, x_max=14.9, dx_max=1.0
-            ),
-            top_layer_specification=NordicStoneLayerSpecification(
-                top_layer_thickness=0.4, relative_density=2.45
-            ),
+            zone_definition=HorizontalRevetmentZoneDefinition(x_min=0.9, x_max=14.9, dx_max=1.0),
+            top_layer_specification=NordicStoneLayerSpecification(top_layer_thickness=0.4, relative_density=2.45),
         )
     )
 
     input.output_revetment_zones.append(
         RevetmentZoneSpecification(
-            zone_definition=HorizontalRevetmentZoneDefinition(
-                x_min=15.0, x_max=21.9, dx_max=1.0
-            ),
+            zone_definition=HorizontalRevetmentZoneDefinition(x_min=15.0, x_max=21.9, dx_max=1.0),
             top_layer_specification=AsphaltLayerSpecification(
                 flexural_strength=0.9,
                 soil_elasticity=64.0,
@@ -146,22 +127,14 @@ def test_schiermonnikoog():
 
     input.output_revetment_zones.append(
         RevetmentZoneSpecification(
-            zone_definition=HorizontalRevetmentZoneDefinition(
-                x_min=22.0, x_max=49.9, dx_max=1.0
-            ),
-            top_layer_specification=GrassWaveImpactLayerSpecification(
-                top_layer_type=TopLayerType.GrassClosedSod
-            ),
+            zone_definition=HorizontalRevetmentZoneDefinition(x_min=22.0, x_max=49.9, dx_max=1.0),
+            top_layer_specification=GrassWaveImpactLayerSpecification(top_layer_type=TopLayerType.GrassClosedSod),
         )
     )
     input.output_revetment_zones.append(
         RevetmentZoneSpecification(
-            zone_definition=HorizontalRevetmentZoneDefinition(
-                x_min=22.0, x_max=49.9, dx_max=1.0
-            ),
-            top_layer_specification=GrassWaveRunupLayerSpecification(
-                outer_slope=0.16, top_layer_type=TopLayerType.GrassClosedSod
-            ),
+            zone_definition=HorizontalRevetmentZoneDefinition(x_min=22.0, x_max=49.9, dx_max=1.0),
+            top_layer_specification=GrassWaveRunupLayerSpecification(outer_slope=0.16, top_layer_type=TopLayerType.GrassClosedSod),
         )
     )
 

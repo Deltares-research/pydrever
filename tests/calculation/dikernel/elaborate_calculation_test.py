@@ -44,38 +44,27 @@ def test_elaborate_caculation():
     schematization.x_inner_crest = 50.0
     schematization.x_inner_toe = 60.0
 
-    time_steps = numpy.linspace(
-        0.0, 126000.0, int(126000.0 / 1000.0), dtype=float, endpoint=True
-    )
+    time_steps = numpy.linspace(0.0, 126000.0, int(126000.0 / 1000.0), dtype=float, endpoint=True)
 
     phase_water_levels = numpy.pi / 64.0
     amplitude_water_levels = 1.1
     minimum_water_level = 0.5
-    water_levels = (
-        amplitude_water_levels
-        * (1 - numpy.cos(time_steps[1:] / 1000.0 * phase_water_levels))
-        + minimum_water_level
-    )
+    water_levels = amplitude_water_levels * (1 - numpy.cos(time_steps[1:] / 1000.0 * phase_water_levels)) + minimum_water_level
 
     phase_wave_heights = numpy.pi / 64.0
     ampltude_waves = 0.5
     minimum_wave_height = 0.8
-    wave_heights = (
-        ampltude_waves * (1 - numpy.cos(time_steps[1:] / 1000.0 * phase_wave_heights))
-        + minimum_wave_height
-    )
+    wave_heights = ampltude_waves * (1 - numpy.cos(time_steps[1:] / 1000.0 * phase_wave_heights)) + minimum_wave_height
 
     wave_periods = 7.0 + time_steps[1:] / 1000.0 * 0.06
 
     wave_directions = -20 + time_steps[1:] / 1000.0 * 0.5
-    wave_directions = [
-        d + 360 if d < 0 else d - 360 if d > 360 else d for d in wave_directions
-    ]
+    wave_directions = [d + 360 if d < 0 else d - 360 if d > 360 else d for d in wave_directions]
     hydrodynamic_conditions = HydrodynamicConditions(
-        time_steps=time_steps,
-        water_levels=water_levels,
-        wave_heights=wave_heights,
-        wave_periods=wave_periods,
+        time_steps=time_steps.tolist(),
+        water_levels=water_levels.tolist(),
+        wave_heights=wave_heights.tolist(),
+        wave_periods=wave_periods.tolist(),
         wave_directions=wave_directions,
     )
 
@@ -89,57 +78,35 @@ def test_elaborate_caculation():
         fatigue_asphalt_beta=5.4,
     )
 
-    nordic_stone_layer = NordicStoneLayerSpecification(
-        top_layer_thickness=0.28, relative_density=2.45
-    )
-    grass_wave_impact_layer = GrassWaveImpactLayerSpecification(
-        top_layer_type=TopLayerType.GrassClosedSod
-    )
-    grass_wave_runup_layer = GrassWaveRunupLayerSpecification(
-        outer_slope=0.3, top_layer_type=TopLayerType.GrassClosedSod
-    )
-    grass_overtopping_layer_closed = GrassOvertoppingLayerSpecification(
-        top_layer_type=TopLayerType.GrassClosedSod
-    )
-    grass_overtopping_layer_open = GrassOvertoppingLayerSpecification(
-        top_layer_type=TopLayerType.GrassOpenSod
-    )
+    nordic_stone_layer = NordicStoneLayerSpecification(top_layer_thickness=0.28, relative_density=2.45)
+    grass_wave_impact_layer = GrassWaveImpactLayerSpecification(top_layer_type=TopLayerType.GrassClosedSod)
+    grass_wave_runup_layer = GrassWaveRunupLayerSpecification(outer_slope=0.3, top_layer_type=TopLayerType.GrassClosedSod)
+    grass_overtopping_layer_closed = GrassOvertoppingLayerSpecification(top_layer_type=TopLayerType.GrassClosedSod)
+    grass_overtopping_layer_open = GrassOvertoppingLayerSpecification(top_layer_type=TopLayerType.GrassOpenSod)
 
     revetment_zones = [
         RevetmentZoneSpecification(
-            zone_definition=HorizontalRevetmentZoneDefinition(
-                x_min=25.01, x_max=34.9, dx_max=0.5
-            ),
+            zone_definition=HorizontalRevetmentZoneDefinition(x_min=25.01, x_max=34.9, dx_max=0.5),
             top_layer_specification=nordic_stone_layer,
         ),
         RevetmentZoneSpecification(
-            zone_definition=HorizontalRevetmentZoneDefinition(
-                x_min=35.1, x_max=40.9, dx_max=0.5
-            ),
+            zone_definition=HorizontalRevetmentZoneDefinition(x_min=35.1, x_max=40.9, dx_max=0.5),
             top_layer_specification=asphalt_layer,
         ),
         RevetmentZoneSpecification(
-            zone_definition=HorizontalRevetmentZoneDefinition(
-                x_min=41.1, x_max=44.9, dx_max=0.5
-            ),
+            zone_definition=HorizontalRevetmentZoneDefinition(x_min=41.1, x_max=44.9, dx_max=0.5),
             top_layer_specification=grass_wave_impact_layer,
         ),
         RevetmentZoneSpecification(
-            zone_definition=HorizontalRevetmentZoneDefinition(
-                x_min=41.1, x_max=44.9, dx_max=0.5
-            ),
+            zone_definition=HorizontalRevetmentZoneDefinition(x_min=41.1, x_max=44.9, dx_max=0.5),
             top_layer_specification=grass_wave_runup_layer,
         ),
         RevetmentZoneSpecification(
-            zone_definition=HorizontalRevetmentZoneDefinition(
-                x_min=45.0, x_max=49.99, dx_max=0.5
-            ),
+            zone_definition=HorizontalRevetmentZoneDefinition(x_min=45.0, x_max=49.99, dx_max=0.5),
             top_layer_specification=grass_overtopping_layer_closed,
         ),
         RevetmentZoneSpecification(
-            zone_definition=HorizontalRevetmentZoneDefinition(
-                x_min=52.0, x_max=58, dx_max=2.0
-            ),
+            zone_definition=HorizontalRevetmentZoneDefinition(x_min=52.0, x_max=58, dx_max=2.0),
             top_layer_specification=grass_overtopping_layer_open,
         ),
     ]
@@ -151,9 +118,7 @@ def test_elaborate_caculation():
         get_grass_wave_overtopping_calculation_settings(),
     ]
 
-    input = DikernelInput(
-        hydrodynamic_input=hydrodynamic_conditions, dike_schematization=schematization
-    )
+    input = DikernelInput(hydrodynamic_input=hydrodynamic_conditions, dike_schematization=schematization)
     input.output_revetment_zones = revetment_zones
     input.settings = calculation_settings
 
@@ -316,9 +281,7 @@ def get_grass_wave_impact_calculation_settings() -> GrassWaveImpactCalculationSe
     return settings
 
 
-def get_grass_wave_overtopping_calculation_settings() -> (
-    GrassWaveOvertoppingCalculationSettings
-):
+def get_grass_wave_overtopping_calculation_settings() -> GrassWaveOvertoppingCalculationSettings:
     top_layer_closed_sod = GrassCumulativeOverloadTopLayerSettings(
         top_layer_type=TopLayerType.GrassClosedSod,
         critical_cumulative_overload=7000.0,

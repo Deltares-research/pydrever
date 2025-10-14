@@ -1,21 +1,21 @@
 """
- Copyright (C) Stichting Deltares 2023-2024. All rights reserved.
- 
- This file is part of the dikernel-python toolbox.
- 
- This program is free software; you can redistribute it and/or modify it under the terms of
- the GNU Lesser General Public License as published by the Free Software Foundation; either
- version 3 of the License, or (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- See the GNU Lesser General Public License for more details.
- 
- You should have received a copy of the GNU Lesser General Public License along with this
- program; if not, see <https://www.gnu.org/licenses/>.
- 
- All names, logos, and references to "Deltares" are registered trademarks of Stichting
- Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
+Copyright (C) Stichting Deltares 2023-2024. All rights reserved.
+
+This file is part of the dikernel-python toolbox.
+
+This program is free software; you can redistribute it and/or modify it under the terms of
+the GNU Lesser General Public License as published by the Free Software Foundation; either
+version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along with this
+program; if not, see <https://www.gnu.org/licenses/>.
+
+All names, logos, and references to "Deltares" are registered trademarks of Stichting
+Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
 from pydantic import BaseModel, ConfigDict
@@ -43,9 +43,7 @@ class DikernelOutputLocation(BaseModel):
 
     @property
     def final_damage(self) -> float:
-        return (
-            self.damage_development[-1] if self.damage_development is not None else 0.0
-        )
+        return self.damage_development[-1] if self.damage_development is not None else 0.0
 
 
 class AsphaltWaveImpactOutputLocation(DikernelOutputLocation):
@@ -60,20 +58,20 @@ class AsphaltWaveImpactOutputLocation(DikernelOutputLocation):
 
 
 class GrassOvertoppingOutputLocation(DikernelOutputLocation):
-    representative_wave_runup_2p: list[float]
-    cumulative_overload: list[float]
-    average_number_of_waves: list[float]
+    representative_wave_runup_2p: list[float | None]
+    cumulative_overload: list[float | None]
+    average_number_of_waves: list[float | None]
     vertical_distance_water_level_elevation: list[float]
 
 
 class GrassWaveRunupOutputLocation(DikernelOutputLocation):
     z_position: float
     vertical_distance_water_level_elevation: list[float]
-    representative_wave_runup_2p: list[float]
+    representative_wave_runup_2p: list[float | None]
     wave_angle: list[float | None]
     wave_angle_impact: list[float | None]
-    cumulative_overload: list[float]
-    average_number_of_waves: list[float]
+    cumulative_overload: list[float | None]
+    average_number_of_waves: list[float | None]
 
 
 class GrassWaveImpactOutputLocation(DikernelOutputLocation):
