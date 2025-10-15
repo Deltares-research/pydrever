@@ -59,7 +59,10 @@ class Dikernel:
             return False
 
         try:
-            result = Calculator.Calculate(self.__c_input)
+            handler: LogHandler = LogHandler()
+            settings: CalculatorSettings = CalculatorSettings()
+            settings.LogHandler = handler
+            result = Calculator.Calculate(self.__c_input, settings)
 
             success = result.GetType() == SuccessResult
 
@@ -72,10 +75,8 @@ class Dikernel:
 
             self.__c_output = calculation_output_property.GetValue(result, None)
 
-            # TODO: We should provide a Handler in the calculate method to process messages.
-            # warnings, errors = _message_helper.parse_messages(self.__c_output)
-            # self.warnings.extend(warnings)
-            # self.errors.extend(errors)
+            self.warnings.extend(list(w for w in handler.Warnings))
+            self.errors.extend(list(w for w in handler.Errors))
 
             if len(self.errors) > 0:
                 return False

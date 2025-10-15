@@ -34,12 +34,14 @@ clr.AddReference(os.path.join(dll_base_path, "DiKErnel.Core.dll"))
 clr.AddReference(os.path.join(dll_base_path, "DiKErnel.Integration.dll"))
 clr.AddReference(os.path.join(dll_base_path, "DiKErnel.Util.dll"))
 clr.AddReference(os.path.join(dll_base_path, "DiKErnel.FunctionLibrary.dll"))
+clr.AddReference(os.path.join(dll_base_path, "LogHandlerHelper.dll"))
 
 from System import Double, ValueTuple, Type, Convert
 from System.Collections.Generic import List
 from System.Reflection import BindingFlags
 
-from DiKErnel.Core import Calculator, Validator
+from LogHandlerHelper import LogHandler
+from DiKErnel.Core import Calculator, Validator, CalculatorSettings
 from DiKErnel.Core.Data import (
     LocationDependentOutput,
     CalculationOutput,
