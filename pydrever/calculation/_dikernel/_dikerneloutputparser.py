@@ -69,25 +69,9 @@ def __create_output_location(c_output_location: LocationDependentOutput, x_posit
     """
     Calculate commonly used output variables
     """
-    # TODO: Fix this once Elmar is done changing the API.
-    time_of_failure = None
-    # time_of_failure = (
-    #     next(
-    #         (
-    #             item.TimeOfFailure
-    #             for item in c_output_location.TimeDependentOutputItems
-    #             if item is not None and item.TimeOfFailure is not None
-    #         ),
-    #         None,
-    #     )
-    #     if not None
-    #     else None
-    # )
-    damage_increment = list(item.IncrementDamage for item in c_output_location.TimeDependentOutputItems)
-
-    # TODO: Fix this once Elmar is done changing the API.
-    # damage_development = list(item.Damage for item in c_output_location.TimeDependentOutputItems)
-    damage_development = np.cumsum(damage_increment).tolist()
+    time_of_failure: float | None = c_output_location.TimeOfFailure
+    damage_increment: list[float] = list(item.IncrementDamage for item in c_output_location.TimeDependentOutputItems)
+    damage_development: list[float] = list(item for item in c_output_location.CumulativeDamages)
 
     """
     Switch between the various type of possible output (different types of calculation)

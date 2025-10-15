@@ -58,6 +58,7 @@ def parse(input: DikernelInput) -> ICalculationInput:
     __add_dike_profile_to_builder(builder, input.dike_schematization)
     __add_hydrodynamics_to_builder(builder, input.hydrodynamic_input)
     __add_output_location_specifications_to_builder(builder, input)
+
     # TODO: In future this way of working should maybe changed to the way Calculator.Calculate() works?
     composed_input = builder.Build()
 
