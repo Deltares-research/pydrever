@@ -1,21 +1,21 @@
 """
- Copyright (C) Stichting Deltares 2023-2024. All rights reserved.
- 
- This file is part of the dikernel-python toolbox.
- 
- This program is free software; you can redistribute it and/or modify it under the terms of
- the GNU Lesser General Public License as published by the Free Software Foundation; either
- version 3 of the License, or (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- See the GNU Lesser General Public License for more details.
- 
- You should have received a copy of the GNU Lesser General Public License along with this
- program; if not, see <https://www.gnu.org/licenses/>.
- 
- All names, logos, and references to "Deltares" are registered trademarks of Stichting
- Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
+Copyright (C) Stichting Deltares 2023-2024. All rights reserved.
+
+This file is part of the dikernel-python toolbox.
+
+This program is free software; you can redistribute it and/or modify it under the terms of
+the GNU Lesser General Public License as published by the Free Software Foundation; either
+version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along with this
+program; if not, see <https://www.gnu.org/licenses/>.
+
+All names, logos, and references to "Deltares" are registered trademarks of Stichting
+Deltares and remain full property of Stichting Deltares at all times. All rights reserved.
 """
 
 import matplotlib.pyplot as plt
@@ -24,7 +24,7 @@ from pydrever.data import (
     DikernelInput,
     DikernelOutputLocation,
     AsphaltWaveImpactOutputLocation,
-    GrassOvertoppingOutputLocation,
+    GrassCumulativeOverloadOutputLocation,
     GrassWaveImpactOutputLocation,
     NaturalStoneOutputLocation,
     TimeDependentOutputQuantity,
@@ -53,9 +53,7 @@ def plot_hydrodynamic_conditions(input: DikernelInput):
     """
     axs[0, 0].plot(
         run_input.hydrodynamic_input.time_steps,
-        numpy.concatenate(
-            ([None], run_input.hydrodynamic_input.water_levels), axis=None
-        ),
+        numpy.concatenate(([None], run_input.hydrodynamic_input.water_levels), axis=None),
         "gx",
         linestyle="dotted",
     )
@@ -72,9 +70,7 @@ def plot_hydrodynamic_conditions(input: DikernelInput):
     """
     axs[1, 0].plot(
         run_input.hydrodynamic_input.time_steps,
-        numpy.concatenate(
-            ([None], run_input.hydrodynamic_input.wave_heights), axis=None
-        ),
+        numpy.concatenate(([None], run_input.hydrodynamic_input.wave_heights), axis=None),
         "gx",
         linestyle="dotted",
     )
@@ -91,9 +87,7 @@ def plot_hydrodynamic_conditions(input: DikernelInput):
     """
     axs[0, 1].plot(
         run_input.hydrodynamic_input.time_steps,
-        numpy.concatenate(
-            ([None], run_input.hydrodynamic_input.wave_periods), axis=None
-        ),
+        numpy.concatenate(([None], run_input.hydrodynamic_input.wave_periods), axis=None),
         "gx",
         linestyle="dotted",
     )
@@ -110,17 +104,13 @@ def plot_hydrodynamic_conditions(input: DikernelInput):
     """
     axs[1, 1].plot(
         run_input.hydrodynamic_input.time_steps,
-        numpy.concatenate(
-            ([None], run_input.hydrodynamic_input.wave_directions), axis=None
-        ),
+        numpy.concatenate(([None], run_input.hydrodynamic_input.wave_directions), axis=None),
         "gx",
         linestyle="dotted",
     )
     axs[1, 1].plot(
         input.hydrodynamic_input.time_steps,
-        numpy.concatenate(
-            ([None], input.hydrodynamic_input.wave_directions), axis=None
-        ),
+        numpy.concatenate(([None], input.hydrodynamic_input.wave_directions), axis=None),
         "bo",
     )
     axs[1, 1].set(xlabel="Time step [s]", ylabel="Wave angles [degrees]")
@@ -166,9 +156,7 @@ def plot_damage_levels(
 
         values = [[None for x in range(len(run_times) - 1)] for y in range(len(output))]
         for i_loc, location in enumerate(output):
-            values[i_loc] = getattr(
-                location, TimeDependentOutputQuantity.DamageDevelopment.value
-            )
+            values[i_loc] = getattr(location, TimeDependentOutputQuantity.DamageDevelopment.value)
 
         colors = plt.cm.winter(numpy.linspace(0, 1, len(run_times) - 1))
         for i in range(len(values[0])):
@@ -253,7 +241,7 @@ def plot_development_per_location(
     match location:
         case AsphaltWaveImpactOutputLocation():
             color = "gray"
-        case GrassOvertoppingOutputLocation():
+        case GrassCumulativeOverloadOutputLocation():
             color = "darkgreen"
         case GrassWaveImpactOutputLocation():
             color = "darkgreen"

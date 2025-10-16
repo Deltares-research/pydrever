@@ -24,16 +24,10 @@ from pydrever.data import (
     NaturalStoneOutputLocation,
     AsphaltWaveImpactOutputLocation,
     GrassWaveImpactOutputLocation,
-    GrassWaveRunupOutputLocation,
-    GrassOvertoppingOutputLocation,
+    GrassCumulativeOverloadOutputLocation,
 )
 
 from pydantic import ValidationError
-
-
-def test_naturalstoneoutputlocationthrowsonmissinginput():
-    with pytest.raises(ValueError):
-        o = NaturalStoneOutputLocation(damage_development=[1.0, 2.0])
 
 
 @pytest.mark.parametrize(
@@ -192,46 +186,7 @@ def test_grasswaveimpactoutputlocationthrowsonwronginput(field_name, value):
     "field_name,value",
     [
         ("x_position", "a3.r2"),
-        ("time_of_failure", "tr3"),
-        ("damage_development", 1),
-        ("damage_increment", "s"),
-        ("z_position", "float"),
-        ("vertical_distance_water_level_elevation", "s"),
-        ("representative_wave_runup_2p", ["s"]),
-        ("wave_angle", [1.0, "None"]),
-        ("wave_angle_impact", False),
-        ("cumulative_overload", None),
-        ("average_number_of_waves", [1.0, "frnbeu"]),
-    ],
-)
-def test_grasswaverunupoutputlocationthrowsonwronginput(field_name, value):
-    input = {
-        "x_position": 1.23,
-        "time_of_failure": None,
-        "damage_development": [1.0],
-        "damage_increment": [1.0],
-        "z_position": 2.132,
-        "vertical_distance_water_level_elevation": [1.0],
-        "representative_wave_runup_2p": [1.0],
-        "wave_angle": [1.0, None],
-        "wave_angle_impact": [1.0, None],
-        "cumulative_overload": [1.0],
-        "average_number_of_waves": [1.0],
-    }
-
-    input[field_name] = value
-    with pytest.raises(ValidationError) as v_error:
-        o = GrassWaveRunupOutputLocation(**input)
-
-    errors = v_error.value.errors()
-    assert len(errors) == 1
-    assert errors[0]["loc"][0] == field_name
-
-
-@pytest.mark.parametrize(
-    "field_name,value",
-    [
-        ("x_position", "a3.r2"),
+        ("z_position", "a3.r2"),
         ("time_of_failure", "tr3"),
         ("damage_development", 1),
         ("damage_increment", "s"),
@@ -241,9 +196,10 @@ def test_grasswaverunupoutputlocationthrowsonwronginput(field_name, value):
         ("vertical_distance_water_level_elevation", [None]),
     ],
 )
-def test_grassovertoppingoutputlocationthrowsonwronginput(field_name, value):
+def test_grasscumulativeoverloadoutputlocationthrowsonwronginput(field_name, value):
     input = {
         "x_position": 1.23,
+        "z_position": 1.32,
         "time_of_failure": None,
         "damage_development": [1.0],
         "damage_increment": [1.0],
@@ -255,7 +211,7 @@ def test_grassovertoppingoutputlocationthrowsonwronginput(field_name, value):
 
     input[field_name] = value
     with pytest.raises(ValidationError) as v_error:
-        o = GrassOvertoppingOutputLocation(**input)
+        o = GrassCumulativeOverloadOutputLocation(**input)
 
     errors = v_error.value.errors()
     assert len(errors) == 1

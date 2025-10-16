@@ -43,9 +43,8 @@ from ._dikernelinput import (
 from ._dikerneloutput import (
     DikernelOutputLocation,
     AsphaltWaveImpactOutputLocation,
-    GrassOvertoppingOutputLocation,
+    GrassCumulativeOverloadOutputLocation,
     GrassWaveImpactOutputLocation,
-    GrassWaveRunupOutputLocation,
     NaturalStoneOutputLocation,
 )
 from ._dikerneloutputspecification import (

@@ -21,9 +21,8 @@ Deltares and remain full property of Stichting Deltares at all times. All rights
 from pydrever.data import (
     DikernelOutputLocation,
     AsphaltWaveImpactOutputLocation,
-    GrassOvertoppingOutputLocation,
+    GrassCumulativeOverloadOutputLocation,
     GrassWaveImpactOutputLocation,
-    GrassWaveRunupOutputLocation,
     NaturalStoneOutputLocation,
 )
 from pydrever.calculation._dikernel._dikernelcreferences import *
@@ -92,8 +91,9 @@ def __create_output_location(c_output_location: LocationDependentOutput, x_posit
                 c_output_location.TimeDependentOutputItems,
             )
         case GrassCumulativeOverloadLocationDependentOutput():
-            return __create_grass_overtopping_output_location(
+            return __create_grass_cumulative_overload_output_location(
                 x_position,
+                c_output_location.Z,
                 time_of_failure,
                 damage_development,
                 damage_increment,
@@ -110,16 +110,6 @@ def __create_output_location(c_output_location: LocationDependentOutput, x_posit
                 damage_increment,
                 c_output_location.TimeDependentOutputItems,
             )
-        # TODO: This needs to change to CumulativeOverload. Also the input.
-        # case GrassWaveRunupRayleighLocationDependentOutput():
-        #     return __create_grass_wave_runup_output_location(
-        #         x_position,
-        #         c_output_location.Z,
-        #         time_of_failure,
-        #         damage_development,
-        #         damage_increment,
-        #         c_output_location.TimeDependentOutputItems,
-        #     )
         case NaturalStoneWaveImpactLocationDependentOutput():
             return __create_natural_stone_output_location(
                 x_position,
@@ -161,42 +151,21 @@ def __create_asphalt_wave_impact_output_location(
     )
 
 
-def __create_grass_overtopping_output_location(
-    x_position: float,
-    time_of_failure: float | None,
-    damage_development: list[float],
-    damage_increment: list[float],
-    time_dependent_output_items,
-) -> GrassOvertoppingOutputLocation:
-    return GrassOvertoppingOutputLocation(
-        x_position=x_position,
-        time_of_failure=time_of_failure,
-        damage_development=damage_development,
-        damage_increment=damage_increment,
-        vertical_distance_water_level_elevation=list(item.VerticalDistanceWaterLevelElevation for item in time_dependent_output_items),
-        representative_wave_runup_2p=list(item.RepresentativeWaveRunup2P for item in time_dependent_output_items),
-        cumulative_overload=list(item.CumulativeOverload for item in time_dependent_output_items),
-        average_number_of_waves=list(item.AverageNumberOfWaves for item in time_dependent_output_items),
-    )
-
-
-def __create_grass_wave_runup_output_location(
+def __create_grass_cumulative_overload_output_location(
     x_position: float,
     z_position: float,
     time_of_failure: float | None,
     damage_development: list[float],
     damage_increment: list[float],
     time_dependent_output_items,
-) -> GrassWaveRunupOutputLocation:
-    return GrassWaveRunupOutputLocation(
+) -> GrassCumulativeOverloadOutputLocation:
+    return GrassCumulativeOverloadOutputLocation(
         x_position=x_position,
         z_position=z_position,
         time_of_failure=time_of_failure,
         damage_development=damage_development,
         damage_increment=damage_increment,
         vertical_distance_water_level_elevation=list(item.VerticalDistanceWaterLevelElevation for item in time_dependent_output_items),
-        wave_angle=list(item.WaveAngle for item in time_dependent_output_items),
-        wave_angle_impact=list(item.WaveAngleImpact for item in time_dependent_output_items),
         representative_wave_runup_2p=list(item.RepresentativeWaveRunup2P for item in time_dependent_output_items),
         cumulative_overload=list(item.CumulativeOverload for item in time_dependent_output_items),
         average_number_of_waves=list(item.AverageNumberOfWaves for item in time_dependent_output_items),
@@ -215,10 +184,10 @@ def __create_grass_wave_impact_output_location(
 ) -> GrassWaveImpactOutputLocation:
     return GrassWaveImpactOutputLocation(
         x_position=x_position,
+        z_position=z_position,
         time_of_failure=time_of_failure,
         damage_development=damage_development,
         damage_increment=damage_increment,
-        z_position=z_position,
         minimum_wave_height=minimum_wave_height,
         maximum_wave_height=maximum_wave_height,
         loading_revetment=list(item.LoadingRevetment for item in time_dependent_output_items),

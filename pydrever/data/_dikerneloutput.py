@@ -26,6 +26,8 @@ class DikernelOutputLocation(BaseModel):
 
     x_position: float
     """The cross-shore position of the calculated location."""
+    z_position: float
+    """The height of the calculated location."""
     time_of_failure: float | None
     """The moment (time step) this location failed. None if it did not fail."""
     damage_development: list[float]
@@ -47,7 +49,6 @@ class DikernelOutputLocation(BaseModel):
 
 
 class AsphaltWaveImpactOutputLocation(DikernelOutputLocation):
-    z_position: float
     outer_slope: float
     log_flexural_strength: float
     stiffness_relation: float
@@ -57,25 +58,14 @@ class AsphaltWaveImpactOutputLocation(DikernelOutputLocation):
     average_number_of_waves: list[float]
 
 
-class GrassOvertoppingOutputLocation(DikernelOutputLocation):
+class GrassCumulativeOverloadOutputLocation(DikernelOutputLocation):
     representative_wave_runup_2p: list[float | None]
     cumulative_overload: list[float | None]
     average_number_of_waves: list[float | None]
     vertical_distance_water_level_elevation: list[float]
-
-
-class GrassWaveRunupOutputLocation(DikernelOutputLocation):
-    z_position: float
-    vertical_distance_water_level_elevation: list[float]
-    representative_wave_runup_2p: list[float | None]
-    wave_angle: list[float | None]
-    wave_angle_impact: list[float | None]
-    cumulative_overload: list[float | None]
-    average_number_of_waves: list[float | None]
 
 
 class GrassWaveImpactOutputLocation(DikernelOutputLocation):
-    z_position: float
     minimum_wave_height: float
     maximum_wave_height: float
     loading_revetment: list[float]
@@ -87,7 +77,6 @@ class GrassWaveImpactOutputLocation(DikernelOutputLocation):
 
 
 class NaturalStoneOutputLocation(DikernelOutputLocation):
-    z_position: float
     resistance: float
     outer_slope: list[float]
     slope_upper_level: list[float]
