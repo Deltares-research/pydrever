@@ -66,6 +66,9 @@ class Dikernel:
 
             success = result.GetType() == SuccessResult
 
+            self.warnings.extend(list(w for w in handler.Warnings))
+            self.errors.extend(list(w for w in handler.Errors))
+
             if not success:
                 return False
 
@@ -74,9 +77,6 @@ class Dikernel:
                 return False
 
             self.__c_output = calculation_output_property.GetValue(result, None)
-
-            self.warnings.extend(list(w for w in handler.Warnings))
-            self.errors.extend(list(w for w in handler.Errors))
 
             if len(self.errors) > 0:
                 return False

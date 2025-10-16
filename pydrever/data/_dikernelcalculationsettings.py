@@ -161,11 +161,6 @@ class GrassWaveRunupCalculationSettings(CalculationSettings):
 
     average_number_of_waves_factor_ctm: float | None = None
     """The ctm factor - instance variable."""
-    representative_wave_runup_2p_aru: float | None = None
-    representative_wave_runup_2p_bru: float | None = None
-    representative_wave_runup_2p_cru: float | None = None
-    wave_angle_impact_a_beta: float | None = None
-    wave_angle_impact_beta_max: float | None = None
     fixed_number_of_waves: int | None = None
     front_velocity_cu: float | None = None
 

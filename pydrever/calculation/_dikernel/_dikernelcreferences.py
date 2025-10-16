@@ -65,7 +65,10 @@ from DiKErnel.Integration.Data.GrassWaveImpact import (
     GrassWaveImpactLocationDependentOutput,
     GrassWaveImpactLocationConstructionProperties,
 )
-from DiKErnel.Integration.Data.GrassWaveRunup import GrassWaveRunupRayleighDiscreteLocationConstructionProperties
+from DiKErnel.Integration.Data.GrassWaveRunup import (
+    GrassWaveRunupRayleighDiscreteLocationConstructionProperties,
+    GrassWaveRunupBattjesGroenendijkAnalyticalLocationConstructionProperties,
+)
 from DiKErnel.Integration.Data.NaturalStoneWaveImpact import (
     NaturalStoneWaveImpactLocationDependentOutput,
     NaturalStoneWaveImpactLocationConstructionProperties,
@@ -73,6 +76,7 @@ from DiKErnel.Integration.Data.NaturalStoneWaveImpact import (
 )
 from DiKErnel.Integration.Data.GrassWaveOvertopping import (
     GrassWaveOvertoppingRayleighDiscreteLocationConstructionProperties,
+    GrassWaveOvertoppingRayleighLocationConstructionProperties,
 )
 from DiKErnel.Integration import CalculationInputBuilder
 

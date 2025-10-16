@@ -60,6 +60,8 @@ def test_schiermonnikoog():
         roughnesses=roughnesses,
         x_outer_toe=0.8,
         x_outer_crest=50.0,
+        foreshore_slope=0.05,
+        z_bottom=-2.85,
     )
 
     mean_water_level = 0.0

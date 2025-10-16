@@ -38,6 +38,8 @@ def test_elaborate_caculation():
         roughnesses=roughnesses,
         x_outer_toe=25.0,
         x_outer_crest=45.0,
+        foreshore_slope=0.05,
+        z_bottom=-2.85,
     )
     schematization.x_crest_outer_berm = 35.0
     schematization.x_notch_outer_berm = 41.0
@@ -125,7 +127,11 @@ def test_elaborate_caculation():
     dikernel = Dikernel(input)
 
     run_result = dikernel.run()
-
+    if not run_result:
+        for m in dikernel.errors:
+            print(m)
+        for m in dikernel.warnings:
+            print(m)
     assert run_result
 
 

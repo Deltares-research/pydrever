@@ -21,6 +21,8 @@ Deltares and remain full property of Stichting Deltares at all times. All rights
 from __future__ import annotations
 from pydrever.data._toplayertypes import TopLayerType
 from pydrever.data._dikernelcalculationsettings import CalculationSettings
+from pydrever.data._grassovertoppingcalculationtypes import GrassOvertoppingCalculationType
+from pydrever.data._grasswaverunupcalculationtypes import GrassWaveRunupCalculationType
 from pydantic import BaseModel, ConfigDict
 
 
@@ -91,6 +93,7 @@ class GrassOvertoppingLayerSpecification(TopLayerSpecification):
     Specification of a grass top layer for wave overtopping calculations.
     """
 
+    calculation_type: GrassOvertoppingCalculationType = GrassOvertoppingCalculationType.Analytical
     increased_load_transition_alpha_m: float | None = None
     increased_load_transition_alpha_s: float | None = None
 
@@ -100,8 +103,7 @@ class GrassWaveRunupLayerSpecification(TopLayerSpecification):
     Specification of a grass top layer for wave runup calculations.
     """
 
+    calculation_type: GrassWaveRunupCalculationType = GrassWaveRunupCalculationType.AnalyticalBattjesGroenendijk
     outer_slope: float
     increased_load_transition_alpha_m: float | None = None
     increased_load_transition_alpha_s: float | None = None
-    reduced_strength_transition_2p_gamma_b: float | None = None
-    reduced_strength_transition_2p_gamma_f: float | None = None
