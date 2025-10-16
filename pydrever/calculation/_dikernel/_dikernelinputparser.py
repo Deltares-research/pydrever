@@ -110,6 +110,9 @@ def __add_dike_profile_to_builder(builder: CalculationInputBuilder, dike_schemat
     if dike_schematization.x_inner_toe is not None:
         builder.AddDikeProfilePoint(dike_schematization.x_inner_toe, CharacteristicPointType.InnerToe)
 
+    if dike_schematization.foreshore_slope is not None and dike_schematization.z_bottom is not None:
+        builder.AddForeshore(dike_schematization.foreshore_slope, dike_schematization.z_bottom)
+
 
 def __add_hydrodynamics_to_builder(
     builder: CalculationInputBuilder,
