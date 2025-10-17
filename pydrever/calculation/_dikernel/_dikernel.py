@@ -41,16 +41,30 @@ class Dikernel:
             input (DikernelInput): The specified input for the calculation.
         """
         self.input: DikernelInput = input
+        """Ths input specification DiKErnel is supposed to calculated with."""
         self.output: list[DikernelOutputLocation] | None = None
+        """A list of output locations that hold all calculation results after finishing the calculation."""
         self.warnings: list[str] = list[str]()
+        """A list of warnings that occurred during validation or running the calculation."""
         self.errors: list[str] = list[str]()
+        """A list of errors that occurred during validation or running the calculation."""
+        self.calculate_locations_parallel = False
+        """This property triggers DiKErnel to start parallel calculations on the GPU for each specified location. In case of many locations, this will be faster when set to True."""
+        self.calculate_time_steps_parallel = False
+        """This property triggers DiKErnel to start parallel calculations on the GPU for each specified time step. In case of many time steps, this will be faster when set to True."""
         self.__c_input = None
         self.__c_output = None
         self.__c_validation_result = None
 
     def run(self) -> bool:
         """
-        Method to run a calculation.
+        Method to run a calculation with DiKErnel. This method firstly validates some of the input, it then calls DiKErnel
+        to perform the build in validation. If all validation is ok, a calculation with DiKErnel is performed.
+
+        After finishing a calculation:
+        * output - The results can be found under the "output" property of this class.
+        * warnings - Any warnings given by DiKErnel are listed in the warnings property of this class.
+        * errors - Any errors given by DiKErnel are listed in the warnings property of this class.
 
         Returns:
             bool: Indicating whether the calculation was seccessfull or not.
@@ -62,6 +76,8 @@ class Dikernel:
             handler: LogHandler = LogHandler()
             settings: CalculatorSettings = CalculatorSettings()
             settings.LogHandler = handler
+            settings.CalculateLocationsInParallel = self.calculate_locations_parallel
+            settings.CalculateTimeStepsInParallel = self.calculate_time_steps_parallel
             result = Calculator.Calculate(self.__c_input, settings)
 
             success = result.GetType() == SuccessResult
