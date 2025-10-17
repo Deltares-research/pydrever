@@ -22,6 +22,9 @@ Deltares and remain full property of Stichting Deltares at all times. All rights
 This file adds all relevent C# classes as import. 
 """
 
+# from pythonnet import load
+# load("coreclr", runtime_config="C:/src/pydrever/pydrever/calculation/_dikernel/_dikerneldll/runtimeconfig.json")
+
 import clr
 import os
 
